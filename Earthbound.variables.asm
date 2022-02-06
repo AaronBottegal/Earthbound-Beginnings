@@ -94,6 +94,10 @@ SLOT/DATA_OFFSET_USE?:                        .rs 1 ; 0x0037
 R6_BANKED_ADDR_MOVED:                         .rs 2 ; 0x0038 to 0x0039
 
 
+          .rsset 0x0040
+FPTR_SPRITES?:                                .rs 2 ; 0x0040 to 0x0041
+
+
           .rsset 0x0048
 R_**:$0048:                                   .rs 1 ; 0x0048
 
@@ -166,6 +170,10 @@ SCRIPT_LOADED_SHIFTED_UNK:                    .rs 1 ; 0x00AA
 
           .rsset 0x00AC
 SCRIPT_LOADED_SHIFTED_|VAL:                   .rs 2 ; 0x00AC to 0x00AD
+
+
+          .rsset 0x00B0
+SOUND_WRITE_DEST:                             .rs 2 ; 0x00B0 to 0x00B1
 
 
           .rsset 0x00C0
@@ -256,7 +264,7 @@ VAL_CMP_DIFFERS_STORED_UNK:                   .rs 1 ; 0x07F5
 
 
           .rsset 0x07F8
-SCRIPT_ARR_UNK:                               .rs 7 ; 0x07F8 to 0x07FE
+SOUND_UNK_REQUEST?:                           .rs 7 ; 0x07F8 to 0x07FE
 
 
           .rsset 0x6222
