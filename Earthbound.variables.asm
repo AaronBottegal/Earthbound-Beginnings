@@ -46,7 +46,8 @@ NES_CTRL2:                                    .equ $4017
 ; NES RAM/WRAM Variables.
 
 
-          .rsset 0x0007
+          .rsset 0x0006
+COPY_PROTECTION_VAL:                          .rs 1 ; 0x0006
 ENGINE_BASE_R6_VAL?:                          .rs 1 ; 0x0007
 NMI_GFX_COUNTER:                              .rs 1 ; 0x0008
 WORLD_POS?_CARRY_ADDS_UNK:                    .rs 3 ; 0x0009 to 0x000B
@@ -68,19 +69,28 @@ SCRIPT_R7_UNK:                                .rs 1 ; 0x0012
 SCRIPT_R6_ROUTINE_SELECT:                     .rs 1 ; 0x0015
 
 
-          .rsset 0x001A
-SCRIPT_PAIR_UNK:                              .rs 2 ; 0x001A to 0x001B
+          .rsset 0x0018
+SCRIPT_PAIR_PTR_B?:                           .rs 2 ; 0x0018 to 0x0019
+SCRIPT_PAIR_PTR?:                             .rs 2 ; 0x001A to 0x001B
 
 
-          .rsset 0x0020
-ENGINE_FLAG_20_SETUP_UNK:                     .rs 1 ; 0x0020
-
-
-          .rsset 0x0022
+          .rsset 0x001F
+ACTION_BUTTONS_RESULT:                        .rs 1 ; 0x001F
+FIRST_LAUNCHER_HOLD_FLAG?:                    .rs 1 ; 0x0020
+R_**:$0021:                                   .rs 1 ; 0x0021
 SCRIPT_FLAG_0x22:                             .rs 1 ; 0x0022
 UNK_NONZERO_SKIP:                             .rs 1 ; 0x0023
-R_**:$0024:                                   .rs 1 ; 0x0024
+CLEAR_AFTER_HELL_ALOT_LOL:                    .rs 1 ; 0x0024
 ENGINE_FLAG_25_SKIP_UNK:                      .rs 1 ; 0x0025
+
+
+          .rsset 0x0028
+R_**:$0028:                                   .rs 1 ; 0x0028
+R_**:$0029:                                   .rs 1 ; 0x0029
+R_**:$002A:                                   .rs 1 ; 0x002A
+R_**:$002B:                                   .rs 1 ; 0x002B
+R_**:$002C:                                   .rs 1 ; 0x002C
+R_**:$002D:                                   .rs 1 ; 0x002D
 
 
           .rsset 0x0030
@@ -88,10 +98,12 @@ ENGINE_FPTR_30:                               .rs 2 ; 0x0030 to 0x0031
 ENGINE_FPTR_32:                               .rs 2 ; 0x0032 to 0x0033
 
 
-          .rsset 0x0036
+          .rsset 0x0035
+R_**:$0035:                                   .rs 1 ; 0x0035
 GAME_SLOT_CURRENT?:                           .rs 1 ; 0x0036
 SLOT/DATA_OFFSET_USE?:                        .rs 1 ; 0x0037
 R6_BANKED_ADDR_MOVED:                         .rs 2 ; 0x0038 to 0x0039
+STREAM_WRITE_ARR_UNK:                         .rs 4 ; 0x003A to 0x003D
 
 
           .rsset 0x0040
@@ -119,9 +131,7 @@ SAVE_GAME_MOD_PAGE_PTR:                       .rs 2 ; 0x0064 to 0x0065
 ALT_STUFF_INDEX?:                             .rs 1 ; 0x0066
 ALT_COUNT_UNK:                                .rs 1 ; 0x0067
 ARR_BITS_TO_UNK:                              .rs 8 ; 0x0068 to 0x006F
-
-
-          .rsset 0x0071
+R_**:$0070:                                   .rs 1 ; 0x0070
 ENGINE_PACKINATOR_ARG_SEED_0xA0_PRE_COUNT:    .rs 1 ; 0x0071
 ENGINE_SCRIPT_SWITCH_VAL:                     .rs 1 ; 0x0072
 RTN_ARG_UNK:                                  .rs 1 ; 0x0073
@@ -135,22 +145,33 @@ ENGINE_PTR_PACKET_MANAGER:                    .rs 2 ; 0x007C to 0x007D
 DATA_APPEND_COUNT?:                           .rs 1 ; 0x007E
 PACKET_PRE_SEED_0xA0_COUNT:                   .rs 1 ; 0x007F
 FPTR_SPRITES?:                                .rs 2 ; 0x0080 to 0x0081
-FPTR_UNK_84_MENU_SELECTION?:                  .rs 1 ; 0x0082
+FPTR_UNK_84_MENU_SELECTION?:                  .rs 2 ; 0x0082 to 0x0083
 
 
-          .rsset 0x0084
+          .rsset 0x0083
+R_**:$0083:                                   .rs 1 ; 0x0083
 FPTR_UNK_84_MENU?:                            .rs 2 ; 0x0084 to 0x0085
 STREAM_TARGET?:                               .rs 1 ; 0x0086
 CARRY_UP?:                                    .rs 1 ; 0x0087
 SCRIPT_B800_PTR_UNK:                          .rs 2 ; 0x0088 to 0x0089
 STREAM_DEEP_HELPER_UNK:                       .rs 2 ; 0x008A to 0x008B
+PPU_GROUPED_ADDR_LH:                          .rs 2 ; 0x008C to 0x008D
 
 
-          .rsset 0x0097
+          .rsset 0x0090
+OR_AND_STORE_UNK:                             .rs 1 ; 0x0090
+PACKET_UPDATES_COUNT/SCRATCH:                 .rs 1 ; 0x0091
+DEEP_BASE_UNK:                                .rs 1 ; 0x0092
+DEEP_STREAM_MOD_UNK:                          .rs 1 ; 0x0093
+
+
+          .rsset 0x0096
+B800_PTR_L_ADD_UNK:                           .rs 1 ; 0x0096
 SCRIPT_INVERT_UNK:                            .rs 1 ; 0x0097
 
 
-          .rsset 0x00A1
+          .rsset 0x00A0
+SCRIPT_UNK_DATA_SELECT_??:                    .rs 1 ; 0x00A0
 STREAM_DEEP_INDEX:                            .rs 1 ; 0x00A1
 STREAM_UNK_DEEP_A:                            .rs 2 ; 0x00A2 to 0x00A3
 STREAM_DEEP_B:                                .rs 1 ; 0x00A4
@@ -195,7 +216,7 @@ CTRL_NEWLY_PRESSED:                           .rs 2 ; 0x00DC to 0x00DD
 CTRL_BUTTONS_PREVIOUS:                        .rs 2 ; 0x00DE to 0x00DF
 NMI_FLAG_E0_TODO:                             .rs 1 ; 0x00E0
 BMI_FLAG_SET_DIFF_MODDED_UNK:                 .rs 1 ; 0x00E1
-NMI_FLAG_UNK:                                 .rs 1 ; 0x00E2
+NMI_FLAG_OBJECT_PROCESSING?:                  .rs 1 ; 0x00E2
 
 
           .rsset 0x00E4
@@ -229,7 +250,7 @@ SPRITE_PAGE:                                  .rs 256 ; 0x0200 to 0x02FF
 
 
           .rsset 0x0400
-NMI_PPU_CMD_PACKETS_BUF:                      .rs 16 ; 0x0400 to 0x040F
+NMI_PPU_CMD_PACKETS_BUF:                      .rs 64 ; 0x0400 to 0x043F
 
 
           .rsset 0x0500
@@ -269,6 +290,39 @@ SOUND_UNK_REQUEST?:                           .rs 7 ; 0x07F8 to 0x07FE
 
           .rsset 0x6222
 WRAM/RAM_ARR_UNK_WRAM:                        .rs 4
+
+
+          .rsset 0x6780
+R_**:$6780:                                   .rs 1
+
+
+          .rsset 0x6788
+R_**:$6788:                                   .rs 1
+
+
+          .rsset 0x6794
+R_**:$6794:                                   .rs 1
+R_**:$6795:                                   .rs 1
+R_**:$6796:                                   .rs 1
+R_**:$6797:                                   .rs 1
+
+
+          .rsset 0x6799
+R_**:$6799:                                   .rs 1
+R_**:$679A:                                   .rs 1
+
+
+          .rsset 0x679E
+R_**:$679E:                                   .rs 1
+R_**:$679F:                                   .rs 1
+
+
+          .rsset 0x67C0
+R_**:$67C0:                                   .rs 1
+
+
+          .rsset 0x67E0
+R_**:$67E0:                                   .rs 1
 
 
           .rsset 0x7400

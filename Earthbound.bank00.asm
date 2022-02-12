@@ -1,4 +1,4 @@
-    .db 00
+    .db 00 ; PTRS?
     .db C2
     .db E9
     .db E7
