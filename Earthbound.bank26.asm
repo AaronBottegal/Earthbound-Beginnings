@@ -1,193 +1,231 @@
-    LDX #$78
-    JSR ENGINE_DELAY_X_FRAMES
-    JSR $A0B1
-    JSR ENGINE_SETTLE_ALL_UPDATES?
+1A_RTN_IDFK: ; 1A:0000, 0x034000
+    LDX #$78 ; Delay val.
+    JSR ENGINE_DELAY_X_FRAMES ; Delay.
+    JSR FADE_AND_SCREEN_CLEAR_WHATEVER ; Do ??
+    JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
     LDA #$00
-    STA MMC3_MIRRORING
+    STA MMC3_MIRRORING ; Set V mirroring.
     LDA #$00
-    STA NMI_LATCH_FLAG
+    STA NMI_LATCH_FLAG ; Clear flag.
     LDA NMI_FLAG_E7
-    AND #$BF
+    AND #$BF ; Keep 1011.1111 only.
     STA NMI_FLAG_E7
     LDA #$00
-    STA NMI_FP_UNK[2]
+    STA NMI_FP_UNK[2] ; Clear ??
     STA NMI_FP_UNK+1
-    LDA ENGINE_PPU_CTRL_COPY
-    AND #$FC
-    LDX #$10
+    LDA ENGINE_PPU_CTRL_COPY ; Load ??
+    AND #$FC ; Clear nametable bits.
+    LDX #$10 ; Seed X and Y scroll.
     LDY #$08
-    STA ENGINE_PPU_CTRL_COPY
-    STX ENGINE_SCROLL_X
+    STA ENGINE_PPU_CTRL_COPY ; Store CTRL copy.
+    STX ENGINE_SCROLL_X ; Set scroll.
     STY ENGINE_SCROLL_Y
     LDA #$FF
-    JSR STORE_IF_MISMATCH_OTHERWISE_WAIT_MENU_DEPTH?
+    JSR STORE_IF_MISMATCH_OTHERWISE_WAIT_MENU_DEPTH? ; Set ??
     LDA #$1B
-    STA ENGINE_BASE_R6_VAL?
-    JSR ENGINE_NMI_0x01_SET/WAIT
-    LDA #$D3
+    STA ENGINE_BASE_R6_VAL? ; Set ??
+    JSR ENGINE_NMI_0x01_SET/WAIT ; Wait.
+    LDA #$D3 ; Set FPTR 1A:02D3
     STA FPTR_SPRITES?[2]
     LDA #$A2
     STA FPTR_SPRITES?+1
-    LDY #$00
-    LDA [FPTR_SPRITES?[2]],Y
-    BEQ 1A:005A
-    JSR $A05D
-    CLC
-    TYA
-    ADC FPTR_SPRITES?[2]
+LOOP_STREAM_RESET: ; 1A:0042, 0x034042
+    LDY #$00 ; Stream reset.
+    LDA [FPTR_SPRITES?[2]],Y ; Load from stream.
+    BEQ GAME_END_INFINITE_LOOP ; == 0, end.
+    JSR SUB_STREAMY ; Do ??
+    CLC ; Prep add.
+    TYA ; Y to A.
+    ADC FPTR_SPRITES?[2] ; Advance FPTR by stream index.
     STA FPTR_SPRITES?[2]
     LDA #$00
     ADC FPTR_SPRITES?+1
     STA FPTR_SPRITES?+1
-    JMP $A042
-    JMP $A05A
-    ASL A
-    TAX
-    LDA $A069,X
+    JMP LOOP_STREAM_RESET
+GAME_END_INFINITE_LOOP: ; 1A:005A, 0x03405A
+    JMP GAME_END_INFINITE_LOOP
+SUB_STREAMY: ; 1A:005D, 0x03405D
+    ASL A ; << 1, *2
+    TAX ; To X index.
+    LDA RTN_PTRS_H,X
     PHA
-    LDA $A068,X
+    LDA RTN_PTRS_L,X
     PHA
     RTS
-    EOR $8FA0,Y
-    LDY #$9F
-    LDY #$B0
-    LDY #$CC
-    LDY #$F2
-    LDY #$EE
-    LDY #$51
-    LDA [**:$0005,X]
-    LDX #$89
-    LDA [UPDATE_PACKET_COUNT/GROUPS,X]
-    LDA [ENGINE_MAPPER_CONFIG_STATUS,X]
-    LDA [SPRITE_INDEX_SWAP,X]
-    LDY #$BC
-    LDY #$F7
-    LDA [ENGINE_PPU_MASK_COPY,X]
-    LDA [**:$0014,X]
-    LDX #$25
-    LDX #$99
-    LDX #$BC
-    LDX #$C8
-    LDA [FPTR_SPRITES?[2]],Y
-    TAX
-    JSR ENGINE_SETTLE_ALL_UPDATES?
+RTN_PTRS_L: ; 1A:0068, 0x034068
+    LOW(1A:0059) ; 0x00
+RTN_PTRS_H: ; 1A:0069, 0x034069
+    HIGH(1A:0059) ; End, infinite loop.
+    LOW(1A:008F) ; 0x01
+    HIGH(1A:008F) ; Stream delay count.
+    LOW(1A:009F) ; 0x02
+    HIGH(1A:009F) ; Stream trigger button wait.
+    LOW(1A:00B0) ; 0x03
+    HIGH(1A:00B0) ; Fade, clear screen, reset stream to 0x01
+    LOW(1A:00CC) ; 0x04
+    HIGH(1A:00CC) ; Set GFX R2,R3,R0,R1 from stream.
+    LOW(1A:00F2) ; 0x05
+    HIGH(1A:00F2) ; Update packets rows.
+    LOW(1A:00EE) ; 0x06
+    HIGH(1A:00EE) ; Update packet 0x8 ??
+    LOW(RTS) ; 0x07
+    HIGH(RTS) ; Palette and stream reset.
+    LOW(1A:0205) ; 0x08
+    HIGH(1A:0205)
+    LOW(1A:0189) ; 0x09
+    HIGH(1A:0189)
+    LOW(1A:01C3) ; 0x0A
+    HIGH(1A:01C3)
+    LOW(1A:01EF) ; 0x0B
+    HIGH(1A:01EF)
+    LOW(1A:00E4) ; 0x0C
+    HIGH(1A:00E4) ; Set only GFX R1.
+    LOW(1A:00BC) ; 0x0D
+    HIGH(1A:00BC) ; Set R4,R5,R2,R3,R0,R1 GFX banks.
+    LOW(1A:01F7) ; 0x0E
+    HIGH(1A:01F7) ; Stream to ??
+    LOW(1A:01FE) ; 0x0F
+    HIGH(1A:01FE) ; Stream replace.
+    LOW(1A:0214) ; 0x10
+    HIGH(1A:0214) ; Object clear ??
+    LOW(1A:0225) ; 0x11
+    HIGH(1A:0225) ; PPU read and then idk. TODO better.
+    LOW(1A:0299) ; 0x12
+    HIGH(1A:0299) ; Setup ??, read, update, restream.
+    LOW(1A:02BC) ; 0x13
+    HIGH(1A:02BC) ; Palette and restream.
+    .db C8 ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from file.
+    TAX ; Loaded to X, count to wait.
+WAIT_X_TIMES: ; 1A:0094, 0x034094
+    JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle updates.
     LDA #$01
-    STA NMI_FLAG_E5_TODO
-    DEX
-    BNE 1A:0094
-    INY
-    RTS
+    STA NMI_FLAG_E5_TODO ; Set flag.
+    DEX ; Count.
+    BNE WAIT_X_TIMES ; != 09, goto.
+    INY ; Stream++
+    RTS ; Leave.
     LDA #$00
-    STA CONTROL_ACCUMULATED?[2]
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    BIT CONTROL_ACCUMULATED?[2]
-    BEQ 1A:00A7
+    STA CONTROL_ACCUMULATED?[2] ; Clear CTRL.
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from stream.
+TEST_NOT_TRIGGERED: ; 1A:00A7, 0x0340A7
+    BIT CONTROL_ACCUMULATED?[2] ; Test accumulated.
+    BEQ TEST_NOT_TRIGGERED ; == 0, wait for trigger.
     LDA #$00
-    STA CONTROL_ACCUMULATED?[2]
-    INY
-    RTS
-    JSR ENGINE_PALETTE_FADE_OUT
-    JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_RAM
-    JSR ENGINE_CLEAR_SCREENS_0x2000-0x2800
-    LDY #$01
-    RTS
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    LDX #$04
-    JSR ENGINE_SET_MAPPER_BANK_X_VAL_A
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    LDX #$05
-    JSR ENGINE_SET_MAPPER_BANK_X_VAL_A
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    LDX #$02
-    JSR ENGINE_SET_MAPPER_BANK_X_VAL_A
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    LDX #$03
-    JSR ENGINE_SET_MAPPER_BANK_X_VAL_A
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    LDX #$00
-    JSR ENGINE_SET_MAPPER_BANK_X_VAL_A
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    LDX #$01
-    JSR ENGINE_SET_MAPPER_BANK_X_VAL_A
-    INY
-    RTS
-    LDA #$08
-    BNE 1A:00F5
-    LDA #$20
-    STA **:$0043
-    JSR ENGINE_SETTLE_ALL_UPDATES?
-    LDA #$05
+    STA CONTROL_ACCUMULATED?[2] ; Clear pressed/accumulated.
+    INY ; Stream++
+    RTS ; Leave.
+FADE_AND_SCREEN_CLEAR_WHATEVER: ; 1A:00B1, 0x0340B1
+    JSR ENGINE_PALETTE_FADE_OUT ; Do fade.
+    JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_RAM ; Nothing on screen.
+    JSR ENGINE_CLEAR_SCREENS_0x2000-0x2800 ; Clear screens.
+    LDY #$01 ; Val ??
+    RTS ; Leave.
+RTN_0xD: ; 1A:00BD, 0x0340BD
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from stream.
+    LDX #$04 ; Set GFX R4.
+    JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set GFX.
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from stream.
+    LDX #$05 ; Set GFX bank R5.
+    JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set mapper.
+RTN_0x4: ; 1A:00CD, 0x0340CD
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from stream.
+    LDX #$02 ; R2 seed.
+    JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set GFX R2 bank.
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from stream.
+    LDX #$03 ; R3 seed.
+    JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set R3 GFX bank.
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from stream.
+    LDX #$00 ; Seed R0.
+    JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set R0 GFX bank.
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from file.
+    LDX #$01 ; Seed R1.
+    JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set GFX R1.
+    INY ; Stream++
+    RTS ; Leave.
+    LDA #$08 ; Seed + 0x8
+    BNE DELTA_0x8 ; != 0, goto, always taken. Seeded.
+    LDA #$20 ; Seed row.
+DELTA_0x8: ; 1A:00F5, 0x0340F5
+    STA **:$0043 ; Set delta for PPU addr.
+    JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
+    LDA #$05 ; Update packet type, unique+1 data.
     STA NMI_PPU_CMD_PACKETS_BUF[64]
-    LDY #$04
-    LDA [FPTR_SPRITES?[2]],Y
-    STA **:$0042
-    DEY
-    LDA [FPTR_SPRITES?[2]],Y
-    STA NMI_PPU_CMD_PACKETS_BUF+1
-    DEY
-    LDA [FPTR_SPRITES?[2]],Y
-    STA NMI_PPU_CMD_PACKETS_BUF+2
-    DEY
-    LDA [FPTR_SPRITES?[2]],Y
-    STA NMI_PPU_CMD_PACKETS_BUF+3
-    LDY #$05
-    LDX #$00
-    LDA [FPTR_SPRITES?[2]],Y
-    STA NMI_PPU_CMD_PACKETS_BUF+4,X
-    INY
-    BNE 1A:0125
-    INC FPTR_SPRITES?+1
-    INX
-    CPX NMI_PPU_CMD_PACKETS_BUF+1
-    BNE 1A:011B
+    LDY #$04 ; Stream index.
+    LDA [FPTR_SPRITES?[2]],Y ; Load from file.
+    STA **:$0042 ; Set count of to do.
+    DEY ; Stream--
+    LDA [FPTR_SPRITES?[2]],Y ; Load from stream.
+    STA NMI_PPU_CMD_PACKETS_BUF+1 ; Set addr H.
+    DEY ; Stream--
+    LDA [FPTR_SPRITES?[2]],Y ; Load from stream.
+    STA NMI_PPU_CMD_PACKETS_BUF+2 ; Set addr L.
+    DEY ; Stream--
+    LDA [FPTR_SPRITES?[2]],Y ; Load from stream.
+    STA NMI_PPU_CMD_PACKETS_BUF+3 ; Set, count.
+    LDY #$05 ; Stream index.
+LOOP_PACKET_INDEX_INIT: ; 1A:0119, 0x034119
+    LDX #$00 ; Index init for iteration.
+SIZE_LOOP: ; 1A:011B, 0x03411B
+    LDA [FPTR_SPRITES?[2]],Y ; Load from file.
+    STA NMI_PPU_CMD_PACKETS_BUF+4,X ; Store to packet data.
+    INY ; Stream++
+    BNE STREAM_NONZERO ; != 0, goto.
+    INC FPTR_SPRITES?+1 ; Mod PTR H.
+STREAM_NONZERO: ; 1A:0125, 0x034125
+    INX ; Index++
+    CPX NMI_PPU_CMD_PACKETS_BUF+1 ; If _ size
+    BNE SIZE_LOOP ; != 0, goto.
     LDA #$00
-    STA NMI_PPU_CMD_PACKETS_BUF+4,X
-    STA NMI_PPU_CMD_PACKETS_INDEX
+    STA NMI_PPU_CMD_PACKETS_BUF+4,X ; EOF for packet.
+    STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index to trigger.
     LDA #$80
-    STA NMI_FLAG_E5_TODO
-    DEC **:$0042
-    BEQ 1A:0151
-    JSR ENGINE_SETTLE_ALL_UPDATES?
-    CLC
-    LDA **:$0043
-    ADC NMI_PPU_CMD_PACKETS_BUF+3
+    STA NMI_FLAG_E5_TODO ; Set flag.
+    DEC **:$0042 ; Count--
+    BEQ RTS ; == 0, leave.
+    JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
+    CLC ; Prep add.
+    LDA **:$0043 ; Load delta.
+    ADC NMI_PPU_CMD_PACKETS_BUF+3 ; Add with, 16-bit.
     STA NMI_PPU_CMD_PACKETS_BUF+3
     LDA #$00
     ADC NMI_PPU_CMD_PACKETS_BUF+2
     STA NMI_PPU_CMD_PACKETS_BUF+2
-    JMP $A119
+    JMP LOOP_PACKET_INDEX_INIT ; Loop.
+RTS: ; 1A:0151, 0x034151
     RTS
-    JSR ENGINE_SETTLE_ALL_UPDATES?
-    LDY #$10
-    LDX #$0F
-    LDA [FPTR_SPRITES?[2]],Y
-    STA SCRIPT_PALETTE_UPLOADED?[32],X
-    LDA $A2C3,X
-    STA SCRIPT_PALETTE_UPLOADED?+16,X
-    DEY
-    DEX
-    BPL 1A:0159
-    LDA SCRIPT_PALETTE_UPLOADED?[32]
-    STA SCRIPT_PALETTE_UPLOADED?+16
-    STA SCRIPT_PALETTE_UPLOADED?+20
+    JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
+    LDY #$10 ; Stream index.
+    LDX #$0F ; Palette index, BG.
+MEMCPY_POSITIVE: ; 1A:0159, 0x034159
+    LDA [FPTR_SPRITES?[2]],Y ; Move from file.
+    STA SCRIPT_PALETTE_UPLOADED?[32],X ; To BG.
+    LDA PALETTE_DATA,X ; Move from palette in ROM.
+    STA SCRIPT_PALETTE_UPLOADED?+16,X ; Store to sprites.
+    DEY ; Stream--
+    DEX ; Index--
+    BPL MEMCPY_POSITIVE ; Positive, goto.
+    LDA SCRIPT_PALETTE_UPLOADED?[32] ; Load back of script.
+    STA SCRIPT_PALETTE_UPLOADED?+16 ; Copy to sprite mirror.
+    STA SCRIPT_PALETTE_UPLOADED?+20 ; And the sprite mirrors of these, too.
     STA SCRIPT_PALETTE_UPLOADED?+24
     STA SCRIPT_PALETTE_UPLOADED?+28
     LDA #$04
-    STA NMI_PPU_CMD_PACKETS_BUF[64]
+    STA NMI_PPU_CMD_PACKETS_BUF[64] ; Set packet palette update.
     LDA #$00
-    STA NMI_PPU_CMD_PACKETS_BUF+1
-    STA NMI_PPU_CMD_PACKETS_INDEX
+    STA NMI_PPU_CMD_PACKETS_BUF+1 ; Set EOF.
+    STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index to trigger.
     LDA #$80
-    STA NMI_FLAG_E5_TODO
-    LDY #$11
-    RTS
+    STA NMI_FLAG_E5_TODO ; Set flag.
+    LDY #$11 ; Stream reset.
+    RTS ; Leave.
     JSR ENGINE_SETTLE_ALL_UPDATES?
     INY
     LDA [FPTR_SPRITES?[2]],Y
@@ -247,112 +285,118 @@
     JSR STORE_IF_MISMATCH_OTHERWISE_WAIT_MENU_DEPTH?
     INY
     RTS
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    STA **:$0047
-    INY
-    RTS
-    DEC **:$0047
-    BNE 1A:0206
-    LDY #$03
-    RTS
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    PHA
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    STA FPTR_SPRITES?+1
-    PLA
-    STA FPTR_SPRITES?[2]
-    LDY #$00
-    RTS
-    JSR ENGINE_SETTLE_ALL_UPDATES?
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from file.
+    STA STREAM_REPLACE_COUNT? ; Store to ??
+    INY ; Stream++
+    RTS ; Leave.
+    DEC STREAM_REPLACE_COUNT? ; -- ??
+    BNE STREAM_REPLACE ; != 0, goto.
+    LDY #$03 ; Stream reset.
+    RTS ; Leave.
+STREAM_REPLACE: ; 1A:0206, 0x034206
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; From file, ptr L.
+    PHA ; To stack.
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; From file, ptr H.
+    STA FPTR_SPRITES?+1 ; Replace file with.
+    PLA ; Pull addr L.
+    STA FPTR_SPRITES?[2] ; Set.
+    LDY #$00 ; Stream reset.
+    RTS ; Leave.
+    JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from stream.
+    ASL A ; << 3, *8.
     ASL A
     ASL A
-    ASL A
-    TAX
+    TAX ; To X index. Sprite slot.
     LDA #$00
-    STA **:$0300,X
-    INY
-    RTS
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    STA FPTR_PACKET_CREATION[2]
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    STA RTN_ARG_UNK
+    STA **:$0300,X ; Clear ??
+    INY ; Stream++
+    RTS ; Leave.
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from file.
+    STA FPTR_PACKET_CREATION[2] ; Store ??
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from file.
+    STA ARG_IDFK ; Set ??
     LDA #$02
-    STA PACKET_HPOS_COORD?
+    STA PACKET_HPOS_COORD? ; Set coords.
     LDA #$13
     STA PACKET_YPOS_COORD?
     LDA #$1C
-    STA R_**:$0070
-    LDA #$00
-    STA ENGINE_PACKINATOR_ARG_SEED_0xA0_PRE_COUNT
-    JSR L_1E:0AA2
-    JSR ENGINE_CREATE_UPDATE_BUF_INIT_DEC?
-    CMP #$00
-    BEQ 1A:0252
-    LDY #$00
-    LDA [FPTR_PACKET_CREATION[2]],Y
-    CMP #$00
-    BNE 1A:0240
-    JSR ENGINE_SETTLE_ALL_UPDATES?
-    LDA #$08
+    STA R_**:$0070 ; Set ??
+    LDA #$00 ; Clear.
+    STA ENGINE_PACKINATOR_ARG_SEED_0xA0_PRE_COUNT ; It.
+STREAM_NONZERO: ; 1A:0240, 0x034240
+    JSR LIB_READING_PPU_ROM_$0110_HELPER ; Do
+    JSR ENGINE_CREATE_UPDATE_BUF_INIT_DEC? ; Create update.
+    CMP #$00 ; If _ #$00
+    BEQ VAL_EQ_0x00 ; == 0, goto.
+    LDY #$00 ; Stream reset.
+    LDA [FPTR_PACKET_CREATION[2]],Y ; Load from stream.
+    CMP #$00 ; If _ #$00
+    BNE STREAM_NONZERO ; != 0, goto.
+VAL_EQ_0x00: ; 1A:0252, 0x034252
+    JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
+    LDA #$08 ; Packet type, move single byte count times.
     STA NMI_PPU_CMD_PACKETS_BUF[64]
-    LDA #$07
+    LDA #$07 ; Count.
     STA NMI_PPU_CMD_PACKETS_BUF+1
-    LDA #$E9
+    LDA #$E9 ; Addr, $23E9
     STA NMI_PPU_CMD_PACKETS_BUF+3
     LDA #$23
     STA NMI_PPU_CMD_PACKETS_BUF+2
-    LDA #$FF
+    LDA #$FF ; Data tile.
     STA NMI_PPU_CMD_PACKETS_BUF+4
-    LDA #$00
+    LDA #$00 ; EOF for packet.
     STA NMI_PPU_CMD_PACKETS_BUF+5
-    LDX #$02
+    LDX #$02 ; Seed ??
+LOOP_PACKET_MODDED: ; 1A:0275, 0x034275
     LDA #$00
-    STA NMI_PPU_CMD_PACKETS_INDEX
+    STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
-    STA NMI_FLAG_E5_TODO
-    DEX
-    BEQ 1A:0297
-    JSR ENGINE_SETTLE_ALL_UPDATES?
-    CLC
-    LDA #$08
-    ADC NMI_PPU_CMD_PACKETS_BUF+3
-    STA NMI_PPU_CMD_PACKETS_BUF+3
+    STA NMI_FLAG_E5_TODO ; Set flag.
+    DEX ; X--
+    BEQ EXIT_RESTREAM ; == 0, leave.
+    JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
+    CLC ; Prep add.
+    LDA #$08 ; Addr L delta.
+    ADC NMI_PPU_CMD_PACKETS_BUF+3 ; Add with.
+    STA NMI_PPU_CMD_PACKETS_BUF+3 ; Store result.
+    LDA #$00 ; Delta none for carry.
+    ADC NMI_PPU_CMD_PACKETS_BUF+2 ; Add for carry.
+    STA NMI_PPU_CMD_PACKETS_BUF+2 ; Store result.
+    JMP LOOP_PACKET_MODDED ; Goto.
+EXIT_RESTREAM: ; 1A:0297, 0x034297
+    LDY #$03 ; Reset stream.
+    RTS
+    INY ; Stream++
+    LDA [FPTR_SPRITES?[2]],Y ; Load from file.
+    STA FPTR_PACKET_CREATION[2] ; Set ??
+    INY
+    LDA [FPTR_SPRITES?[2]],Y
+    STA ARG_IDFK ; Set ??
+    INY
+    LDA [FPTR_SPRITES?[2]],Y
+    STA PACKET_HPOS_COORD? ; Set coord.
+    INY
+    LDA [FPTR_SPRITES?[2]],Y
+    STA PACKET_YPOS_COORD? ; Set coord.
     LDA #$00
-    ADC NMI_PPU_CMD_PACKETS_BUF+2
-    STA NMI_PPU_CMD_PACKETS_BUF+2
-    JMP $A275
-    LDY #$03
-    RTS
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    STA FPTR_PACKET_CREATION[2]
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    STA RTN_ARG_UNK
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    STA PACKET_HPOS_COORD?
-    INY
-    LDA [FPTR_SPRITES?[2]],Y
-    STA PACKET_YPOS_COORD?
-    LDA #$00
-    STA R_**:$0070
-    STA ENGINE_PACKINATOR_ARG_SEED_0xA0_PRE_COUNT
-    JSR L_1E:0AA2
-    JSR ENGINE_CREATE_UPDATE_BUF_INIT_DEC?
-    LDY #$05
-    RTS
-    JSR ENGINE_PALETTE_UPLOAD_WITH_WAIT_HELPER
-    LDY #$01
-    RTS
-    .db 0F
+    STA R_**:$0070 ; Clear ??
+    STA ENGINE_PACKINATOR_ARG_SEED_0xA0_PRE_COUNT ; Init.
+    JSR LIB_READING_PPU_ROM_$0110_HELPER ; Do read.
+    JSR ENGINE_CREATE_UPDATE_BUF_INIT_DEC? ; Do a create.
+    LDY #$05 ; Reset stream.
+    RTS ; Leave.
+    JSR ENGINE_PALETTE_UPLOAD_WITH_PACKET_HELPER ; Do.
+    LDY #$01 ; Restream.
+    RTS ; Leave.
+PALETTE_DATA: ; 1A:02C3, 0x0342C3
+    .db 0F ; Palette.
     .db 0F
     .db 00
     .db 30
@@ -367,8 +411,8 @@
     .db 0F
     .db 0F
     .db 12
-    .db 37
-    .db 01
+    .db 37 ; End of palette.
+    .db 01 ; File ??
     .db 78
     .db 0B
     .db 2D

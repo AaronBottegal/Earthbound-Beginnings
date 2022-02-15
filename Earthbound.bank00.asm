@@ -4678,7 +4678,7 @@
     .db 08
     .db FD
     .db 01
-    .db 04
+    .db 04 ; This is ptr'd to.
     .db 00
     .db 67
     .db DB

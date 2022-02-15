@@ -77,9 +77,9 @@ SCRIPT_PAIR_PTR?:                             .rs 2 ; 0x001A to 0x001B
           .rsset 0x001F
 ACTION_BUTTONS_RESULT:                        .rs 1 ; 0x001F
 FIRST_LAUNCHER_HOLD_FLAG?:                    .rs 1 ; 0x0020
-R_**:$0021:                                   .rs 1 ; 0x0021
+MAIN_FLAG_UNK:                                .rs 1 ; 0x0021
 SCRIPT_FLAG_0x22:                             .rs 1 ; 0x0022
-UNK_NONZERO_SKIP:                             .rs 1 ; 0x0023
+FLAG_UNK_23:                                  .rs 1 ; 0x0023
 CLEAR_AFTER_HELL_ALOT_LOL:                    .rs 1 ; 0x0024
 ENGINE_FLAG_25_SKIP_UNK:                      .rs 1 ; 0x0025
 
@@ -89,7 +89,7 @@ R_**:$0028:                                   .rs 1 ; 0x0028
 R_**:$0029:                                   .rs 1 ; 0x0029
 R_**:$002A:                                   .rs 1 ; 0x002A
 R_**:$002B:                                   .rs 1 ; 0x002B
-R_**:$002C:                                   .rs 1 ; 0x002C
+ROUTINE_CONTINUE_FLAG?:                       .rs 1 ; 0x002C
 R_**:$002D:                                   .rs 1 ; 0x002D
 
 
@@ -99,7 +99,7 @@ ENGINE_FPTR_32:                               .rs 2 ; 0x0032 to 0x0033
 
 
           .rsset 0x0035
-R_**:$0035:                                   .rs 1 ; 0x0035
+STREAM_INDEX_FILE_UNK_SCRIPT/COMMANDS_TEXT?:  .rs 1 ; 0x0035
 GAME_SLOT_CURRENT?:                           .rs 1 ; 0x0036
 SLOT/DATA_OFFSET_USE?:                        .rs 1 ; 0x0037
 R6_BANKED_ADDR_MOVED:                         .rs 2 ; 0x0038 to 0x0039
@@ -110,16 +110,24 @@ STREAM_WRITE_ARR_UNK:                         .rs 4 ; 0x003A to 0x003D
 FPTR_SPRITES?:                                .rs 2 ; 0x0040 to 0x0041
 
 
-          .rsset 0x0048
-R_**:$0048:                                   .rs 1 ; 0x0048
+          .rsset 0x0047
+STREAM_REPLACE_COUNT?:                        .rs 1 ; 0x0047
+FLAG_UNK_48:                                  .rs 1 ; 0x0048
 
 
-          .rsset 0x0055
+          .rsset 0x0050
+R_**:$0050:                                   .rs 1 ; 0x0050
+R_**:$0051:                                   .rs 1 ; 0x0051
+R_**:$0052:                                   .rs 1 ; 0x0052
+SCRIPT_INDEX_53_UNK:                          .rs 1 ; 0x0053
+R_**:$0054:                                   .rs 1 ; 0x0054
 57_INDEX_UNK:                                 .rs 1 ; 0x0055
 56_THING_NAME_SIZE:                           .rs 1 ; 0x0056
 
 
-          .rsset 0x005C
+          .rsset 0x005A
+FLAG_SPRITE_OFF_SCREEN_UNK:                   .rs 1 ; 0x005A
+R_**:$005B:                                   .rs 1 ; 0x005B
 FPTR_5C_UNK:                                  .rs 2 ; 0x005C to 0x005D
 
 
@@ -133,8 +141,8 @@ ALT_COUNT_UNK:                                .rs 1 ; 0x0067
 ARR_BITS_TO_UNK:                              .rs 8 ; 0x0068 to 0x006F
 R_**:$0070:                                   .rs 1 ; 0x0070
 ENGINE_PACKINATOR_ARG_SEED_0xA0_PRE_COUNT:    .rs 1 ; 0x0071
-ENGINE_SCRIPT_SWITCH_VAL:                     .rs 1 ; 0x0072
-RTN_ARG_UNK:                                  .rs 1 ; 0x0073
+ENGINE_SCRIPT_SWITCH_VAL?:                    .rs 1 ; 0x0072
+ARG_IDFK:                                     .rs 1 ; 0x0073
 FPTR_PACKET_CREATION:                         .rs 2 ; 0x0074 to 0x0075
 PACKET_HPOS_COORD?:                           .rs 1 ; 0x0076
 PACKET_YPOS_COORD?:                           .rs 1 ; 0x0077
@@ -149,7 +157,7 @@ FPTR_UNK_84_MENU_SELECTION?:                  .rs 2 ; 0x0082 to 0x0083
 
 
           .rsset 0x0083
-R_**:$0083:                                   .rs 1 ; 0x0083
+MENU_HELPER_STATUS?:                          .rs 1 ; 0x0083
 FPTR_UNK_84_MENU?:                            .rs 2 ; 0x0084 to 0x0085
 STREAM_TARGET?:                               .rs 1 ; 0x0086
 CARRY_UP?:                                    .rs 1 ; 0x0087
@@ -207,10 +215,7 @@ UPDATE_PACKET_COUNT/GROUPS:                   .rs 1 ; 0x00C3
 
 
           .rsset 0x00D7
-RAM_CODE_UNK:                                 .rs 2 ; 0x00D7 to 0x00D8
-
-
-          .rsset 0x00DA
+RAM_CODE_UNK:                                 .rs 3 ; 0x00D7 to 0x00D9
 CONTROL_ACCUMULATED?:                         .rs 2 ; 0x00DA to 0x00DB
 CTRL_NEWLY_PRESSED:                           .rs 2 ; 0x00DC to 0x00DD
 CTRL_BUTTONS_PREVIOUS:                        .rs 2 ; 0x00DE to 0x00DF
@@ -230,7 +235,7 @@ ENGINE_IRQ_LATCH_CURRENT?:                    .rs 1 ; 0x00EB
 NMI_LATCH_FLAG:                               .rs 1 ; 0x00EC
 ENGINE_IRQ_RTN_INDEX:                         .rs 1 ; 0x00ED
 MAPPER_INDEX_LAST_WRITTEN:                    .rs 1 ; 0x00EE
-ENGINE_MAPPER_CONFIG_STATUS:                  .rs 1 ; 0x00EF
+ENGINE_MAPPER_CONFIG_STATUS_NO_BANK:          .rs 1 ; 0x00EF
 MAPPER_BANK_VALS:                             .rs 8 ; 0x00F0 to 0x00F7
 
 
@@ -247,6 +252,10 @@ NMI_PPU_READ_BUF_UNK:                         .rs 64 ; 0x0110 to 0x014F
 
           .rsset 0x0200
 SPRITE_PAGE:                                  .rs 256 ; 0x0200 to 0x02FF
+
+
+          .rsset 0x03E1
+SPRITE_SLOT_Y_OFF_SCREEN_UNK:                 .rs 1 ; 0x03E1
 
 
           .rsset 0x0400
@@ -266,6 +275,11 @@ CHARACTER_NAMES_ARR:                          .rs 8 ; 0x0580 to 0x0587
 
           .rsset 0x0584
 WRAM/RAM_ARR_UNK_RAM:                         .rs 4 ; 0x0584 to 0x0587
+
+
+          .rsset 0x0600
+STREAM_INDEXES_ARR_UNK:                       .rs 24 ; 0x0600 to 0x0617
+STREAM_PTRS_ARR_UNK:                          .rs 48 ; 0x0618 to 0x0647
 
 
           .rsset 0x076C
