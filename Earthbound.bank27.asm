@@ -67,7 +67,7 @@
     JSR $80AA
     STA VAL_CMP_DIFFERS_STORED_UNK
     LDA #$11
-    STA **:$07F1
+    STA R_**:$07F1
     RTS
     LDA #$C0
     STA APU_FSEQUENCE
@@ -131,7 +131,7 @@
     JSR $800D
     BEQ 1B:011B
     JSR $8011
-    LDA **:$00BF
+    LDA R_**:$00BF
     STA SOUND_UNK_REQUEST?[7],X
     LDA #$00
     STA **:$07DA,X
@@ -149,7 +149,7 @@
     RTS
     STA **:$07D9
     JSR $8015
-    LDA **:$00BF
+    LDA R_**:$00BF
     STA SOUND_UNK_REQUEST?+4
     LDX #$01
     STX **:$07C8
@@ -197,20 +197,20 @@
     BEQ 1B:01B9
     CMP #$19
     BCC 1B:01C4
-    STA **:$00BF
+    STA R_**:$00BF
     SEC
     SBC #$19
     STA **:$07CC
     JMP $81DC
     CMP #$06
     BNE 1B:01D4
-    LDA **:$6707
+    LDA R_**:$6707
     CMP #$01
     BEQ 1B:01D3
     LDA #$07
     BNE 1B:01D4
     TYA
-    STA **:$00BF
+    STA R_**:$00BF
     STA **:$07CC
     DEC **:$07CC
     LDA #$7F
@@ -450,7 +450,7 @@
     STA **:$07A0,X
     JMP $83BA
     JSR $80AD
-    LDA **:$00BF
+    LDA R_**:$00BF
     STA SOUND_UNK_REQUEST?+5
     CMP #$33
     BEQ 1B:035B
@@ -866,7 +866,7 @@
     LDY #$02
     STA APU_DMC_LENGTH
     STY APU_DMC_ADDR
-    LDA **:$07F7
+    LDA R_**:$07F7
     BNE 1B:06D0
     LDA SOUND_WRITE_DEST+1
     STA APU_DMC_CTRL

@@ -511,7 +511,7 @@
     .db FF
     .db FF
     LDA #$0F
-    STA **:$0100 ; Set ??
+    STA R_**:$0100 ; Set ??
     LDA #$03 ; Set config for R3.
     ORA ENGINE_MAPPER_CONFIG_STATUS_NO_BANK ; Set with other bits.
     STA MMC3_BANK_CFG ; Store R3 config.
@@ -520,7 +520,7 @@
 DELAY_LOOP_Y_A: ; 1E:0210, 0x03C210
     DEY ; --
     BNE DELAY_LOOP_Y_A ; != 0, loop.
-    BIT **:$0000 ; Test ??, for delay only?
+    BIT R_**:$0000 ; Test ??, for delay only?
     JMP DELAY_Y_0x4 ; Goto.
 LIB_WRITE_LATCH: ; 1E:0218, 0x03C218
     STA MMC3_IRQ_LATCH ; A to latch.
@@ -535,7 +535,7 @@ DELAY_LOOP_Y_B: ; 1E:0222, 0x03C222
     RTS ; Leave.
 LIB_RETURN_HANDLER_UNK: ; 1E:0226, 0x03C226
     LDA #$0F ; Val ??
-    STA **:$0100 ; Set ??
+    STA R_**:$0100 ; Set ??
     RTS ; Leave.
 DICTIONARY_ALT_VALS: ; 1E:022C, 0x03C22C
     .db 00 ; 0x00
@@ -617,7 +617,7 @@ LATCH_NO_FLAG_RTN: ; 1E:0274, 0x03C274
     LDA #$00
     STA NMI_LATCH_FLAG ; Clear ??
     LDA #$FF
-    STA **:$07F7 ; Set ??
+    STA R_**:$07F7 ; Set ??
     LDA #$0F
     STA APU_STATUS ; Enable APU channels.
     JSR ENGINE_NMI_0x01_SET/WAIT ; Wait.
@@ -876,13 +876,13 @@ LIB_OBJECTS_AND_SETTLE_AND_FLAGS_UNK: ; 1E:03F4, 0x03C3F4
     LDA #$01
     STA NMI_FLAG_E5_TODO ; Set ??
     LDA #$00
-    STA **:$07F7 ; Clear ??
+    STA R_**:$07F7 ; Clear ??
     PLP ; Pull status.
     RTS ; Leave.
 TODO_ROUTINE_NO_MASK_ENTRY: ; 1E:0406, 0x03C406
     LDA #$FF ; Mask, none.
 TODO_ROUTINE_MASK_A: ; 1E:0408, 0x03C408
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Store passed.
+    STA MISC_USE_A ; Store passed.
     JSR ENGINE_WRAM_STATE_WRITEABLE ; WRAM writeable.
     LDA #$00 ; Seed clear ??
 LOOP_STACK_POSITIVE: ; 1E:040F, 0x03C40F
@@ -896,7 +896,7 @@ LOOP_STACK_POSITIVE: ; 1E:040F, 0x03C40F
     STA FPTR_PACKET_CREATION+1
     LDY #$01 ; Stream index.
     LDA STREAM_INDEXES_ARR_UNK+1,X ; Load from arr.
-    AND ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; And with ??
+    AND MISC_USE_A ; And with ??
     STA [FPTR_PACKET_CREATION[2]],Y ; Store to file stream 0x1
     LDY #$14 ; Restream higher.
 STREAM_LT_0x18: ; 1E:042B, 0x03C42B
@@ -912,7 +912,8 @@ INDEXED_LOAD_EQ_0x00: ; 1E:0436, 0x03C436
     ADC #$20 ; += 0x20
     BPL LOOP_STACK_POSITIVE ; Positive, goto.
     JSR ENGINE_WRAM_STATE_WRITE_DISABLED ; Disable WRAM.
-    JSR ENGINE_WRAM_ARR_MOD_LOOPS_UNK ; Do, enables it again, lol.
+LIB_PACKET_R6_0x00_TODO: ; 1E:043F, 0x03C43F
+    JSR ENGINE_WRAM_ARR_MOD_LOOPS_UNK ; Enable WRAM.
     LDA MAPPER_BANK_VALS+6 ; Load R6.
     PHA ; Save to stack.
     JSR LIB_PRG_HELPER_R6_TO_0x00 ; Do.
@@ -954,10 +955,11 @@ LIB_UGH_MORE: ; 1E:046E, 0x03C46E
     TAY
     JSR ENGINE_WRAM_STATE_WRITEABLE
     LDA #$FF
-    STA **:$6600,Y
+L_1E:048C: ; 1E:048C, 0x03C48C
+    STA R_**:$6600,Y
     INY
     DEX
-    BNE 1E:048C
+    BNE L_1E:048C
     JSR ENGINE_WRAM_STATE_WRITE_DISABLED
     LDX NMI_PPU_CMD_PACKETS_BUF+2
     LDY NMI_PPU_CMD_PACKETS_BUF+3
@@ -1006,17 +1008,18 @@ LIB_UGH_MORE: ; 1E:046E, 0x03C46E
     LDA ENGINE_PTR_PACKET_MANAGER[2]
     STA NMI_PPU_CMD_PACKETS_BUF[64],X
     INX
+L_1E:04E5: ; 1E:04E5, 0x03C4E5
     LDA PACKET_PPU_ADDR_HL[2]
     STA NMI_PPU_CMD_PACKETS_BUF[64],X
     INX
     LDA PACKET_PPU_ADDR_HL+1
     STA NMI_PPU_CMD_PACKETS_BUF[64],X
     INX
-    LDA **:$6600,Y
+    LDA R_**:$6600,Y
     AND #$03
     STA PACKET_CONSUMED/INDEX?
     INY
-    LDA **:$6600,Y
+    LDA R_**:$6600,Y
     AND #$0C
     ORA PACKET_CONSUMED/INDEX?
     STA PACKET_CONSUMED/INDEX?
@@ -1024,12 +1027,12 @@ LIB_UGH_MORE: ; 1E:046E, 0x03C46E
     CLC
     ADC #$0F
     TAY
-    LDA **:$6600,Y
+    LDA R_**:$6600,Y
     AND #$30
     ORA PACKET_CONSUMED/INDEX?
     STA PACKET_CONSUMED/INDEX?
     INY
-    LDA **:$6600,Y
+    LDA R_**:$6600,Y
     AND #$C0
     ORA PACKET_CONSUMED/INDEX?
     STA NMI_PPU_CMD_PACKETS_BUF[64],X
@@ -1039,13 +1042,15 @@ LIB_UGH_MORE: ; 1E:046E, 0x03C46E
     SBC #$0F
     TAY
     DEC ENGINE_PTR_PACKET_MANAGER[2]
-    BNE 1E:0528
+    BNE L_1E:0528
     STX NMI_PPU_CMD_PACKETS_INDEX
     RTS
+L_1E:0528: ; 1E:0528, 0x03C528
     INC DISP_UPDATE_COUNT_SMART_INVERTED/MISC
-    BEQ 1E:0531
+    BEQ L_1E:0531
     INC PACKET_PPU_ADDR_HL+1
-    JMP 1E:04E5
+    JMP L_1E:04E5
+L_1E:0531: ; 1E:0531, 0x03C531
     LDA #$04
     EOR PACKET_PPU_ADDR_HL[2]
     STA PACKET_PPU_ADDR_HL[2]
@@ -1053,16 +1058,16 @@ LIB_UGH_MORE: ; 1E:046E, 0x03C46E
     STA DISP_UPDATE_COUNT_SMART_INVERTED/MISC
     AND PACKET_PPU_ADDR_HL+1
     STA PACKET_PPU_ADDR_HL+1
-    JMP 1E:04E5
+    JMP L_1E:04E5
 ENGINE_WRAM_ARR_MOD_LOOPS_UNK: ; 1E:0542, 0x03C542
     JSR ENGINE_WRAM_STATE_WRITEABLE ; Enable WRAM writes.
     LDX #$10 ; Seed ??
     LDY #$00 ; Seed Y index.
-    STY **:$6707 ; Set WRAM ??
+    STY R_**:$6707 ; Set WRAM ??
 LOOP_LARGEST: ; 1E:054C, 0x03C54C
     JSR STREAM_PAGE_Y_INDEXED_CC_0x01-0x05 ; Load val.
     BCS DATA_CS ; Not 0x01-0x05, goto.
-    INC **:$6707 ; ++
+    INC R_**:$6707 ; ++
     JSR CREATE_PTR_UNK ; Create ptr.
     TYA ; Y to A.
     PHA ; Save it to the stack.
@@ -1074,7 +1079,7 @@ SLOT_INDEX_NE_0x14: ; 1E:055B, 0x03C55B
     TYA ; Index into table save.
     PHA
     LDY #$01 ; Seed index.
-    LDA [ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]],Y ; Load from index.
+    LDA [MISC_USE_A],Y ; Load from index.
     LDY #$0E ; Seed alt table index.
 Y_INDEX_POSITIVE: ; 1E:056A, 0x03C56A
     ASL A ; << 1, *2.
@@ -1085,7 +1090,7 @@ Y_INDEX_POSITIVE: ; 1E:056A, 0x03C56A
     LDY #$00 ; Reset index.
 SMALL_TABLE_LOOP: ; 1E:0572, 0x03C572
     LDA DATA_TABLE_SMOL,Y ; Load index.
-    STA **:$6700,X ; Store to arr.
+    STA R_**:$6700,X ; Store to arr.
     INX ; Indexes++
     INY
     CPY #$05 ; If _ #$05
@@ -1093,10 +1098,10 @@ SMALL_TABLE_LOOP: ; 1E:0572, 0x03C572
     PLA ; Pull table index.
     TAY ; Back to Y.
     LDA ROM_DATA_UNK,Y ; Move ??
-    STA **:$6700,X
+    STA R_**:$6700,X
     INX ; Arr++
     LDA ROM_DATA_UNK_PAIR,Y ; Move pair.
-    STA **:$6700,X
+    STA R_**:$6700,X
     INX ; Arr++
     LDY #$1B ; Seed ??
     BNE LOOP_MOVE_TABLE_TO_0x1E_UNK
@@ -1109,14 +1114,14 @@ DATA_CARRY_CLEAR_Y_SUB_LOOP: ; 1E:0592, 0x03C592
     JSR DATA_MOVE_AND_MOD_WITH_PTR_UNK ; Do ??
 LOOP_MOVE_TABLE_TO_0x1E_UNK: ; 1E:059B, 0x03C59B
     LDA ROM_DATA_UNK,Y ; Move from table.
-    STA **:$6700,X
+    STA R_**:$6700,X
     INX ; Indexes++
     INY
     CPY #$1E ; If _ #$1E
     BNE LOOP_MOVE_TABLE_TO_0x1E_UNK ; != 0, goto.
     PLA ; Pull count ??
     TAY ; To Y.
-    LDA **:$6707 ; Load ??
+    LDA R_**:$6707 ; Load ??
     CMP #$03 ; If _ #$03
     BCS VAL_GTE_0x3 ; >=, goto.
 DATA_CS: ; 1E:05B0, 0x03C5B0
@@ -1125,18 +1130,18 @@ DATA_CS: ; 1E:05B0, 0x03C5B0
     BCC LOOP_LARGEST ; <, goto.
 VAL_GTE_0x3: ; 1E:05B5, 0x03C5B5
     LDA #$00
-    STA **:$6704 ; Clear ??
-    STA **:$6705
-    STA **:$6706
+    STA R_**:$6704 ; Clear ??
+    STA R_**:$6705
+    STA R_**:$6706
     SEC ; Prep sub.
     LDA #$03 ; Sub val.
-    SBC **:$6707 ; 3 - var
+    SBC R_**:$6707 ; 3 - var
     TAX ; To X.
     LDY #$00 ; Reset index.
 VAL_LT_0x4: ; 1E:05C9, 0x03C5C9
     JSR STREAM_PAGE_Y_INDEXED_CC_0x01-0x05 ; Do.
     BCS DATA_RET_OTHER
-    STA **:$6704,X ; Store to arr.
+    STA R_**:$6704,X ; Store to arr.
     INX ; Index++
     CPX #$03 ; If _ #$03
     BCS DATA_GTE_0x3 ; >=, goto.
@@ -1145,29 +1150,29 @@ DATA_RET_OTHER: ; 1E:05D6, 0x03C5D6
     CPY #$04 ; If _ #$04
     BCC VAL_LT_0x4 ; <, goto.
 DATA_GTE_0x3: ; 1E:05DB, 0x03C5DB
-    LDA **:$6707 ; Load ??
+    LDA R_**:$6707 ; Load ??
     ASL A ; << 1, *2.
     TAX ; To X index.
     LDA #$04
-    STA **:$6700 ; Set ??
-    STA **:$670A ; Set ??
+    STA R_**:$6700 ; Set ??
+    STA R_**:$670A ; Set ??
     CPX #$04 ; If _ #$04
     BCS X_GTE_0x4 ; >=, goto.
     LDA #$00 ; Seed 0x00
 X_GTE_0x4: ; 1E:05EE, 0x03C5EE
-    STA **:$670D ; Set 0x4/0x0
+    STA R_**:$670D ; Set 0x4/0x0
     LDA ROM_LIB_UNK,X
-    STA **:$6701
+    STA R_**:$6701
     LDA ROM_LIB_PAIR,X
-    STA **:$6702
-    LDA **:$6713 ; Move ??
-    STA **:$670B
-    LDA **:$6714 ; Move ??
-    STA **:$670C
+    STA R_**:$6702
+    LDA R_**:$6713 ; Move ??
+    STA R_**:$670B
+    LDA R_**:$6714 ; Move ??
+    STA R_**:$670C
     LDA #$9D ; Move ??
-    STA **:$670E
+    STA R_**:$670E
     LDA #$C3 ; Move ??
-    STA **:$670F
+    STA R_**:$670F
     JMP ENGINE_WRAM_STATE_WRITE_DISABLED ; Exit, no more WRAM writes.
 ROM_LIB_UNK: ; 1E:0616, 0x03C616
     .db 3D
@@ -1206,41 +1211,41 @@ RTS: ; 1E:0636, 0x03C636
     RTS ; Leave.
 DATA_MOVE_AND_MOD_WITH_PTR_UNK: ; 1E:0637, 0x03C637
     LDA ROM_DATA_UNK,Y ; Move from Y to X indexes.
-    STA **:$6700,X
+    STA R_**:$6700,X
     INX ; Indexes++
     INY
     LDA ROM_DATA_UNK,Y ; 2x
-    STA **:$6700,X
+    STA R_**:$6700,X
     INX ; ++
     INY
     LDA ROM_DATA_UNK,Y ; 3x
-    STA **:$6700,X
+    STA R_**:$6700,X
     INX ; ++
     INY
     CLC ; Prep add.
     LDA ROM_DATA_UNK,Y ; Load from arr.
-    ADC ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Add with ptr L.
-    STA **:$6700,X ; Store to arr.
+    ADC MISC_USE_A ; Add with ptr L.
+    STA R_**:$6700,X ; Store to arr.
     INX ; ++
     INY
     LDA ROM_DATA_UNK,Y ; Load from arr.
-    ADC ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Add with ptr H.
-    STA **:$6700,X ; Store to arr.
+    ADC MISC_USE_B ; Add with ptr H.
+    STA R_**:$6700,X ; Store to arr.
     INX ; ++
     INY
     RTS
 CREATE_PTR_UNK: ; 1E:0665, 0x03C665
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Store arg. AAAA.AABB
+    STA MISC_USE_B ; Store arg. AAAA.AABB
     LDA #$00 ; Clear for shifts low.
-    LSR ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Shift bit off.
+    LSR MISC_USE_B ; Shift bit off.
     ROR A ; Into A.
-    LSR ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; 2x
+    LSR MISC_USE_B ; 2x
     ROR A
     ADC #$00 ; Carry to bit 0, fancy. But never anything here.
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Store to, addr L.
-    LDA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Load passed val 00AA.AAAA
+    STA MISC_USE_A ; Store to, addr L.
+    LDA MISC_USE_B ; Load passed val 00AA.AAAA
     ADC #$74 ; Add with, PTR offset base. Range of 0x74-B3.
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Store addr H.
+    STA MISC_USE_B ; Store addr H.
     RTS
 UPDATE_BUF_FROM_FILE_HELPER_UNK: ; 1E:067A, 0x03C67A
     JSR ENGINE_CREATE_UPDATE_BUF_INIT_INC? ; Create file.
@@ -1374,7 +1379,7 @@ LOOP_COUNT: ; 1E:075F, 0x03C75F
     LSR A ; >> 1, /2.
     BCC PACKET_END ; CC, goto.
     LDA #$0E
-    STA **:$07F1 ; Set ??
+    STA R_**:$07F1 ; Set ??
 PACKET_END: ; 1E:077B, 0x03C77B
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_BUF+5
@@ -1405,49 +1410,57 @@ BIT_0x40_CLEAR: ; 1E:07A4, 0x03C7A4
     JMP ROUTINE_LOOP ; Loop.
 L_1E:07AF: ; 1E:07AF, 0x03C7AF
     CMP #$01
-    BNE 1E:07C0
+    BNE L_1E:07C0
     PHA
     LDX #$A4
+L_1E:07B6: ; 1E:07B6, 0x03C7B6
     LDA NMI_PPU_CMD_PACKETS_BUF+50,X
-    STA **:$045B,X
+    STA R_**:$045B,X
     DEX
-    BNE 1E:07B6
+    BNE L_1E:07B6
     PLA
+L_1E:07C0: ; 1E:07C0, 0x03C7C0
     RTS
 L_1E:07C1: ; 1E:07C1, 0x03C7C1
     LDA #$33
+L_1E:07C3: ; 1E:07C3, 0x03C7C3
     CLC
     ADC #$29
     DEX
-    BNE 1E:07C3
+    BNE L_1E:07C3
     STX PACKET_PRE_SEED_0xA0_COUNT
     TAX
     PHA
-    JSR 1E:07D4
+    JSR L_1E:07D4
     STA PACKET_PRE_SEED_0xA0_COUNT
     PLA
     TAX
+L_1E:07D4: ; 1E:07D4, 0x03C7D4
     JSR ENGINE_SETTLE_ALL_UPDATES?
     STX NMI_PPU_CMD_PACKETS_INDEX
+L_1E:07D9: ; 1E:07D9, 0x03C7D9
     LDA NMI_PPU_CMD_PACKETS_BUF[64],X
-    BEQ 1E:07FD
+    BEQ L_1E:07FD
     EOR #$05
-    BNE 1E:07F3
+    BNE L_1E:07F3
     ORA PACKET_PRE_SEED_0xA0_COUNT
-    BNE 1E:07E9
-    JSR 1E:080E
+    BNE L_1E:07E9
+    JSR L_1E:080E
+L_1E:07E9: ; 1E:07E9, 0x03C7E9
     TXA
     CLC
     ADC #$04
     ADC NMI_PPU_CMD_PACKETS_BUF+1,X
     TAX
-    BCC 1E:07D9
-    JSR 1E:080E
+    BCC L_1E:07D9
+L_1E:07F3: ; 1E:07F3, 0x03C7F3
+    JSR L_1E:080E
     TXA
     CLC
     ADC #$05
     TAX
-    BCC 1E:07D9
+    BCC L_1E:07D9
+L_1E:07FD: ; 1E:07FD, 0x03C7FD
     STA PACKET_PRE_SEED_0xA0_COUNT
     SEC
     LDA NMI_PPU_CMD_PACKETS_INDEX
@@ -1456,8 +1469,9 @@ L_1E:07C1: ; 1E:07C1, 0x03C7C1
     LDA #$80
     STA NMI_FLAG_E5_TODO
     CPX #$5C
-    BCS 1E:07D4
+    BCS L_1E:07D4
     RTS
+L_1E:080E: ; 1E:080E, 0x03C80E
     SEC
     LDA NMI_PPU_CMD_PACKETS_BUF+3,X
     SBC #$20
@@ -1468,7 +1482,7 @@ L_1E:07C1: ; 1E:07C1, 0x03C7C1
     STA NMI_PPU_CMD_PACKETS_BUF+2,X
     EOR DISP_UPDATE_COUNT_SMART_INVERTED/MISC
     AND #$04
-    BEQ 1E:083C
+    BEQ L_1E:083C
     SEC
     LDA NMI_PPU_CMD_PACKETS_BUF+3,X
     SBC #$40
@@ -1478,6 +1492,7 @@ L_1E:07C1: ; 1E:07C1, 0x03C7C1
     AND #$0F
     ORA #$20
     STA NMI_PPU_CMD_PACKETS_BUF+2,X
+L_1E:083C: ; 1E:083C, 0x03C83C
     RTS
 ENGINE_PACKET_CREATE_FROM_FILE: ; 1E:083D, 0x03C83D
     JSR PACKET_CALC_COORDS_TO_VADDR
@@ -1674,13 +1689,13 @@ SCRIPT_RTN_E: ; 1E:0950, 0x03C950
     LDY ALT_STUFF_INDEX? ; Load ??
     BEQ ALT_0x00 ; == 0, goto.
     LDA #$00
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Clear ??
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+2
+    STA MISC_USE_A ; Clear ??
+    STA MISC_USE_B
+    STA MISC_USE_C
     DEY ; Y--
 VAL_POSITIVE: ; 1E:0975, 0x03C975
     LDA [SAVE_GAME_MOD_PAGE_PTR[2]],Y ; Load from file.
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2],Y ; Store to 0x0060.
+    STA MISC_USE_A,Y ; Store to 0x0060.
     DEY ; Y--
     BPL VAL_POSITIVE ; Positive, goto.
     TXA ; X to A.
@@ -1983,7 +1998,7 @@ MAIN_LOOP_REENTRY_LARGEST: ; 1E:0B5D, 0x03CB5D
     LDA CURRENT_SAVE_MANIPULATION_PAGE+6 ; Load.
     AND #$0F ; Keep bottom.
     EOR #$84 ; Invet to set.
-    STA **:$000D ; Store to.
+    STA R_**:$000D ; Store to.
 MAIN_LOOP_REENTRY_SECOND_LARGEST: ; 1E:0B70, 0x03CB70
     JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_RAM ; Settle, no sprites.
     JSR ENGINE_SETTLE_UPDATES_TODO ; Settle, scroll, ??
@@ -2048,11 +2063,11 @@ STATES_COMBINED_ANY_SET_HANDLER: ; 1E:0BEB, 0x03CBEB
     LDA FLAG_UNK_48 ; Load ??
     BEQ HELPER_GOTO_MAIN_TERTIARY ; == 0, goto.
     CMP #$A2 ; If _ #$A2
-    BEQ MAIN_ALT_UNK ; ==, goto.
+    BEQ MAIN_ALT_CHECKS_END_OF_GAME ; ==, goto.
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
     LDA VAL_CMP_UNK ; Load ??
     PHA ; Save it.
-    JSR LIB_UNK ; Do ??
+    JSR LIB_BATTLE_ENDED? ; Do ??
     PLA ; Pull A.
     BCS HELPER_GOTO_MAIN_PRIMARY ; CS, goto.
     JSR STORE_IF_MISMATCH_OTHERWISE_WAIT_MENU_DEPTH? ; Update it.
@@ -2068,10 +2083,10 @@ HELPER_GOTO_MAIN_PRIMARY: ; 1E:0C14, 0x03CC14
     JMP MAIN_LOOP_REENTRY_LARGEST ; Do ??
 HELPER_GOTO_MAIN_TERTIARY: ; 1E:0C17, 0x03CC17
     JMP MAIN_LOOP_REENTRY_THIRD_LARGEST ; Do ??
-MAIN_ALT_UNK: ; 1E:0C1A, 0x03CC1A
+MAIN_ALT_CHECKS_END_OF_GAME: ; 1E:0C1A, 0x03CC1A
     JSR ENGINE_HELPER_R6_0x14 ; Set R6.
     JSR SCRIPTY_TODO ; Do ??
-    JSR LIB_UNK ; Do ??
+    JSR LIB_BATTLE_ENDED? ; Return if game ended.
     BCS HELPER_GOTO_MAIN_PRIMARY ; Ret CS.
     JSR ENGINE_HELPER_R6_0x14 ; R6 Bank.
     JMP GAME_ENDING_SEQUENCE ; Do game end, this is it.
@@ -2133,7 +2148,7 @@ ALT_RTN: ; 1E:0C83, 0x03CC83
 SHIFT_CC: ; 1E:0C96, 0x03CC96
     BIT SCRIPT_UNK_DATA_SELECT_?? ; Test ??
     BMI RTS ; If negative, leave.
-    INC **:$00D5 ; Inc ??
+    INC R_**:$00D5 ; Inc ??
 RTS: ; 1E:0C9C, 0x03CC9C
     RTS
 CTRL_BUTTONS_TO_ACTION_VAL_START: ; 1E:0C9D, 0x03CC9D
@@ -2154,75 +2169,81 @@ CTRL_BUTTONS_ACTION_INDEX: ; 1E:0CA9, 0x03CCA9
     .db 00
     .db 00
     .db 00
+L_1E:0CB1: ; 1E:0CB1, 0x03CCB1
     LDA #$FF
     JSR STORE_IF_MISMATCH_OTHERWISE_WAIT_MENU_DEPTH?
-    JSR 1E:1A16
+    JSR L_1E:1A16
     LDA #$02
-    STA **:$07F0
+    STA R_**:$07F0
     LDA #$01
     ORA ENGINE_PPU_MASK_COPY
     STA ENGINE_PPU_MASK_COPY
     LDX #$08
+L_1E:0CC6: ; 1E:0CC6, 0x03CCC6
     JSR SCRIPT_INVERT_X_SCROLL_SETTLE
     DEX
-    BNE 1E:0CC6
+    BNE L_1E:0CC6
     LDA #$1E
     AND ENGINE_PPU_MASK_COPY
     STA ENGINE_PPU_MASK_COPY
     JSR WAIT_ANY_BUTTONS_PRESSED_RET_PRESSED
-    JMP 1E:0D79
+    JMP L_1E:0D79
     LDA VAL_CMP_UNK
     PHA
     LDA #$FF
-    STA **:$000F
+    STA R_**:$000F
     JSR STORE_IF_MISMATCH_OTHERWISE_WAIT_MENU_DEPTH?
     JSR LIB_OBJECTS_AND_SETTLE_AND_FLAGS_UNK
     LDA #$01
-    STA **:$07F4
-    JSR 1E:0D9D
+    STA R_**:$07F4
+    JSR L_1E:0D9D
     LDX #$05
-    JSR 1E:0D8B
+L_1E:0CF0: ; 1E:0CF0, 0x03CCF0
+    JSR L_1E:0D8B
     LDA SCRIPT_UNK_DATA_SELECT_??
-    BMI 1E:0CB1
+    BMI L_1E:0CB1
     LDA CTRL_BUTTONS_PREVIOUS[2]
     AND #$0F
     TAX
-    LDA 1F:0BDD,X
-    BMI 1E:0D0C
+    LDA L_1F:0BDD,X
+    BMI L_1E:0D0C
     ORA #$40
     TAX
     EOR SCRIPT_FLAG_0x22
     CMP #$04
-    BEQ 1E:0D0C
+    BEQ L_1E:0D0C
     STX SCRIPT_FLAG_0x22
+L_1E:0D0C: ; 1E:0D0C, 0x03CD0C
     LDX ENGINE_FLAG_25_SKIP_UNK
     INX
     CPX #$2D
-    BCC 1E:0CF0
+    BCC L_1E:0CF0
     JSR ENGINE_SETTLE_ALL_UPDATES?
     LDA #$20
+L_1E:0D18: ; 1E:0D18, 0x03CD18
     TAX
-    ASL **:$0304,X
-    ASL **:$0305,X
+    ASL R_**:$0304,X
+    ASL R_**:$0305,X
     SEC
     SBC #$08
-    BNE 1E:0D18
+    BNE L_1E:0D18
     LDA #$0A
+L_1E:0D26: ; 1E:0D26, 0x03CD26
     PHA
     JSR BUTTONS_UPDATE_AND_MORE_OH_MY
     JSR ENGINE_SETTLE_ALL_UPDATES?
     PLA
     SEC
     SBC #$01
-    BNE 1E:0D26
+    BNE L_1E:0D26
     LDA #$01
-    STA **:$07F3
+    STA R_**:$07F3
     LDA #$22
     JSR ENGINE_ALL_COLOR_TO_A
     JSR ENGINE_HELPER_R7_0x13
     JSR ENGINE_WRAM_STATE_WRITEABLE
     JSR $BBD4
-    JSR L_1E:19FA
+    JSR SLOTS_AND_FPTRS_IDFK
     PLA
     LDA CURRENT_SAVE_MANIPULATION_PAGE+4
     TAX
@@ -2231,34 +2252,38 @@ CTRL_BUTTONS_ACTION_INDEX: ; 1E:0CA9, 0x03CCA9
     TXA
     AND #$C0
     STA CURRENT_SAVE_MANIPULATION_PAGE+4
-    JSR 1E:18C9
+    JSR LIB_SPECIAL_CHECKS_WITH_CMPS_UNK
     LDX #$14
     JSR ENGINE_DELAY_X_FRAMES
     JSR ENGINE_WRAM_ARR_MOD_LOOPS_UNK
     JSR HOLY_HELL_ALOT
     JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_RAM
     JSR ENGINE_SETTLE_UPDATES_TODO
-    JSR 1E:0D9D
+    JSR L_1E:0D9D
     LDX #$2C
-    JSR 1E:0D8B
+L_1E:0D70: ; 1E:0D70, 0x03CD70
+    JSR L_1E:0D8B
     LDX ENGINE_FLAG_25_SKIP_UNK
     DEX
     DEX
-    BPL 1E:0D70
+    BPL L_1E:0D70
+L_1E:0D79: ; 1E:0D79, 0x03CD79
     LDX #$00
     STX SCRIPT_FLAG_0x22
     STX CONTROL_ACCUMULATED?[2]
-    STX **:$000F
+    STX R_**:$000F
     JSR L_1E:0DAF
     PLA
     JSR STORE_IF_MISMATCH_OTHERWISE_WAIT_MENU_DEPTH?
     JMP MAIN_LOOP_REENTRY_THIRD_LARGEST
+L_1E:0D8B: ; 1E:0D8B, 0x03CD8B
     JSR L_1E:0DAF
     JSR ENGINE_MAP_DISPLAY?
     JSR ENGINE_SETTLE_ALL_UPDATES?
     JSR MANY_STREAMS_UNK
     JSR STREAMS_UNK_SPRITE_READ?
     JMP BUTTONS_UPDATE_AND_MORE_OH_MY
+L_1E:0D9D: ; 1E:0D9D, 0x03CD9D
     JSR ENGINE_WRAM_STATE_WRITEABLE
     LDA CURRENT_SAVE_MANIPULATION_PAGE+6
     AND #$0F
@@ -2339,8 +2364,8 @@ FILE_SELECTION_SCREEN_SETUP?: ; 1E:0E02, 0x03CE02
     LDY #$5E ; Seed GFX Bank for data.
     LDA #$00
     LDX #$6C ; Seed 0x6C00?
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Set fptr 0x6C00
-    STX ENGINE_PALETTE_FPTR/BITS/GEN_USE+1
+    STA MISC_USE_A ; Set fptr 0x6C00
+    STX MISC_USE_B
     JSR ENGINE_SETTLE_ALL_UPDATES?
     TYA ; Val to A.
     LDX #$01 ; R1
@@ -2354,7 +2379,7 @@ FILE_SELECTION_SCREEN_SETUP?: ; 1E:0E02, 0x03CE02
     STX NMI_PPU_CMD_PACKETS_BUF+2 ; Addr H, 0x18
     STA NMI_PPU_CMD_PACKETS_BUF+3 ; Addr L, 0x00.
     LDA #$00
-    STA **:$0444 ; Clear ??
+    STA R_**:$0444 ; Clear ??
     LDX #$20 ; Loops, 0x40 size per loop, 0x800 total.
 LOOP_0x800: ; 1E:0E30, 0x03CE30
     LDA #$00
@@ -2366,18 +2391,18 @@ LOOP_0x800: ; 1E:0E30, 0x03CE30
     LDY #$00 ; Index.
 LOOP_TO_TARGET: ; 1E:0E40, 0x03CE40
     LDA NMI_PPU_CMD_PACKETS_BUF+4,Y ; Load from buf.
-    STA [ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]],Y ; Store to fp. 0x6C00 - 0x73FF.
+    STA [MISC_USE_A],Y ; Store to fp. 0x6C00 - 0x73FF.
     INY ; Index++
     CPY #$40 ; If _ #$40
     BCC LOOP_TO_TARGET ; <, goto.
     JSR ENGINE_WRAM_STATE_WRITE_DISABLED ; No WRAM writes now.
     CLC ; Prep add.
     TYA ; A = 0x40
-    ADC ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Add consumed to ptr.
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]
+    ADC MISC_USE_A ; Add consumed to ptr.
+    STA MISC_USE_A
     LDA #$00
-    ADC ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Carry add.
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1
+    ADC MISC_USE_B ; Carry add.
+    STA MISC_USE_B
     CLC ; Prep add.
     TYA ; Consumed to A.
     ADC NMI_PPU_CMD_PACKETS_BUF+3 ; Add 0x40 to screen addr, moving 2 lines.
@@ -2391,8 +2416,8 @@ LOOP_TO_TARGET: ; 1E:0E40, 0x03CE40
 PPU_READ_INTO_$0110_HELPER_LOOP_UNK: ; 1E:0E6D, 0x03CE6D
     LDA #$00
     LDX #$00
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]
-    STX ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Set $0000
+    STA MISC_USE_A
+    STX MISC_USE_B ; Set $0000
     LDA #$00
     LDX #$20
     STA SAVE_GAME_MOD_PAGE_PTR[2]
@@ -2400,8 +2425,8 @@ PPU_READ_INTO_$0110_HELPER_LOOP_UNK: ; 1E:0E6D, 0x03CE6D
     LDA #$10
     STA ARR_BITS_TO_UNK[8] ; Set loop count, 0x10.
 LOOPS_NONZERO: ; 1E:0E81, 0x03CE81
-    LDA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Seed PPU Addr H.
-    LDX ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Seed L.
+    LDA MISC_USE_A ; Seed PPU Addr H.
+    LDX MISC_USE_B ; Seed L.
     LDY #$09 ; Seed type, read to RAM.
     JSR ENGINE_LARGE_UNIQUE_PPU_PACKET_HELPER ; Do.
     LDA SAVE_GAME_MOD_PAGE_PTR[2] ; Seed PPU Addr H.
@@ -2410,11 +2435,11 @@ LOOPS_NONZERO: ; 1E:0E81, 0x03CE81
     JSR ENGINE_LARGE_UNIQUE_PPU_PACKET_HELPER ; Do.
     CLC ; Prep add.
     LDA #$40 ; Adding val.
-    ADC ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Add with.
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Store result.
+    ADC MISC_USE_A ; Add with.
+    STA MISC_USE_A ; Store result.
     LDA #$00
-    ADC ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Carry add.
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Store result.
+    ADC MISC_USE_B ; Carry add.
+    STA MISC_USE_B ; Store result.
     CLC ; Prep add.
     LDA #$40 ; Adding val.
     ADC SAVE_GAME_MOD_PAGE_PTR[2] ; Add with.
@@ -2435,7 +2460,7 @@ ENGINE_LARGE_UNIQUE_PPU_PACKET_HELPER: ; 1E:0EB2, 0x03CEB2
     LDA #$40
     STA NMI_PPU_CMD_PACKETS_BUF+1 ; Set GFX bank pair.
     LDA #$00
-    STA **:$0444 ; Clear the end of the packet.
+    STA R_**:$0444 ; Clear the end of the packet.
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_INDEX ; Clear index.
     LDA #$80
@@ -2454,12 +2479,12 @@ ENGINE_HELPER_R6_0x14: ; 1E:0EE1, 0x03CEE1
     LDX #$06
     JMP ENGINE_SET_MAPPER_BANK_X_VAL_A ; Do, return.
 ENGINE_SET_GFX_BANKS_FPTR_AX: ; 1E:0EE8, 0x03CEE8
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Set PTR.
-    STX ENGINE_PALETTE_FPTR/BITS/GEN_USE+1
+    STA MISC_USE_A ; Set PTR.
+    STX MISC_USE_B
     LDX #$05 ; Seed bank GFX bank.
     LDY #$05 ; Seed stream index start.
 STREAM_INDEX_POSITIVE: ; 1E:0EF0, 0x03CEF0
-    LDA [ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]],Y ; Load from index.
+    LDA [MISC_USE_A],Y ; Load from index.
     BEQ STREAM_0x00 ; == 0, goto.
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set bank 0x05 -> 0x00
 STREAM_0x00: ; 1E:0EF7, 0x03CEF7
@@ -2474,7 +2499,7 @@ HOLY_HELL_ALOT: ; 1E:0EFC, 0x03CEFC
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set.
     LDA #$00
     STA SCRIPT_B800_PTR_UNK+1 ; Clear addr H.
-    LDA **:$0014 ; Load ??
+    LDA R_**:$0014 ; Load ??
     ASL A ; << 3, *8.
     ASL A
     ASL A
@@ -2504,8 +2529,8 @@ INDEX_POSITIVE: ; 1E:0F32, 0x03CF32
     BPL INDEX_POSITIVE ; Positive, goto.
     LDX SCRIPT_PALETTE_UPLOADED?+12 ; Load ??
     LDY SCRIPT_PALETTE_UPLOADED?+14
-    STX **:$0017 ; Save to.
-    STY **:$0016
+    STX R_**:$0017 ; Save to.
+    STY R_**:$0016
     LDX #$0F ; Seed ??
     LDY #$30
     STX SCRIPT_PALETTE_UPLOADED?+12
@@ -2517,11 +2542,11 @@ INDEX_POSITIVE: ; 1E:0F32, 0x03CF32
     LDA SCRIPT_PAIR_PTR?+1 ; Move other.
     STA SCRIPT_LOADED_SHIFTED_|VAL+1
     LDA #$40 ; Set ??
-    STA **:$00AE
+    STA R_**:$00AE
     LDA #$00 ; Clear ??
-    STA **:$00AF
+    STA R_**:$00AF
     LDA #$10 ; Set ??
-    STA **:$009B
+    STA R_**:$009B
 LOOP_JMP: ; 1E:0F68, 0x03CF68
     SEC ; Prep sub.
     LDA SCRIPT_PAIR_PTR_B?[2] ; Load ??
@@ -2530,11 +2555,11 @@ LOOP_JMP: ; 1E:0F68, 0x03CF68
     STA SCRIPT_LOADED_SHIFTED_UNK[1] ; Store to.
     LDA SCRIPT_PAIR_PTR_B?+1 ; Load ??
     SBC #$00 ; Carry sub.
-    STA **:$00AB ; Store to.
+    STA R_**:$00AB ; Store to.
     LDA #$13
     STA SCRIPT_COUNT_UNK ; Set ??
     JSR DEEP_STREAMER_IDFK ; Do ??
-    DEC **:$009B ; --
+    DEC R_**:$009B ; --
     BEQ COUNT_EQ_ZERO ; == 0, goto.
     CLC ; Prep add.
     LDA SCRIPT_LOADED_SHIFTED_|VAL[2] ; Load.
@@ -2547,7 +2572,7 @@ LOOP_JMP: ; 1E:0F68, 0x03CF68
 COUNT_EQ_ZERO: ; 1E:0F92, 0x03CF92
     JSR CREATE_VAL/INDEX_UNK ; Do.
     LDY #$00 ; Clear ??
-    STY **:$001D
+    STY R_**:$001D
     JMP LOOP_HELPER_A_LOT ; Exit.
 PALETTE_SPRITE_UNK: ; 1E:0F9C, 0x03CF9C
     .db 0F
@@ -2569,17 +2594,17 @@ PALETTE_SPRITE_UNK: ; 1E:0F9C, 0x03CF9C
 ENGINE_SETTLE_UPDATES_TODO: ; 1E:0FAC, 0x03CFAC
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
     CLC ; No reason?
-    LDA **:$001C ; Load.
+    LDA R_**:$001C ; Load.
     ORA #$08 ; Set ??
     TAX ; To X index.
-    LDY **:$001D ; Y from.
+    LDY R_**:$001D ; Y from.
     LDA ENGINE_PPU_CTRL_COPY ; Load copy.
     AND #$FC ; Nametable clear.
-    ORA **:$001E ; Set nametable with.
+    ORA R_**:$001E ; Set nametable with.
     STA ENGINE_PPU_CTRL_COPY ; Store back.
     STX ENGINE_SCROLL_X ; X and Y as.
     STY ENGINE_SCROLL_Y
-    STY **:$0099 ; Y to, also.
+    STY R_**:$0099 ; Y to, also.
     CLC ; Prep add.
     LDA SCRIPT_PAIR_PTR?[2] ; Load ??
     AND #$C0 ; Keep upper.
@@ -2589,23 +2614,23 @@ ENGINE_SETTLE_UPDATES_TODO: ; 1E:0FAC, 0x03CFAC
     ADC #$03 ; += 0x3
     STA SCRIPT_LOADED_SHIFTED_|VAL+1 ; Store ptr H.
     LDA #$0F
-    STA **:$009B ; Set ??
+    STA R_**:$009B ; Set ??
 LOOP_RTN: ; 1E:0FD8, 0x03CFD8
     CLC ; Prep add.
-    LDA **:$0099 ; Load.
+    LDA R_**:$0099 ; Load.
     ADC #$F0 ; += 0xF0
     BCS ADD_OVERFLOW ; Overflow, goto.
     ADC #$F0 ; Add to sub?
 ADD_OVERFLOW: ; 1E:0FE1, 0x03CFE1
-    STA **:$0099 ; Store to.
+    STA R_**:$0099 ; Store to.
     LDA SCRIPT_PAIR_PTR_B?[2] ; Load.
     AND #$C0 ; Keep upper.
     STA SCRIPT_LOADED_SHIFTED_UNK[1] ; Store to.
     LDA SCRIPT_PAIR_PTR_B?+1 ; Move ??
-    STA **:$00AB
-    LDX **:$009B ; Load index.
+    STA R_**:$00AB
+    LDX R_**:$009B ; Load index.
     LDA ROM_DATA_UNK,X ; Load ??
-    EOR **:$0099 ; Invert with.
+    EOR R_**:$0099 ; Invert with.
     AND #$10 ; Keep ??
     BNE VABIT_SET ; If set, use as-is.
     LDA ROM_DATA_UNK,X ; Load otherwise.
@@ -2618,9 +2643,9 @@ VABIT_SET: ; 1E:0FFB, 0x03CFFB
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
     STA NMI_FLAG_E5_TODO ; Set flag.
-    DEC **:$009B ; --
+    DEC R_**:$009B ; --
     BEQ TIMER_EQ_0x00 ; == 0, goto.
-    LDA **:$009B ; Load left.
+    LDA R_**:$009B ; Load left.
     ASL A ; << 1, *2.
     TAX ; To X index.
     JSR WAIT_NMI/IRQ_CLEAR ; Wait.
@@ -2691,29 +2716,29 @@ SCRIPT_PTR_MOD_AND_??_THEN_CHAIN_??: ; 1E:105E, 0x03D05E
     LDA LUT_MOD_0x0+2,X ; Add data.
     BEQ CREATE_VAL/INDEX_UNK ; == 0, goto.
     BMI VAL_NEGATIVE ; Negative, goto.
-    LDA **:$001D ; Load ??
+    LDA R_**:$001D ; Load ??
     ADC #$20 ; += 0x20
     BCC STORE_UPPER ; No overflow, goto.
     BCS STORE_ASIS ; Overflow, goto.
 VAL_NEGATIVE: ; 1E:1094, 0x03D094
-    LDA **:$001D ; Load.
+    LDA R_**:$001D ; Load.
     ADC #$F0 ; Add sub ??
     BCS STORE_ASIS ; >=, goto.
 STORE_UPPER: ; 1E:109A, 0x03D09A
     ADC #$F0 ; Keep upper only.
 STORE_ASIS: ; 1E:109C, 0x03D09C
-    STA **:$001D ; Store ??
+    STA R_**:$001D ; Store ??
 CREATE_VAL/INDEX_UNK: ; 1E:109E, 0x03D09E
     LDA SCRIPT_PAIR_PTR_B?+1 ; Load ??
     AND #$07 ; Keep lower.
-    STA **:$001E ; Store to.
+    STA R_**:$001E ; Store to.
     LDA SCRIPT_PAIR_PTR_B?[2] ; Load ??
     AND #$C0 ; Keep upper bits.
-    LSR **:$001E ; Shift bits off.
+    LSR R_**:$001E ; Shift bits off.
     ROR A ; Into A.
-    LSR **:$001E ; 2x
+    LSR R_**:$001E ; 2x
     ROR A
-    STA **:$001C ; Store A crafter.
+    STA R_**:$001C ; Store A crafter.
 RTS: ; 1E:10B0, 0x03D0B0
     RTS ; Leave.
 UNK_GFX_AND_??: ; 1E:10B1, 0x03D0B1
@@ -2741,7 +2766,7 @@ HELPER_DEEP_STREAMER_UNK: ; 1E:10C4, 0x03D0C4
     STA SCRIPT_LOADED_SHIFTED_UNK[1] ; Store ??
     LDA SCRIPT_PAIR_PTR_B?+1 ; Load alt.
     ADC MOD_TABLE_UNK+1,X ; Mod with.
-    STA **:$00AB ; Store to.
+    STA R_**:$00AB ; Store to.
     CLC ; Prep add.
     LDA SCRIPT_PAIR_PTR?[2] ; Load ??
     AND #$C0 ; Keep upper.
@@ -2751,9 +2776,9 @@ HELPER_DEEP_STREAMER_UNK: ; 1E:10C4, 0x03D0C4
     ADC SLOT_EXTRAS[4],X ; Mod.
     STA SCRIPT_LOADED_SHIFTED_|VAL+1 ; Store ??
     LDA SLOT_EXTRAS+1,X ; Move ?? ptr/?? ??
-    STA **:$00AE
+    STA R_**:$00AE
     LDA SLOT_EXTRAS+2,X
-    STA **:$00AF
+    STA R_**:$00AF
     LDA SLOT_EXTRAS+3,X ; Move ?? single?
     STA SCRIPT_COUNT_UNK
     JMP DEEP_STREAMER_IDFK ; Goto.
@@ -2799,16 +2824,16 @@ LOOP_BEGINNING: ; 1E:1120, 0x03D120
     LDY #$00 ; Stream index.
     LDA [SCRIPT_B800_PTR_UNK[2]],Y ; Load from stream.
     AND #$3F ; Keep lower.
-    CMP **:$0014 ; If _ #$14
+    CMP R_**:$0014 ; If _ #$14
     BEQ VALS_EQ ; ==, goto.
-    LDA **:$0016 ; Load ??
+    LDA R_**:$0016 ; Load ??
     JMP VAL_SEEDED ; Goto.
 VALS_EQ: ; 1E:1132, 0x03D132
-    LDA **:$0094 ; Load.
+    LDA R_**:$0094 ; Load.
     LDX #$06 ; R6.
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set R6 bank.
     CLC ; Prep add.
-    LDA **:$00AB ; Load ??
+    LDA R_**:$00AB ; Load ??
     STA SCRIPT_B800_PTR_UNK[2] ; Store, addr L.
     LDA SCRIPT_LOADED_SHIFTED_|VAL+1 ; Load ??
     AND #$1F ; Keep lower.
@@ -2831,7 +2856,7 @@ VAL_SEEDED: ; 1E:114F, 0x03D14F
     .db 13
     .db 2C ; BIT TRICK past LDA $11, Alt B.
 VAL_EQ_0x00: ; 1E:115E, 0x03D15E
-    LDA **:$0011 ; Load alt.
+    LDA R_**:$0011 ; Load alt.
     STA SCRIPT_B800_PTR_UNK+1 ; Store A decided.
     TXA ; X to A.
     ASL A ; << 3, *8.
@@ -2895,7 +2920,7 @@ REENTRY_NO_OVERFLOW: ; 1E:118F, 0x03D18F
     JSR ENGINE_WRAM_STATE_WRITE_DISABLED ; Disable WRAM.
     DEC SCRIPT_COUNT_UNK ; --
     BEQ EXIT_RTS ; ==, goto.
-    LDA **:$00AE ; Load val mod.
+    LDA R_**:$00AE ; Load val mod.
     BEQ MOD_0x00 ; ==, goto.
     INC STREAM_DEEP_INDEX ; ++
     CLC ; Prep add.
@@ -2903,8 +2928,8 @@ REENTRY_NO_OVERFLOW: ; 1E:118F, 0x03D18F
     STA SCRIPT_LOADED_SHIFTED_UNK[1] ; Store result.
     BCC ADD_NO_OVERFLOW ; No overflow, goto.
     LDA #$00 ; TODO: Badcode? Does nothing?
-    ADC **:$00AB
-    STA **:$00AB
+    ADC R_**:$00AB
+    STA R_**:$00AB
     AND #$03 ; Keep lower.
     BNE LOWER_NONZERO ; != 0, goto.
     LDA STREAM_DEEP_INDEX ; Load ??
@@ -2916,12 +2941,12 @@ REENTRY_NO_OVERFLOW: ; 1E:118F, 0x03D18F
     STA STREAM_UNK_DEEP_A+1 ; Store to.
     CLC ; Prep add.
     ADC #$02 ; += 0x2
-    STA **:$00A5 ; Store to.
+    STA R_**:$00A5 ; Store to.
     ADC #$02 ; += 0x2
-    STA **:$00A7 ; Store to.
+    STA R_**:$00A7 ; Store to.
     JMP LOOP_BEGINNING ; Loop.
 MOD_0x00: ; 1E:11F9, 0x03D1F9
-    LDX **:$00AF ; X from.
+    LDX R_**:$00AF ; X from.
     BEQ EXIT_RTS ; == 0, leave.
     CLC ; Prep add.
     LDA STREAM_DEEP_INDEX ; Load.
@@ -2975,7 +3000,7 @@ DATA_POSITIVE: ; 1E:123F, 0x03D23F
     STA SCRIPT_LOADED_SHIFTED_UNK[1] ; Store ??
     LDA SCRIPT_PAIR_PTR_B?+1 ; Load.
     ADC PTR_MOD_ARR+1,X ; Add with.
-    STA **:$00AB ; Store to.
+    STA R_**:$00AB ; Store to.
     CLC ; Prep add.
     LDA SCRIPT_PAIR_PTR?[2] ; Load ??
     AND #$C0 ; Keep upper.
@@ -2986,14 +3011,14 @@ DATA_POSITIVE: ; 1E:123F, 0x03D23F
     STA SCRIPT_LOADED_SHIFTED_|VAL+1 ; Store to.
     CLC ; Prep add.
     LDA ROM_DATA_UNK+2,X ; Load 0x10
-    ADC **:$001D ; Mod val.
+    ADC R_**:$001D ; Mod val.
     BCS SKIP_SUB ; No overflow.
     ADC #$F0 ; -= 0x11
 SKIP_SUB: ; 1E:126C, 0x03D26C
-    STA **:$0099 ; Store ??
+    STA R_**:$0099 ; Store ??
     LDA ROM_DATA_UNK,X ; Load ??
     BMI EXIT_ALT_CREATOR ; Negative, goto.
-    EOR **:$0099 ; Invert with.
+    EOR R_**:$0099 ; Invert with.
     AND #$10 ; Keep bit.
     BNE NO_LOAD_UNK ; != 0,  goto.
     LDA ROM_DATA_UNK+3,X ; Load ??
@@ -3157,7 +3182,7 @@ LOOP_CREATE_ONE_BYTES: ; 1E:1367, 0x03D367
     JSR CREATE_ONE_BYTE_UPDATES_UNK ; Do ??
     DEC PACKET_UPDATES_COUNT/SCRATCH ; --
     BEQ EXIT_RTS ; == 0, leave.
-    INC **:$008E ; ++
+    INC R_**:$008E ; ++
     CLC ; Prep add.
     LDA DEEP_BASE_UNK ; Load, addr L.
     ADC #$02 ; += 0x2
@@ -3167,16 +3192,16 @@ LOOP_CREATE_ONE_BYTES: ; 1E:1367, 0x03D367
     SEC ; Prep sub.
     SBC #$10 ; Sub with.
     STA DEEP_BASE_UNK ; Store back.
-    LDA **:$00A5 ; Load ??
+    LDA R_**:$00A5 ; Load ??
     EOR #$01 ; Invert bit.
-    STA **:$00A5 ; Store back.
+    STA R_**:$00A5 ; Store back.
     SEC ; Prep sub.
-    LDA **:$008E ; Load ??
+    LDA R_**:$008E ; Load ??
     SBC #$08 ; -= 0x8
-    STA **:$008E ; Store back.
-    LDA **:$008F ; Load ??
+    STA R_**:$008E ; Store back.
+    LDA R_**:$008F ; Load ??
     EOR #$04 ; Invert ??
-    STA **:$008F ; Store result.
+    STA R_**:$008F ; Store result.
     JMP LOOP_CREATE_ONE_BYTES ; Loop.
 EXIT_RTS: ; 1E:1397, 0x03D397
     RTS ; Leave.
@@ -3184,7 +3209,7 @@ PACKET_CREATOR_HELPER_TODO_B: ; 1E:1398, 0x03D398
     JSR SCRIPT_R6/R7+LOGICAL_UNK
     SEC
     LDA #$F0
-    SBC **:$0099
+    SBC R_**:$0099
     CLC
     ADC STREAM_DEEP_INDEX
     STA STREAM_DEEP_INDEX
@@ -3211,16 +3236,18 @@ PACKET_CREATOR_HELPER_TODO_B: ; 1E:1398, 0x03D398
     ORA #$01
     STA NMI_PPU_CMD_PACKETS_BUF+34,X
     INX
-    LDA **:$0099
+    LDA R_**:$0099
     STA PPU_GROUPED_ADDR_LH[2]
+L_1E:13DA: ; 1E:13DA, 0x03D3DA
     LDA PPU_GROUPED_ADDR_LH[2]
     SEC
     SBC #$10
     STA PPU_GROUPED_ADDR_LH[2]
-    BCS 1E:13E9
+    BCS L_1E:13E9
     LDA STREAM_DEEP_INDEX
     ADC #$10
     STA STREAM_DEEP_INDEX
+L_1E:13E9: ; 1E:13E9, 0x03D3E9
     JSR FIGURE_IDFK_RTN
     LDY #$00
     LDA [SCRIPT_B800_PTR_UNK[2]],Y
@@ -3245,12 +3272,13 @@ PACKET_CREATOR_HELPER_TODO_B: ; 1E:1398, 0x03D398
     INX
     INX
     DEC PACKET_UPDATES_COUNT/SCRATCH
-    BEQ 1E:1425
+    BEQ L_1E:1425
     CLC
     LDA STREAM_DEEP_INDEX
     ADC #$10
     STA STREAM_DEEP_INDEX
-    JMP 1E:13DA
+    JMP L_1E:13DA
+L_1E:1425: ; 1E:1425, 0x03D425
     LDA #$08
     STA PACKET_UPDATES_COUNT/SCRATCH
     LDX #$44
@@ -3260,9 +3288,9 @@ PACKET_CREATOR_HELPER_TODO_B: ; 1E:1398, 0x03D398
     LDA PACKET_UPDATES_COUNT/SCRATCH
     STA NMI_PPU_CMD_PACKETS_BUF[64],X
     INX
-    LDA **:$0099
+    LDA R_**:$0099
     AND #$10
-    BEQ 1E:1455
+    BEQ L_1E:1455
     SEC
     LDA DEEP_BASE_UNK
     PHA
@@ -3275,36 +3303,40 @@ PACKET_CREATOR_HELPER_TODO_B: ; 1E:1398, 0x03D398
     STA DEEP_BASE_UNK
     LDA #$10
     STA DEEP_STREAM_MOD_UNK
-    BNE 1E:145C
+    BNE L_1E:145C
+L_1E:1455: ; 1E:1455, 0x03D455
     LDA #$10
     STA DEEP_STREAM_MOD_UNK
+L_1E:1459: ; 1E:1459, 0x03D459
     JSR CREATE_ONE_BYTE_UPDATES_UNK
+L_1E:145C: ; 1E:145C, 0x03D45C
     DEC PACKET_UPDATES_COUNT/SCRATCH
-    BEQ 1E:147E
+    BEQ L_1E:147E
     CLC
     LDA DEEP_BASE_UNK
     ADC #$20
     STA DEEP_BASE_UNK
     CLC
-    LDA **:$008E
+    LDA R_**:$008E
     ADC #$08
-    STA **:$008E
-    BCC 1E:1459
+    STA R_**:$008E
+    BCC L_1E:1459
     SBC #$40
-    STA **:$008E
+    STA R_**:$008E
     SEC
     LDA DEEP_BASE_UNK
     SBC #$10
     STA DEEP_BASE_UNK
-    JMP 1E:1459
+    JMP L_1E:1459
+L_1E:147E: ; 1E:147E, 0x03D47E
     RTS
 BITS_ARBITRARY_TEST_HELPER_BYTE: ; 1E:147F, 0x03D47F
     .db 0F
 CREATE_ONE_BYTE_UPDATES_UNK: ; 1E:1480, 0x03D480
-    LDA **:$008F ; Load ??
+    LDA R_**:$008F ; Load ??
     STA NMI_PPU_CMD_PACKETS_BUF[64],X ; Store, addr H.
     INX ; Index++
-    LDA **:$008E ; Load ??
+    LDA R_**:$008E ; Load ??
     STA NMI_PPU_CMD_PACKETS_BUF[64],X ; Store as addr L.
     INX ; Index++
     LDY DEEP_BASE_UNK ; Load stream index.
@@ -3343,16 +3375,16 @@ SCRIPT_R6/R7+LOGICAL_UNK: ; 1E:14B7, 0x03D4B7
     LDX #$07 ; Set as R7.
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Bank it.
     JSR SETUP_DEEP_STREAM_UNK ; Do ??
-    LDA **:$00AB ; Load.
+    LDA R_**:$00AB ; Load.
     AND #$07 ; Keep bottom.
-    STA **:$009A ; Store to.
+    STA R_**:$009A ; Store to.
     LDA SCRIPT_LOADED_SHIFTED_UNK[1] ; Load.
-    LSR **:$009A ; Shift ??
+    LSR R_**:$009A ; Shift ??
     ROR A ; Into A.
-    LSR **:$009A ; 2x
+    LSR R_**:$009A ; 2x
     ROR A
-    STA **:$0098 ; Store built to.
-    LDA **:$0099 ; Load ??
+    STA R_**:$0098 ; Store built to.
+    LDA R_**:$0099 ; Load ??
     EOR STREAM_DEEP_INDEX ; Invert.
     AND #$10 ; Keep.
     BNE BIT_0x10_SET ; != 0, set, goto.
@@ -3374,10 +3406,10 @@ BIT_0x10_SET: ; 1E:14ED, 0x03D4ED
     SBC #$10 ; Sub ??
 TEST_POSITIVE: ; 1E:1501, 0x03D501
     STA DEEP_BASE_UNK ; Store ??
-    LDA **:$0099 ; Load.
+    LDA R_**:$0099 ; Load.
     AND #$F0 ; Keep upper.
     STA PPU_GROUPED_ADDR_LH[2] ; Store to.
-    LDA **:$009A ; Load.
+    LDA R_**:$009A ; Load.
     ASL PPU_GROUPED_ADDR_LH[2] ; Shift ??
     ROL A ; Into A.
     ASL PPU_GROUPED_ADDR_LH[2] ; 2x
@@ -3385,8 +3417,8 @@ TEST_POSITIVE: ; 1E:1501, 0x03D501
     ORA #$20 ; Set ??
     STA PPU_GROUPED_ADDR_LH+1 ; Store to.
     ORA #$03 ; Set ??
-    STA **:$008F ; Store to.
-    LDA **:$0098 ; Load ??
+    STA R_**:$008F ; Store to.
+    LDA R_**:$0098 ; Load ??
     AND #$F0 ; Keep upper.
     LSR A ; >> 3, /8.
     LSR A
@@ -3396,14 +3428,14 @@ TEST_POSITIVE: ; 1E:1501, 0x03D501
     LSR A ; >> 2, /4.
     LSR A
     AND #$07 ; Keep lower.
-    STA **:$008E ; Store to.
-    LDA **:$0099 ; Load ??
+    STA R_**:$008E ; Store to.
+    LDA R_**:$0099 ; Load ??
     LSR A ; >> 2, /4.
     LSR A
     AND #$38 ; Keep 0011.1000
     ORA #$C0 ; Set ??
-    ORA **:$008E ; Set ??
-    STA **:$008E ; Store result.
+    ORA R_**:$008E ; Set ??
+    STA R_**:$008E ; Store result.
     RTS ; Leave.
 FIGURE_IDFK_RTN: ; 1E:1537, 0x03D537
     LDY STREAM_DEEP_INDEX ; Load from stream.
@@ -3414,10 +3446,10 @@ FIGURE_IDFK_RTN: ; 1E:1537, 0x03D537
     LSR A ; >> 1, /2.
     STA B800_PTR_L_ADD_UNK ; Store 0x40/0x00.
     BEQ VAL_UNSET ; == 0, goto.
-    LDA **:$0013 ; Val alt.
+    LDA R_**:$0013 ; Val alt.
     .db 2C ; NOTE: Bit trick around alt load.
 VAL_UNSET: ; 1E:1548, 0x03D548
-    LDA **:$0011 ; Load ??
+    LDA R_**:$0011 ; Load ??
     STA SCRIPT_B800_PTR_UNK+1 ; Store to, addr H.
     LDA [STREAM_UNK_DEEP_A[2]],Y ; Load ??
     ASL A ; << 2, *4.
@@ -3430,7 +3462,7 @@ VAL_UNSET: ; 1E:1548, 0x03D548
     STA SCRIPT_B800_PTR_UNK+1 ; Store to.
     RTS
 SETUP_DEEP_STREAM_UNK: ; 1E:155D, 0x03D55D
-    LDA **:$00AB ; Load.
+    LDA R_**:$00AB ; Load.
     AND #$07 ; Keep 0000.0111
     STA STREAM_UNK_DEEP_A+1 ; Store to.
     LDA SCRIPT_LOADED_SHIFTED_UNK[1] ; Load.
@@ -3456,16 +3488,16 @@ SETUP_DEEP_STREAM_UNK: ; 1E:155D, 0x03D55D
     ADC #$60 ; += 0x60
     STA STREAM_UNK_DEEP_A+1 ; Store back.
     ADC #$02 ; += 0x2.
-    STA **:$00A5 ; Store to.
+    STA R_**:$00A5 ; Store to.
     ADC #$02 ; += 0x2.
-    STA **:$00A7 ; Store to.
+    STA R_**:$00A7 ; Store to.
     RTS ; Leave.
 R7/B800_SET/INIT_UNK: ; 1E:1591, 0x03D591
     JSR CREATE_B800_PTR ; Do ??
     LDY #$00
     LDA [SCRIPT_B800_PTR_UNK[2]],Y ; Load from ptr.
     AND #$3F
-    STA **:$0014 ; Set ??
+    STA R_**:$0014 ; Set ??
     RTS ; Leave.
 CREATE_B800_PTR: ; 1E:159D, 0x03D59D
     LDA SCRIPT_LOADED_SHIFTED_|VAL+1 ; Load.
@@ -3474,7 +3506,7 @@ CREATE_B800_PTR: ; 1E:159D, 0x03D59D
     LSR A
     LSR A
     AND #$0E ; Keep 0000.1110
-    STA **:$0094 ; Store to.
+    STA R_**:$0094 ; Store to.
     ORA #$01 ; Set bit.
     LDX #$07 ; Set R7.
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Bank R7 in.
@@ -3483,7 +3515,7 @@ CREATE_B800_PTR: ; 1E:159D, 0x03D59D
     LSR A
     AND #$07 ; Keep lower.
     STA SCRIPT_B800_PTR_UNK+1 ; Store to.
-    LDA **:$00AB ; Load.
+    LDA R_**:$00AB ; Load.
     AND #$FC ; Keep 1111.1100
     CLC ; Prep add.
     STA SCRIPT_B800_PTR_UNK[2] ; Store to.
@@ -3495,7 +3527,7 @@ SCRIPT_SET_GFX: ; 1E:15C4, 0x03D5C4
     CLC ; Prep add.
     LDA SCRIPT_PAIR_PTR_B?+1 ; Load.
     ADC #$02 ; += 0x2
-    STA **:$00AB ; Store to.
+    STA R_**:$00AB ; Store to.
     CLC ; Prep add.
     LDA SCRIPT_PAIR_PTR?[2] ; Load.
     ADC #$C0 ; Add with.
@@ -3507,14 +3539,14 @@ SCRIPT_SET_GFX: ; 1E:15C4, 0x03D5C4
     LDY #$00 ; Stream index.
     LDA [SCRIPT_B800_PTR_UNK[2]],Y ; Load from PTR.
     AND #$3F ; Keep lower.
-    CMP **:$0014 ; If _ #$14
+    CMP R_**:$0014 ; If _ #$14
     BEQ SET_MULTIPLE? ; ==, goto.
-    LDA **:$0017 ; Load.
+    LDA R_**:$0017 ; Load.
     LDX #$03 ; Gfx bank R3.
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set GFX.
     STA SCRIPT_R7_UNK ; Store val to.
     AND #$03 ; Keep lower.
-    STA **:$0013 ; Store to.
+    STA R_**:$0013 ; Store to.
     RTS ; Leave.
 SET_MULTIPLE?: ; 1E:15F3, 0x03D5F3
     LDA FLAG_UNK_23 ; Load.
@@ -3542,7 +3574,7 @@ GFX_BANK_R2_SET: ; 1E:1612, 0x03D612
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set GFX.
     STA SCRIPT_R6_UNK ; Store val to.
     AND #$03 ; Keep lower.
-    STA **:$0011 ; Store to.
+    STA R_**:$0011 ; Store to.
     INY ; Stream++
     LDA [SCRIPT_B800_PTR_UNK[2]],Y ; Load from stream.
     AND #$3F ; Keep lower.
@@ -3550,7 +3582,7 @@ GFX_BANK_R2_SET: ; 1E:1612, 0x03D612
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set GFX.
     STA SCRIPT_R7_UNK ; Store to.
     AND #$03 ; Keep lower.
-    STA **:$0013 ; Store to.
+    STA R_**:$0013 ; Store to.
     RTS ; Leave.
 LUT_GFX_BANKS_R1: ; 1E:1634, 0x03D634
     .db 00 ; 0x00 = No mod ??
@@ -3621,22 +3653,22 @@ HUGE_ASS_STREAMS_THINGY_IDFK: ; 1E:1674, 0x03D674
     LDA FIRST_LAUNCHER_HOLD_FLAG? ; Load flag.
     BPL SETUP_POSITIVE ; Positive, goto.
     AND #$0F ; Keep lower.
-    STA **:$003E ; Store to.
-    LDA **:$6784 ; Load ??
+    STA R_**:$003E ; Store to.
+    LDA R_**:$6784 ; Load ??
     AND #$C0 ; Keep 1100.0000
     STA SCRIPT_LOADED_SHIFTED_UNK[1] ; Store to.
-    LDA **:$6785 ; Move ??
-    STA **:$00AB
-    LDA **:$6786 ; Load.
+    LDA R_**:$6785 ; Move ??
+    STA R_**:$00AB
+    LDA R_**:$6786 ; Load.
     AND #$C0 ; Keep 1100.0000
     STA SCRIPT_LOADED_SHIFTED_|VAL[2] ; Store 1100.0000
-    LDA **:$6787 ; Move ??
+    LDA R_**:$6787 ; Move ??
     STA SCRIPT_LOADED_SHIFTED_|VAL+1
     JMP SETUP_NEG_COMPLETED
 SETUP_POSITIVE: ; 1E:1697, 0x03D697
     LDA CURRENT_SAVE_MANIPULATION_PAGE+6 ; Load.
     AND #$3F ; Keep lower.
-    STA **:$003E ; Store to.
+    STA R_**:$003E ; Store to.
     CLC ; Prep add ?
     LDA CURRENT_SAVE_MANIPULATION_PAGE+4 ; Load.
     AND #$C0 ; Keep 1100.0000
@@ -3646,7 +3678,7 @@ SETUP_POSITIVE: ; 1E:1697, 0x03D697
     LDA CURRENT_SAVE_MANIPULATION_PAGE+5 ; Move val.
     STA SCRIPT_PAIR_PTR_B?+1
     ADC #$02 ; += 0x2
-    STA **:$00AB ; Store to.
+    STA R_**:$00AB ; Store to.
     CLC ; Prep add.
     LDA CURRENT_SAVE_MANIPULATION_PAGE+6 ; Load.
     AND #$C0 ; Keep bits 1100.0000
@@ -3708,10 +3740,10 @@ NONZERO_ALT: ; 1E:171B, 0x03D71B
     BNE VAL_NONZERO ; != 0, goto.
     JSR MOD_STREAM_LUT_UNK ; Do ??
     LDY #$19 ; Stream index.
-    LDA **:$003E ; Move to stream.
+    LDA R_**:$003E ; Move to stream.
     STA [ENGINE_FPTR_30[2]],Y
     EOR #$04 ; Invert bit.
-    STA **:$003E ; Store val.
+    STA R_**:$003E ; Store val.
     JSR MOVE_TO_STREAM_UNK ; Do.
 VAL_NONZERO: ; 1E:1738, 0x03D738
     JMP ALT_REENTRY ; Goto, abuse RTS.
@@ -3734,15 +3766,17 @@ RET_CC_UNK: ; 1E:1751, 0x03D751
 L_1E:1759: ; 1E:1759, 0x03D759
     PHA
     LDX #$00
+L_1E:175C: ; 1E:175C, 0x03D75C
     LDA CURRENT_SAVE_MANIPULATION_PAGE+9,X
-    BEQ 1E:1769
+    BEQ L_1E:1769
     INX
     CPX #$03
-    BCC 1E:175C
+    BCC L_1E:175C
     PLA
     RTS
 STREAMS_MOD_UNK: ; 1E:1768, 0x03D768
     PHA ; Save A.
+L_1E:1769: ; 1E:1769, 0x03D769
     TXA ; Save X.
     PHA
     JSR CREATE_PTR_HELPER_6700 ; Create.
@@ -3754,52 +3788,59 @@ STREAMS_MOD_UNK: ; 1E:1768, 0x03D768
     STA CURRENT_SAVE_MANIPULATION_PAGE+9,X ; A to X index.
     JSR MOVE_TO_STREAM_UNK_WITH_MOD ; Do with init.
     LDY #$19 ; Stream index.
-    LDA **:$003E ; Load ??
+    LDA R_**:$003E ; Load ??
     STA [ENGINE_FPTR_30[2]],Y ; Store to stream.
     LDY #$00 ; Stream index.
     LDA #$0C ; Val ??
     STA [ENGINE_FPTR_30[2]],Y ; Store to stream.
     CLC ; Set to known state for branch after this routine call?
     JMP ENGINE_WRAM_STATE_WRITE_DISABLED ; Leave.
-L_1E:178D: ; 1E:178D, 0x03D78D
-    LDX #$00
-    CMP CURRENT_SAVE_MANIPULATION_PAGE+8,X
-    BEQ 1E:179A
-    INX
-    CPX #$04
-    BCC 1E:178F
-    RTS
-    JSR ENGINE_WRAM_STATE_WRITEABLE
-    CPX #$03
-    BCS 1E:17AC
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+9,X
-    BEQ 1E:17AE
-    STA CURRENT_SAVE_MANIPULATION_PAGE+8,X
-    INX
-    BCC 1E:179D
-    LDA #$00
-    STA CURRENT_SAVE_MANIPULATION_PAGE+8,X
-    TXA
-    JSR CREATE_PTR_HELPER_6700
-    JSR 1E:1FBF
+COMAPRE_IDFK: ; 1E:178D, 0x03D78D
+    LDX #$00 ; Reset index.
+INDEX_LT_0x4: ; 1E:178F, 0x03D78F
+    CMP CURRENT_SAVE_MANIPULATION_PAGE+8,X ; Compared passed to.
+    BEQ PASSED_MATCH ; ==, goto.
+    INX ; Index++
+    CPX #$04 ; If _ #$04
+    BCC INDEX_LT_0x4 ; <, goto.
+    RTS ; Leave, CS.
+PASSED_MATCH: ; 1E:179A, 0x03D79A
+    JSR ENGINE_WRAM_STATE_WRITEABLE ; WRAM writeable.
+LOOPY: ; 1E:179D, 0x03D79D
+    CPX #$03 ; If _ #$03
+    BCS CLEAR_SLOT_IDFK ; >=, goto.
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+9,X ; Load ??
+    BEQ STORE_SLOT ; == 0, goto.
+    STA CURRENT_SAVE_MANIPULATION_PAGE+8,X ; Move slot down.
+    INX ; X++
+    BCC LOOPY ; Always taken.
+CLEAR_SLOT_IDFK: ; 1E:17AC, 0x03D7AC
+    LDA #$00 ; Clear.
+STORE_SLOT: ; 1E:17AE, 0x03D7AE
+    STA CURRENT_SAVE_MANIPULATION_PAGE+8,X ; Store.
+    TXA ; Slot to A.
+    JSR CREATE_PTR_HELPER_6700 ; Make ptr.
+    JSR LIB_STREAM_SETUP_UNK ; Do ??
     JSR SETUP_PTR_6780_UNK
-    LDX #$00
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+8,X
-    BEQ 1E:17CF
-    JSR STREAM_TO_STREAM_MOD/MOVE_UNK
-    LDA #$0C
-    CPX #$00
-    BNE 1E:17CF
-    LDY #$1C
-    LDA [R6_BANKED_ADDR_MOVED[2]],Y
-    LDY #$00
-    STA [ENGINE_FPTR_30[2]],Y
-    JSR ENGINE_FPTR_COL/ROW_MOD/FORWARD?
-    INX
-    CPX #$04
-    BCC 1E:17BD
-    CLC
-    JMP ENGINE_WRAM_STATE_WRITE_DISABLED
+    LDX #$00 ; Index reset.
+INDEX_LT_0x4_B: ; 1E:17BD, 0x03D7BD
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+8,X ; Load.
+    BEQ VAL_EQ_0x00 ; == 0, goto.
+    JSR STREAM_TO_STREAM_MOD/MOVE_UNK ; Do ??
+    LDA #$0C ; Val ??
+    CPX #$00 ; If _ #$00
+    BNE VAL_EQ_0x00 ; !=, goto.
+    LDY #$1C ; First slot, stream 0x1C ??
+    LDA [R6_BANKED_ADDR_MOVED[2]],Y ; Load data.
+VAL_EQ_0x00: ; 1E:17CF, 0x03D7CF
+    LDY #$00 ; Reset stream.
+    STA [ENGINE_FPTR_30[2]],Y ; Store to stream.
+    JSR ENGINE_FPTR_COL/ROW_MOD/FORWARD? ; Do ??
+    INX ; Index++
+    CPX #$04 ; If _ #$04
+    BCC INDEX_LT_0x4_B ; <, goto.
+    CLC ; Ret CC.
+    JMP ENGINE_WRAM_STATE_WRITE_DISABLED ; Disable and leave.
 MOVE_TO_STREAM_UNK_WITH_MOD: ; 1E:17DF, 0x03D7DF
     JSR STREAM_TO_STREAM_MOD/MOVE_UNK ; Do ??
 MOVE_TO_STREAM_UNK: ; 1E:17E2, 0x03D7E2
@@ -3807,7 +3848,7 @@ MOVE_TO_STREAM_UNK: ; 1E:17E2, 0x03D7E2
     LDA SCRIPT_LOADED_SHIFTED_UNK[1] ; Move to stream.
     STA [ENGINE_FPTR_30[2]],Y
     INY ; Stream++
-    LDA **:$00AB ; Load ??
+    LDA R_**:$00AB ; Load ??
     STA [ENGINE_FPTR_30[2]],Y
     LDY #$06 ; Stream reset.
     LDA SCRIPT_LOADED_SHIFTED_|VAL[2] ; Move to stream.
@@ -3822,9 +3863,9 @@ MOVE_TO_STREAM_UNK: ; 1E:17E2, 0x03D7E2
     LDA STREAM_DEEP_C ; Move to stream.
     STA [ENGINE_FPTR_30[2]],Y
     INY ; Stream++
-    LDA **:$00A7 ; Move to stream.
+    LDA R_**:$00A7 ; Move to stream.
     STA [ENGINE_FPTR_30[2]],Y
-    LDA **:$003E ; Load ??
+    LDA R_**:$003E ; Load ??
     LDY #$15 ; Stream set.
     STA [ENGINE_FPTR_30[2]],Y ; Store to stream.
     LDY #$1D ; Stream set.
@@ -3856,6 +3897,7 @@ STREAM_TO_STREAM_MOD/MOVE_UNK: ; 1E:1813, 0x03D813
     PLA ; Pull original loaded.
     AND #$0F ; Keep lower.
     STA [ENGINE_FPTR_30[2]],Y ; Store to other stream ptr.
+LIB_FPTR_SPECIFIC_MOVE_UNK: ; 1E:1840, 0x03D840
     LDY #$1E ; Reseed stream.
     LDA [R6_BANKED_ADDR_MOVED[2]],Y ; Load from.
     LDY #$16 ; Reseed stream.
@@ -3899,7 +3941,7 @@ CREATE_PTR_HELPER_6700: ; 1E:186C, 0x03D86C
 MOD_STREAM_LUT_UNK: ; 1E:1884, 0x03D884
     LDY #$15 ; Stream index.
     LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
-    STA **:$003E ; Store to.
+    STA R_**:$003E ; Store to.
     EOR #$04 ; Invert bit.
     ASL A ; << 3, *8.
     ASL A
@@ -3913,7 +3955,7 @@ MOD_STREAM_LUT_UNK: ; 1E:1884, 0x03D884
     INY ; Stream++
     LDA LUT_MOD_0x0+1,X ; Load mod.
     ADC [ENGINE_FPTR_30[2]],Y ; Mod with carry.
-    STA **:$00AB ; Store to.
+    STA R_**:$00AB ; Store to.
     LDY #$06 ; Stream mod.
     CLC ; Prep add.
     LDA LUT_MOD_0x0+2,X ; Load mod.
@@ -3925,90 +3967,101 @@ MOD_STREAM_LUT_UNK: ; 1E:1884, 0x03D884
     STA SCRIPT_LOADED_SHIFTED_|VAL+1 ; Store to.
     JSR SETUP_DEEP_STREAM_UNK ; Setup ??
     JMP ENGINE_FPTR_COL/ROW_MOD/FORWARD? ; Do mod, leave.
-    JSR CREATE_PTR_HELPER_6700
-    LDY #$02
-    LDA [ENGINE_FPTR_30[2]],Y
+LIB_FPTR_AND_MOVE_HELPER: ; 1E:18BA, 0x03D8BA
+    JSR CREATE_PTR_HELPER_6700 ; Do PTR.
+    LDY #$02 ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Move ptr.
     STA R6_BANKED_ADDR_MOVED[2]
-    INY
-    LDA [ENGINE_FPTR_30[2]],Y
+    INY ; Stream++
+    LDA [ENGINE_FPTR_30[2]],Y ; Addr H.
     STA R6_BANKED_ADDR_MOVED+1
-    RTS
+    RTS ; Leave.
+LIB_SPECIAL_CHECKS_WITH_CMPS_UNK: ; 1E:18C9, 0x03D8C9
     LDA #$07
-    JSR L_1E:178D
+    JSR COMAPRE_IDFK
     LDA #$06
-    JMP L_1E:178D
-L_1E:18D3: ; 1E:18D3, 0x03D8D3
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+385
-    BPL 1E:18DD
-    LDA #$06
-    JSR L_1E:178D
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+449
-    BPL 1E:18E7
-    LDA #$07
-    JSR L_1E:178D
+    JMP COMAPRE_IDFK
+LIB_SPECIAL_CHECKS_UNK: ; 1E:18D3, 0x03D8D3
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+385 ; Load ??
+    BPL POSITIVE_VAL ; Positive, goto.
+    LDA #$06 ; Val ??
+    JSR COMAPRE_IDFK ; Do a bit, slotty.
+POSITIVE_VAL: ; 1E:18DD, 0x03D8DD
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+449 ; Load ??
+    BPL VAL_POSITIVE ; Positive, goto.
+    LDA #$07 ; Val ??
+    JSR COMAPRE_IDFK ; Do.
+VAL_POSITIVE: ; 1E:18E7, 0x03D8E7
     LDX #$00
-    STX SLOT/DATA_OFFSET_USE?
-    JSR X_INDEX_TEST_UNK
-    BCS 1E:1906
-    TXA
-    JSR 1E:18BA
-    JSR ENGINE_WRAM_STATE_WRITEABLE
-    JSR 1E:1840
-    BCS 1E:18FE
-    INC SLOT/DATA_OFFSET_USE?
-    JSR ENGINE_WRAM_STATE_WRITE_DISABLED
-    INX
-    CPX #$04
-    BCC 1E:18EB
-    STX GAME_SLOT_CURRENT?
-    LDA SLOT/DATA_OFFSET_USE?
-    BEQ 1E:190E
-    CLC
+    STX SLOT/DATA_OFFSET_USE? ; Set slot.
+VAL_LT_0x4: ; 1E:18EB, 0x03D8EB
+    JSR X_INDEX_TEST_UNK ; Do ??
+    BCS RET_CS ; CS, goto.
+    TXA ; X to A.
+    JSR LIB_FPTR_AND_MOVE_HELPER ; Do ??
+    JSR ENGINE_WRAM_STATE_WRITEABLE ; Enable WRAM.
+    JSR LIB_FPTR_SPECIFIC_MOVE_UNK ; Do ??
+    BCS RET_CS ; CS, goto.
+    INC SLOT/DATA_OFFSET_USE? ; ++
+RET_CS: ; 1E:18FE, 0x03D8FE
+    JSR ENGINE_WRAM_STATE_WRITE_DISABLED ; No more WRAM.
+    INX ; Index++
+    CPX #$04 ; If _ #$04
+    BCC VAL_LT_0x4 ; <, goto.
+RET_CS: ; 1E:1906, 0x03D906
+    STX GAME_SLOT_CURRENT? ; X to.
+    LDA SLOT/DATA_OFFSET_USE? ; Load ??
+    BEQ LOADED_ZERO ; == 0, goto.
+    CLC ; Ret CC.
     RTS
-    JSR 1E:18C9
-    JSR ENGINE_WRAM_STATE_WRITEABLE
+LOADED_ZERO: ; 1E:190E, 0x03D90E
+    JSR LIB_SPECIAL_CHECKS_WITH_CMPS_UNK ; Do ??
+    JSR ENGINE_WRAM_STATE_WRITEABLE ; WRAM again.
     LDA #$00
-    STA CURRENT_SAVE_MANIPULATION_PAGE+65
+    STA CURRENT_SAVE_MANIPULATION_PAGE+65 ; Clear specific.
     STA CURRENT_SAVE_MANIPULATION_PAGE+86
     STA CURRENT_SAVE_MANIPULATION_PAGE+87
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+67
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+67 ; Move ??
     STA CURRENT_SAVE_MANIPULATION_PAGE+84
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+68
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+68 ; Move ??
     STA CURRENT_SAVE_MANIPULATION_PAGE+85
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+16
-    LSR CURRENT_SAVE_MANIPULATION_PAGE+17
-    ROR A
-    ADC #$00
-    STA CURRENT_SAVE_MANIPULATION_PAGE+16
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+17
-    ADC #$00
-    STA CURRENT_SAVE_MANIPULATION_PAGE+17
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+16 ; Load ??
+    LSR CURRENT_SAVE_MANIPULATION_PAGE+17 ; Carry from.
+    ROR A ; Rotate A.
+    ADC #$00 ; Add 0x00/0x01
+    STA CURRENT_SAVE_MANIPULATION_PAGE+16 ; Store to.
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+17 ; Load ??
+    ADC #$00 ; Carry add.
+    STA CURRENT_SAVE_MANIPULATION_PAGE+17 ; Store result.
     LDA #$01
-    STA SLOT/DATA_OFFSET_USE?
+    STA SLOT/DATA_OFFSET_USE? ; Set ??
     LDA #$00
-    STA MAIN_FLAG_UNK
-    STA FLAG_UNK_23
-    LDX STREAM_REPLACE_COUNT?
-    LDY 1E:196B,X
-    LDX #$03
-    LDA 1E:196F,Y
-    STA CURRENT_SAVE_MANIPULATION_PAGE+4,X
-    DEY
-    DEX
-    BPL 1E:1950
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+6
-    AND #$0F
-    ORA #$20
-    STA FIRST_LAUNCHER_HOLD_FLAG?
-    EOR #$60
-    STA SCRIPT_FLAG_0x22
-    SEC
-    JMP ENGINE_WRAM_STATE_WRITE_DISABLED
-    .db 03
+    STA MAIN_FLAG_UNK ; Clear flag.
+    STA FLAG_UNK_23 ; Clear ??
+    LDX STREAM_REPLACE_COUNT? ; Index ??
+    LDY Y_INDEXES_UNK,X ; Load index from X.
+    LDX #$03 ; Count 4
+COUNT_POSITIVE: ; 1E:1950, 0x03D950
+    LDA DATA_WRITING_UNK,Y ; Load from index.
+    STA CURRENT_SAVE_MANIPULATION_PAGE+4,X ; Set ??
+    DEY ; Y--
+    DEX ; Count--
+    BPL COUNT_POSITIVE ; Positive, goto.
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+6 ; Load ??
+    AND #$0F ; Keep lower.
+    ORA #$20 ; Set bits.
+    STA FIRST_LAUNCHER_HOLD_FLAG? ; Set ??
+    EOR #$60 ; Invert 0110.0000
+    STA SCRIPT_FLAG_0x22 ; Set ??
+    SEC ; Ret CS.
+    JMP ENGINE_WRAM_STATE_WRITE_DISABLED ; Disable and leave.
+Y_INDEXES_UNK: ; 1E:196B, 0x03D96B
+    .db 03 ; Indexes.
     .db 03
     .db 03
     .db 07
-    .db 5C
+DATA_WRITING_UNK: ; 1E:196F, 0x03D96F
+    .db 5C ; Data write.
     .db DF
     .db 00
     .db 24
@@ -4018,23 +4071,29 @@ L_1E:18D3: ; 1E:18D3, 0x03D8D3
     .db DB
 L_1E:1977: ; 1E:1977, 0x03D977
     DEC GAME_SLOT_CURRENT?
-    BMI 1E:1997
-    BEQ 1E:1997
+    BMI L_1E:1997
+    BEQ L_1E:1997
+L_1E:197D: ; 1E:197D, 0x03D97D
     LDA CURRENT_SAVE_MANIPULATION_PAGE+8
     CMP #$01
-    BEQ 1E:198C
-    JSR 1E:1998
-    BCS 1E:197D
-    JSR 1E:1998
+    BEQ L_1E:198C
+    JSR L_1E:1998
+    BCS L_1E:197D
+L_1E:1989: ; 1E:1989, 0x03D989
+    JSR L_1E:1998
+L_1E:198C: ; 1E:198C, 0x03D98C
     LDA #$00
-    JSR 1E:18BA
+    JSR LIB_FPTR_AND_MOVE_HELPER
     LDY #$01
     LDA [R6_BANKED_ADDR_MOVED[2]],Y
-    BMI 1E:1989
+    BMI L_1E:1989
+L_1E:1997: ; 1E:1997, 0x03D997
     RTS
+L_1E:1998: ; 1E:1998, 0x03D998
     JSR ENGINE_WRAM_STATE_WRITEABLE
     LDX #$00
     STX SLOT/DATA_OFFSET_USE?
+L_1E:199F: ; 1E:199F, 0x03D99F
     LDA CURRENT_SAVE_MANIPULATION_PAGE+8,X
     PHA
     LDA CURRENT_SAVE_MANIPULATION_PAGE+9,X
@@ -4042,38 +4101,40 @@ L_1E:1977: ; 1E:1977, 0x03D977
     PLA
     STA CURRENT_SAVE_MANIPULATION_PAGE+9,X
     LDA #$02
-    JSR 1E:19DE
+    JSR L_1E:19DE
     LDA #$03
-    JSR 1E:19DE
+    JSR L_1E:19DE
     LDA #$08
+L_1E:19B9: ; 1E:19B9, 0x03D9B9
     PHA
-    JSR 1E:19DE
+    JSR L_1E:19DE
     PLA
     CLC
     ADC #$01
     CMP #$11
-    BCC 1E:19B9
+    BCC L_1E:19B9
     LDA #$16
-    JSR 1E:19DE
+    JSR L_1E:19DE
     LDA #$17
-    JSR 1E:19DE
+    JSR L_1E:19DE
     CLC
     LDA SLOT/DATA_OFFSET_USE?
     ADC #$20
     STA SLOT/DATA_OFFSET_USE?
     INX
     CPX GAME_SLOT_CURRENT?
-    BCC 1E:199F
+    BCC L_1E:199F
     JMP ENGINE_WRAM_STATE_WRITE_DISABLED
+L_1E:19DE: ; 1E:19DE, 0x03D9DE
     CLC
     ADC SLOT/DATA_OFFSET_USE?
     TAY
     LDA R_**:$6780,Y
     PHA
-    LDA **:$67A0,Y
+    LDA R_**:$67A0,Y
     STA R_**:$6780,Y
     PLA
-    STA **:$67A0,Y
+    STA R_**:$67A0,Y
     RTS
 X_INDEX_TEST_UNK: ; 1E:19F1, 0x03D9F1
     SEC ; Prep sub.
@@ -4082,202 +4143,221 @@ X_INDEX_TEST_UNK: ; 1E:19F1, 0x03D9F1
     CMP #$06 ; If _ #$06
 RTS: ; 1E:19F9, 0x03D9F9
     RTS ; 0x01-0x05, CC. CS otherwise.
-L_1E:19FA: ; 1E:19FA, 0x03D9FA
-    LDX #$00
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+8,X
-    BEQ 1E:1A10
-    JSR CREATE_PTR_UNK
-    LDY #$2C
-    LDA **:$73D8,Y
-    STA [ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]],Y
-    INY
-    CPY #$30
-    BCC 1E:1A06
-    INX
-    CPX #$04
-    BCC 1E:19FC
-    RTS
+SLOTS_AND_FPTRS_IDFK: ; 1E:19FA, 0x03D9FA
+    LDX #$00 ; Index reset.
+INDEX_LT_0x4: ; 1E:19FC, 0x03D9FC
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+8,X ; Load from indexed.
+    BEQ VAL_EQ_0x00 ; ==, goto.
+    JSR CREATE_PTR_UNK ; Make ptr ??
+    LDY #$2C ; Index.
+VAL_LT_0x30: ; 1E:1A06, 0x03DA06
+    LDA WRAM_ARR_UNK[48],Y ; Load WRAM ??
+    STA [MISC_USE_A],Y ; Store to stream.
+    INY ; Stream++
+    CPY #$30 ; If _ #$30
+    BCC VAL_LT_0x30 ; <, goto.
+VAL_EQ_0x00: ; 1E:1A10, 0x03DA10
+    INX ; Index++
+    CPX #$04 ; If _ #$04
+    BCC INDEX_LT_0x4 ; <, loop.
+    RTS ; Leave.
+L_1E:1A16: ; 1E:1A16, 0x03DA16
     JSR ENGINE_SETTLE_ALL_UPDATES?
     JSR ENGINE_0x300_OBJECTS_UNK?
     LDX #$00
+L_1E:1A1E: ; 1E:1A1E, 0x03DA1E
     JSR X_INDEX_TEST_UNK
-    BCS 1E:1A3C
+    BCS L_1E:1A3C
     TXA
-    JSR 1E:18BA
+    JSR LIB_FPTR_AND_MOVE_HELPER
     LDY #$01
     LDA [R6_BANKED_ADDR_MOVED[2]],Y
-    BMI 1E:1A3C
+    BMI L_1E:1A3C
     LDY #$10
     LDA [ENGINE_FPTR_30[2]],Y
     TAY
     LDA #$80
-    STA **:$0306,Y
+    STA R_**:$0306,Y
     LDA #$81
-    STA **:$0307,Y
+    STA R_**:$0307,Y
+L_1E:1A3C: ; 1E:1A3C, 0x03DA3C
     INX
     CPX #$04
-    BCC 1E:1A1E
+    BCC L_1E:1A1E
     LDA #$01
     STA NMI_FLAG_E5_TODO
     JMP ENGINE_SETTLE_ALL_UPDATES?
-L_1E:1A48: ; 1E:1A48, 0x03DA48
-    LDA SLOT/DATA_OFFSET_USE?
+LIB_UNK: ; 1E:1A48, 0x03DA48
+    LDA SLOT/DATA_OFFSET_USE? ; Move ??. If 0x00, loops forever to crash game.
     STA SAVE_GAME_MOD_PAGE_PTR[2]
-    LDA **:$0049
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]
-    LDA **:$004A
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1
-    LDA **:$004B
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+2
-    JSR ENGINE_NUMS_UNK_MODULO?
-    LDA ARR_BITS_TO_UNK[8]
-    BEQ 1E:1A61
-    LDA #$01
-    CLC
-    ADC ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]
-    STA **:$0049
-    LDA #$00
-    ADC ENGINE_PALETTE_FPTR/BITS/GEN_USE+1
-    STA **:$004A
-    LDA #$00
-    ADC ENGINE_PALETTE_FPTR/BITS/GEN_USE+2
-    STA **:$004B
-    JSR ENGINE_WRAM_STATE_WRITEABLE
-    LDX #$00
-    JSR X_INDEX_TEST_UNK
-    BCS 1E:1ADD
-    STA R_**:$0028
-    TXA
-    LSR A
+    LDA R_**:$0049 ; Move to misc use. ??
+    STA MISC_USE_A
+    LDA R_**:$004A
+    STA MISC_USE_B
+    LDA R_**:$004B
+    STA MISC_USE_C
+    JSR ENGINE_NUMS_UNK_MODULO? ; Do ??
+    LDA ARR_BITS_TO_UNK[8] ; Load ??
+    BEQ VAL_EQ_0x00 ; == 0, goto.
+    LDA #$01 ; 0x1 otherwise.
+VAL_EQ_0x00: ; 1E:1A61, 0x03DA61
+    CLC ; Prep add.
+    ADC MISC_USE_A ; Add val to.
+    STA R_**:$0049 ; Store result.
+    LDA #$00 ; Carry seed.
+    ADC MISC_USE_B ; Add carry.
+    STA R_**:$004A ; Store result.
+    LDA #$00 ; Seed carry.
+    ADC MISC_USE_C ; Add carry.
+    STA R_**:$004B ; Store result.
+    JSR ENGINE_WRAM_STATE_WRITEABLE ; WRAM writable.
+    LDX #$00 ; Index set.
+VAL_LT_0x4: ; 1E:1A77, 0x03DA77
+    JSR X_INDEX_TEST_UNK ; Do ??
+    BCS RTN_RET_CS ; Ret CS, goto.
+    STA R_**:$0028 ; Set ??
+    TXA ; X to A.
+    LSR A ; >> 1, /2.
+    ROR A ; Rotate into now.
     ROR A
     ROR A
-    ROR A
-    STA SCRIPT_INDEX_53_UNK
-    TXA
-    PHA
-    JSR 1E:18BA
-    LDY #$01
-    LDA [R6_BANKED_ADDR_MOVED[2]],Y
-    BMI 1E:1ADB
-    LDA STREAM_REPLACE_COUNT?
-    BNE 1E:1AD8
-    LDY #$11
-    CLC
-    LDA **:$0049
-    ADC [R6_BANKED_ADDR_MOVED[2]],Y
-    STA [R6_BANKED_ADDR_MOVED[2]],Y
-    INY
-    LDA **:$004A
-    ADC [R6_BANKED_ADDR_MOVED[2]],Y
-    STA [R6_BANKED_ADDR_MOVED[2]],Y
-    INY
-    LDA **:$004B
-    ADC [R6_BANKED_ADDR_MOVED[2]],Y
-    STA [R6_BANKED_ADDR_MOVED[2]],Y
-    BCC 1E:1AB9
-    LDY #$11
+    STA SCRIPT_INDEX_53_UNK ; Store shifted.
+    TXA ; X to A again.
+    PHA ; Save it.
+    JSR LIB_FPTR_AND_MOVE_HELPER ; Do lib.
+    LDY #$01 ; Stream index.
+    LDA [R6_BANKED_ADDR_MOVED[2]],Y ; Load ??
+    BMI VAL_NEGATIVE ; Negative, goto.
+    LDA STREAM_REPLACE_COUNT? ; Load ??
+    BNE SUBS_UNDERFLOWED ; != 0, goto.
+    LDY #$11 ; Stream index.
+    CLC ; Prep add.
+    LDA R_**:$0049 ; Delta.
+    ADC [R6_BANKED_ADDR_MOVED[2]],Y ; Add with stream.
+    STA [R6_BANKED_ADDR_MOVED[2]],Y ; Store result.
+    INY ; Stream++
+    LDA R_**:$004A ; Delta.
+    ADC [R6_BANKED_ADDR_MOVED[2]],Y ; Add with stream.
+    STA [R6_BANKED_ADDR_MOVED[2]],Y ; Store result.
+    INY ; Stream++
+    LDA R_**:$004B ; Delta.
+    ADC [R6_BANKED_ADDR_MOVED[2]],Y ; Add with stream.
+    STA [R6_BANKED_ADDR_MOVED[2]],Y ; Store result.
+    BCC NO_CARRY_FINAL ; No carry, goto.
+    LDY #$11 ; Stream index.
+    LDA #$FF ; Seed val to write. Failure condition or catch here.
+    STA [R6_BANKED_ADDR_MOVED[2]],Y ; Set 0xFF.
+    INY ; Stream++
+    STA [R6_BANKED_ADDR_MOVED[2]],Y ; 0xFF
+    INY ; Stream++
+    STA [R6_BANKED_ADDR_MOVED[2]],Y ; 0xFF
+NO_CARRY_FINAL: ; 1E:1AB9, 0x03DAB9
+    LDY #$10 ; Stream index.
+    LDA [R6_BANKED_ADDR_MOVED[2]],Y ; Load from file.
+    JSR LIB_IDFK_DECIMALY_AND_IDK ; Do ??
+    LDY #$11 ; Stream index.
+    SEC ; Prep sub.
+    LDA [R6_BANKED_ADDR_MOVED[2]],Y ; Load from stream.
+    SBC SAVE_GAME_MOD_PAGE_PTR[2] ; -= ??
+    INY ; Stream++
+    LDA [R6_BANKED_ADDR_MOVED[2]],Y ; Load ??
+    SBC SAVE_GAME_MOD_PAGE_PTR+1 ; -= ??, carried.
+    INY ; Stream++
+    LDA [R6_BANKED_ADDR_MOVED[2]],Y ; Load ??
+    SBC ALT_STUFF_INDEX? ; -= ??, carried.
+    BCC SUBS_UNDERFLOWED ; Underflowed, goto.
+    JSR L_1E:1B6C ; Do, in range.
+    BCC NO_CARRY_FINAL ; Ret CC, goto.
+SUBS_UNDERFLOWED: ; 1E:1AD8, 0x03DAD8
+    JSR LIB_STREAMY_UNK ; Do ??
+VAL_NEGATIVE: ; 1E:1ADB, 0x03DADB
+    PLA ; Pull A.
+    TAX ; To X index.
+RTN_RET_CS: ; 1E:1ADD, 0x03DADD
+    INX ; Index++
+    CPX #$04 ; If _ #$04
+    BCC VAL_LT_0x4 ; <, goto.
+    JSR LIB_PACKET_R6_0x00_TODO ; Do ??
+    LDA STREAM_REPLACE_COUNT? ; Load ??
+    BNE EXIT_DISABLE_WRAM ; != 0, goto.
+    JSR ENGINE_WRAM_STATE_WRITEABLE ; Do writeable.
+    LDX #$12 ; Index.
+    JSR LIB_ADD_TO_GROUP_24-BIT ; Add.
+    LDX #$15 ; Index.
+    JSR LIB_ADD_TO_GROUP_24-BIT ; Add.
+    LDA FLAG_UNK_48 ; Load ??
+    BEQ EXIT_DISABLE_WRAM ; == 0, goto.
+    STA PTR_CREATE_SEED? ; Store nonzero.
+    JSR ENGINE_HELPER_R7_0x13 ; Bank in.
+    JSR PTR_AND_BANK_R6_UNK ; Do ??
     LDA #$FF
-    STA [R6_BANKED_ADDR_MOVED[2]],Y
-    INY
-    STA [R6_BANKED_ADDR_MOVED[2]],Y
-    INY
-    STA [R6_BANKED_ADDR_MOVED[2]],Y
-    LDY #$10
-    LDA [R6_BANKED_ADDR_MOVED[2]],Y
-    JSR L_1E:1B40
-    LDY #$11
-    SEC
-    LDA [R6_BANKED_ADDR_MOVED[2]],Y
-    SBC SAVE_GAME_MOD_PAGE_PTR[2]
-    INY
-    LDA [R6_BANKED_ADDR_MOVED[2]],Y
-    SBC SAVE_GAME_MOD_PAGE_PTR+1
-    INY
-    LDA [R6_BANKED_ADDR_MOVED[2]],Y
-    SBC ALT_STUFF_INDEX?
-    BCC 1E:1AD8
-    JSR 1E:1B6C
-    BCC 1E:1AB9
-    JSR 1E:1C87
-    PLA
-    TAX
-    INX
-    CPX #$04
-    BCC 1E:1A77
-    JSR 1E:043F
-    LDA STREAM_REPLACE_COUNT?
-    BNE 1E:1B30
-    JSR ENGINE_WRAM_STATE_WRITEABLE
-    LDX #$12
-    JSR 1E:1C11
-    LDX #$15
-    JSR 1E:1C11
-    LDA FLAG_UNK_48
-    BEQ 1E:1B30
-    STA R_**:$0029
-    JSR ENGINE_HELPER_R7_0x13
-    JSR $BBC3
-    LDA #$FF
-    STA R_**:$002A
-    LDA R_**:$002B
-    ORA #$1F
-    ASL R_**:$002A
-    ASL A
-    BCC 1E:1B0A
-    JSR ADDS_IDFK
-    AND R_**:$002A
-    BNE 1E:1B30
-    JSR $BB8C
-    LDX #$00
-    JSR X_INDEX_TEST_UNK
-    BCS 1E:1B2B
-    STA R_**:$0028
-    TXA
+    STA R_**:$002A ; Set ??
+    LDA R_**:$002B ; Load ??
+    ORA #$1F ; Set ??
+CC_LOOP: ; 1E:1B0A, 0x03DB0A
+    ASL R_**:$002A ; << var.
+    ASL A ; << 1.
+    BCC CC_LOOP ; CC, do more.
+    JSR ADDS_IDFK ; Do adds.
+    AND R_**:$002A ; Remove ??
+    BNE EXIT_DISABLE_WRAM ; Any set, goto.
+    JSR PTR_MOVE_TO_UNK_ARR_WRAM ; Do ??
+    LDX #$00 ; Index ??
+INDEX_LT_0x4: ; 1E:1B1B, 0x03DB1B
+    JSR X_INDEX_TEST_UNK ; Do ??
+    BCS RET_CS ; CS, goto.
+    STA R_**:$0028 ; Store loaded from arr.
+    TXA ; Save X.
     PHA
-    JSR $A979
-    PLA
+    JSR BANKED_DERP ; Do ??
+    PLA ; Restore X.
     TAX
-    BCC 1E:1B33
-    INX
-    CPX #$04
-    BCC 1E:1B1B
-    JMP ENGINE_WRAM_STATE_WRITE_DISABLED
-    JSR ENGINE_HELPER_R7_0x17
+    BCC CALL_INTO_0x17_IDFK ; CC, goto, passed.
+RET_CS: ; 1E:1B2B, 0x03DB2B
+    INX ; Index++
+    CPX #$04 ; If _ #$04
+    BCC INDEX_LT_0x4 ; <, loop.
+EXIT_DISABLE_WRAM: ; 1E:1B30, 0x03DB30
+    JMP ENGINE_WRAM_STATE_WRITE_DISABLED ; Exit disabling wram.
+CALL_INTO_0x17_IDFK: ; 1E:1B33, 0x03DB33
+    JSR ENGINE_HELPER_R7_0x17 ; To bank.
     LDA #$06
-    STA **:$07F1
-    LDA #$8C
-    JMP $A3F8
-L_1E:1B40: ; 1E:1B40, 0x03DB40
-    TAX
-    INX
-    STX SAVE_GAME_MOD_PAGE_PTR[2]
-    INX
-    STX ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]
+    STA R_**:$07F1 ; Set ??
+    LDA #$8C ; Val ??
+    JMP LIB_EXIT_IDFK ; Goto ??
+LIB_IDFK_DECIMALY_AND_IDK: ; 1E:1B40, 0x03DB40
+    TAX ; A to X.
+    INX ; ++
+    STX SAVE_GAME_MOD_PAGE_PTR[2] ; Store ??
+    INX ; ++
+    STX MISC_USE_A ; Store ??
     LDA #$00
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+2
-    JSR LIB_DECIMAL?_UNK
-    JSR LIB_DECIMAL?_UNK
-    JSR 1E:1CDF
-    LDY #$00
-    LDA [ARR_BITS_TO_UNK[8]],Y
+    STA MISC_USE_B ; Clear ??
+    STA MISC_USE_C
+    JSR LIB_DECIMAL?_UNK ; Do.
+    JSR LIB_DECIMAL?_UNK ; Again. Mistake?
+    JSR LIB_SETUP_PTR_AND_R6_UNK ; Do ??
+    LDY #$00 ; Stream index.
+    LDA [ARR_BITS_TO_UNK[8]],Y ; Move ??
     STA SAVE_GAME_MOD_PAGE_PTR[2]
-    JSR LIB_DECIMAL?_UNK
-    LDA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1
+    JSR LIB_DECIMAL?_UNK ; Do RTN.
+    LDA MISC_USE_B ; Move ??
     STA SAVE_GAME_MOD_PAGE_PTR[2]
-    LDA ENGINE_PALETTE_FPTR/BITS/GEN_USE+2
+    LDA MISC_USE_C ; 2x
     STA SAVE_GAME_MOD_PAGE_PTR+1
-    LDA ENGINE_TO_DECIMAL_INDEX_POSITION
+    LDA ENGINE_TO_DECIMAL_INDEX_POSITION ; Move ??
     STA ALT_STUFF_INDEX?
-    RTS
+    RTS ; Leve.
+L_1E:1B6C: ; 1E:1B6C, 0x03DB6C
     LDY #$10
     LDA [R6_BANKED_ADDR_MOVED[2]],Y
     CMP #$63
-    BCC 1E:1B75
+    BCC L_1E:1B75
     RTS
+L_1E:1B75: ; 1E:1B75, 0x03DB75
     ADC #$01
     STA [R6_BANKED_ADDR_MOVED[2]],Y
-    JSR 1E:043F
+    JSR LIB_PACKET_R6_0x00_TODO
     JSR ENGINE_WRAM_STATE_WRITEABLE
     LDA #$FF
     JSR STORE_IF_MISMATCH_OTHERWISE_WAIT_MENU_DEPTH?
@@ -4285,8 +4365,9 @@ L_1E:1B40: ; 1E:1B40, 0x03DB40
     JSR STORE_IF_MISMATCH_OTHERWISE_WAIT_MENU_DEPTH?
     LDA #$82
     JSR $A3F8
-    JSR 1E:1CDF
+    JSR LIB_SETUP_PTR_AND_R6_UNK
     LDY #$03
+L_1E:1B93: ; 1E:1B93, 0x03DB93
     JSR ADDS_IDFK
     LSR A
     LSR A
@@ -4300,19 +4381,21 @@ L_1E:1B40: ; 1E:1B40, 0x03DB40
     STA 57_INDEX_UNK,Y
     INY
     CPY #$08
-    BCC 1E:1B93
+    BCC L_1E:1B93
     LDY #$0B
+L_1E:1BAA: ; 1E:1BAA, 0x03DBAA
     CLC
     LDA [R6_BANKED_ADDR_MOVED[2]],Y
-    ADC **:$004D,Y
-    BCC 1E:1BBC
-    SBC **:$004D,Y
+    ADC R_**:$004D,Y
+    BCC L_1E:1BBC
+    SBC R_**:$004D,Y
     EOR #$FF
-    STA **:$004D,Y
+    STA R_**:$004D,Y
     LDA #$FF
+L_1E:1BBC: ; 1E:1BBC, 0x03DBBC
     STA [R6_BANKED_ADDR_MOVED[2]],Y
-    LDA **:$004D,Y
-    BEQ 1E:1BCD
+    LDA R_**:$004D,Y
+    BEQ L_1E:1BCD
     TYA
     PHA
     CLC
@@ -4320,81 +4403,90 @@ L_1E:1B40: ; 1E:1B40, 0x03DB40
     JSR $A3F8
     PLA
     TAY
+L_1E:1BCD: ; 1E:1BCD, 0x03DBCD
     INY
     CPY #$10
-    BCC 1E:1BAA
+    BCC L_1E:1BAA
     LDY #$07
-    LDA **:$0058
-    JSR 1E:1C64
+    LDA R_**:$0058
+    JSR L_1E:1C64
     LDY #$09
-    LDA **:$0059
-    JSR 1E:1C64
+    LDA R_**:$0059
+    JSR L_1E:1C64
     LDY #$0E
     LDA [R6_BANKED_ADDR_MOVED[2]],Y
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]
+    STA MISC_USE_A
     CLC
     ADC #$14
-    BCC 1E:1BED
+    BCC L_1E:1BED
     LDA #$FF
+L_1E:1BED: ; 1E:1BED, 0x03DBED
     LDY #$03
-    JSR 1E:1C3F
+    JSR L_1E:1C3F
     LDA #$84
-    JSR 1E:1C38
+    JSR L_1E:1C38
     LDA R_**:$0028
     CMP #$03
-    BCS 1E:1C0F
+    BCS L_1E:1C0F
     LDY #$0F
     LDA [R6_BANKED_ADDR_MOVED[2]],Y
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]
+    STA MISC_USE_A
     LSR A
     CLC
     LDY #$05
-    JSR 1E:1C3F
+    JSR L_1E:1C3F
     LDA #$85
-    JSR 1E:1C38
+    JSR L_1E:1C38
+L_1E:1C0F: ; 1E:1C0F, 0x03DC0F
     CLC
     RTS
-    CLC
-    LDA **:$004C
-    ADC CURRENT_SAVE_MANIPULATION_PAGE[768],X
-    STA CURRENT_SAVE_MANIPULATION_PAGE[768],X
-    LDA **:$004D
-    ADC CURRENT_SAVE_MANIPULATION_PAGE+1,X
+LIB_ADD_TO_GROUP_24-BIT: ; 1E:1C11, 0x03DC11
+    CLC ; Prep add.
+    LDA R_**:$004C ; Load adding.
+    ADC CURRENT_SAVE_MANIPULATION_PAGE[768],X ; Add with X indexed.
+    STA CURRENT_SAVE_MANIPULATION_PAGE[768],X ; Store result.
+    LDA R_**:$004D ; Load adding.
+    ADC CURRENT_SAVE_MANIPULATION_PAGE+1,X ; Add with pair.
+    STA CURRENT_SAVE_MANIPULATION_PAGE+1,X ; Store result.
+    LDA #$00 ; Carry add prep.
+    ADC SAVE_SLOT_DATA_UNK_A,X ; Carry add to, also.
+    STA SAVE_SLOT_DATA_UNK_A,X ; Store result.
+    BCC VALUE_VALID_PROBABLY ; No carry, should be good.
+    LDA #$FF ; Failure/OOB set.
+    STA CURRENT_SAVE_MANIPULATION_PAGE[768],X ; Set.
     STA CURRENT_SAVE_MANIPULATION_PAGE+1,X
-    LDA #$00
-    ADC SAVE_SLOT_DATA_UNK_A,X
     STA SAVE_SLOT_DATA_UNK_A,X
-    BCC 1E:1C37
-    LDA #$FF
-    STA CURRENT_SAVE_MANIPULATION_PAGE[768],X
-    STA CURRENT_SAVE_MANIPULATION_PAGE+1,X
-    STA SAVE_SLOT_DATA_UNK_A,X
-    RTS
+VALUE_VALID_PROBABLY: ; 1E:1C37, 0x03DC37
+    RTS ; Leave.
+L_1E:1C38: ; 1E:1C38, 0x03DC38
     LDX FPTR_5C_UNK+1
-    BEQ 1E:1C70
+    BEQ L_1E:1C70
     JMP $A3F8
+L_1E:1C3F: ; 1E:1C3F, 0x03DC3F
     CLC
-    ADC ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]
+    ADC MISC_USE_A
+    STA MISC_USE_A
     LDA #$00
     ROL A
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1
+    STA MISC_USE_B
     SEC
-    LDA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2]
+    LDA MISC_USE_A
     SBC [R6_BANKED_ADDR_MOVED[2]],Y
     TAX
     INY
-    LDA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1
+    LDA MISC_USE_B
     SBC [R6_BANKED_ADDR_MOVED[2]],Y
-    BEQ 1E:1C5C
+    BEQ L_1E:1C5C
     LDX #$08
-    BCS 1E:1C5C
+    BCS L_1E:1C5C
     LDX #$01
+L_1E:1C5C: ; 1E:1C5C, 0x03DC5C
     DEY
     TXA
     ASL A
-    JSR 1E:1C71
+    JSR L_1E:1C71
     STA FPTR_5C_UNK+1
+L_1E:1C64: ; 1E:1C64, 0x03DC64
     CLC
     ADC [R6_BANKED_ADDR_MOVED[2]],Y
     STA [R6_BANKED_ADDR_MOVED[2]],Y
@@ -4402,10 +4494,13 @@ L_1E:1B40: ; 1E:1B40, 0x03DB40
     LDA #$00
     ADC [R6_BANKED_ADDR_MOVED[2]],Y
     STA [R6_BANKED_ADDR_MOVED[2]],Y
+L_1E:1C70: ; 1E:1C70, 0x03DC70
     RTS
+L_1E:1C71: ; 1E:1C71, 0x03DC71
     CMP #$10
-    BCC 1E:1C77
+    BCC L_1E:1C77
     LDA #$10
+L_1E:1C77: ; 1E:1C77, 0x03DC77
     TAX
     JSR ADDS_IDFK
     LSR A
@@ -4418,73 +4513,80 @@ L_1E:1B40: ; 1E:1B40, 0x03DB40
     LSR A
     LSR A
     RTS
-    LDA MAIN_FLAG_UNK
-    BNE 1E:1CCC
-    JSR 1E:1CDF
-    LDY #$02
-    LDA [ARR_BITS_TO_UNK[8]],Y
-    BEQ 1E:1CCC
-    PHA
-    LDX #$C0
-    STX R_**:$0029
-    JSR 1E:1CE6
-    PLA
-    PHA
-    TAY
-    LDA [ARR_BITS_TO_UNK[8]],Y
-    LDY #$10
-    CMP [R6_BANKED_ADDR_MOVED[2]],Y
-    BCS 1E:1CC6
-    JSR SUB_TODO
-    AND [R6_BANKED_ADDR_MOVED[2]],Y
-    BNE 1E:1CC6
-    JSR ADDS_IDFK
-    AND #$C0
-    BNE 1E:1CC6
-    LDA [R6_BANKED_ADDR_MOVED[2]],Y
-    ORA LUT_INDEX_TO_BITS_0x80-0x01,X
-    STA [R6_BANKED_ADDR_MOVED[2]],Y
+LIB_STREAMY_UNK: ; 1E:1C87, 0x03DC87
+    LDA MAIN_FLAG_UNK ; Load ??
+    BNE RTS ; != 0, goto.
+    JSR LIB_SETUP_PTR_AND_R6_UNK ; Do ??
+    LDY #$02 ; Stream idnex.
+    LDA [ARR_BITS_TO_UNK[8]],Y ; Load from stream.
+    BEQ RTS ; == 0, goto.
+    PHA ; Save val, stream index.
+    LDX #$C0 ; Seed ??
+X_STORE_LOOP?: ; 1E:1C97, 0x03DC97
+    STX PTR_CREATE_SEED? ; Store X ??
+    JSR LIB_SETUP_PTR_UNK_SEED_LOAD_ALT ; Do ptr and stuff seeded.
+    PLA ; Pull val for stream index.
+    PHA ; Re-save it, too.
+    TAY ; To stream index.
+    LDA [ARR_BITS_TO_UNK[8]],Y ; Load streamed.
+    LDY #$10 ; Reseed with.
+    CMP [R6_BANKED_ADDR_MOVED[2]],Y ; If _ stream
+    BCS VAL_GTE_STREAM ; >=, goto.
+    JSR SUB_PTR_SEED_TO_STREAM_INDEX_AND_BIT_TO_TEST ; Get testing.
+    AND [R6_BANKED_ADDR_MOVED[2]],Y ; Test from stream.
+    BNE VAL_GTE_STREAM ; Test set, goto.
+    JSR ADDS_IDFK ; Not set, do ??
+    AND #$C0 ; Keep upper bits.
+    BNE VAL_GTE_STREAM ; Either set, goto.
+    LDA [R6_BANKED_ADDR_MOVED[2]],Y ; Load from stream.
+    ORA LUT_INDEX_TO_BITS_0x80-0x01,X ; Set val.
+    STA [R6_BANKED_ADDR_MOVED[2]],Y ; Store it back.
     LDA #$09
-    STA **:$07F1
-    LDA #$83
-    JSR $A3F8
-    LDX R_**:$0029
-    INX
-    BNE 1E:1C97
-    PLA
-    RTS
-SUB_TODO: ; 1E:1CCD, 0x03DCCD
-    LDA R_**:$0029
-    CLC
-    ADC #$C0
-    ROR A
+    STA R_**:$07F1 ; Set ??
+    LDA #$83 ; Val ??
+    JSR LIB_EXIT_IDFK ; Goto. TODO: Might not be 0x17 bank.
+VAL_GTE_STREAM: ; 1E:1CC6, 0x03DCC6
+    LDX PTR_CREATE_SEED? ; Load.
+    INX ; ++
+    BNE X_STORE_LOOP? ; != 0, goto.
+    PLA ; Restore index.
+RTS: ; 1E:1CCC, 0x03DCCC
+    RTS ; Leave.
+SUB_PTR_SEED_TO_STREAM_INDEX_AND_BIT_TO_TEST: ; 1E:1CCD, 0x03DCCD
+    LDA PTR_CREATE_SEED? ; Load seed.
+    CLC ; Prep add.
+    ADC #$C0 ; += 0xC0
+    ROR A ; >> 1, /2. Carry result into.
+    LSR A ; >> 2, /4.
     LSR A
-    LSR A
-    TAY
-    LDA R_**:$0029
-    AND #$07
-    TAX
-    LDA LUT_INDEX_TO_BITS_0x80-0x01,X
-    RTS
-    CLC
-    LDA R_**:$0028
-    ADC #$B8
-    BCC 1E:1CE8
-    LDA R_**:$0029
-    ASL A
+    TAY ; To Y indedx.
+    LDA PTR_CREATE_SEED? ; Load seed again.
+    AND #$07 ; Keep lower, bit to test.
+    TAX ; To X index.
+    LDA LUT_INDEX_TO_BITS_0x80-0x01,X ; Load bit test from LUT.
+    RTS ; Leave.
+LIB_SETUP_PTR_AND_R6_UNK: ; 1E:1CDF, 0x03DCDF
+    CLC ; Prep add.
+    LDA R_**:$0028 ; Load ??
+    ADC #$B8 ; +=, base val.
+    BCC NO_OVERFLOW ; No carry, goto.
+LIB_SETUP_PTR_UNK_SEED_LOAD_ALT: ; 1E:1CE6, 0x03DCE6
+    LDA PTR_CREATE_SEED? ; Load alt val ??
+NO_OVERFLOW: ; 1E:1CE8, 0x03DCE8
+    ASL A ; << 1, *2.
+    ROL ARR_BITS_TO_UNK+1 ; Rotate into.
+    ASL A ; 2x
     ROL ARR_BITS_TO_UNK+1
-    ASL A
+    ASL A ; 3x
     ROL ARR_BITS_TO_UNK+1
-    ASL A
-    ROL ARR_BITS_TO_UNK+1
-    CLC
-    ADC #$00
-    STA ARR_BITS_TO_UNK[8]
-    LDA ARR_BITS_TO_UNK+1
-    AND #$07
-    ADC #$98
-    STA ARR_BITS_TO_UNK+1
-    JMP 1E:1E8B
+    CLC ; Prep add.
+    ADC #$00 ; Do nothing, ew.
+    STA ARR_BITS_TO_UNK[8] ; Store addr L.
+    LDA ARR_BITS_TO_UNK+1 ; Load ??
+    AND #$07 ; Keep 0000.0111
+    ADC #$98 ; Base, 0x98, to 9F.
+    STA ARR_BITS_TO_UNK+1 ; Set PTR H,
+    JMP ENGINE_R6_TO_BANK_0x00_THING_1 ; Do.
 MANY_STREAMS_UNK: ; 1E:1D01, 0x03DD01
     JSR SETUP_PTR_6780_UNK ; Setup ptr.
     JSR ENGINE_WRAM_STATE_WRITEABLE ; Enable writes.
@@ -4593,7 +4695,7 @@ VAL_NONZERO: ; 1E:1D97, 0x03DD97
     LDA [ENGINE_FPTR_32[2]],Y
     LDY #$05
     STA [ENGINE_FPTR_30[2]],Y
-    STA **:$00AB
+    STA R_**:$00AB
     LDY #$02
     LDA [ENGINE_FPTR_32[2]],Y
     AND #$C0
@@ -4619,15 +4721,16 @@ VAL_NONZERO: ; 1E:1D97, 0x03DD97
     LDA STREAM_DEEP_C
     STA [ENGINE_FPTR_30[2]],Y
     INY
-    LDA **:$00A7
+    LDA R_**:$00A7
     STA [ENGINE_FPTR_30[2]],Y
     LDY #$18
     LDX #$08
     LDA #$00
+L_1E:1E0C: ; 1E:1E0C, 0x03DE0C
     STA [ENGINE_FPTR_30[2]],Y
     INY
     DEX
-    BNE 1E:1E0C
+    BNE L_1E:1E0C
     RTS
 STREAM_UNK: ; 1E:1E13, 0x03DE13
     LDY #$00 ; Stream index.
@@ -4703,10 +4806,12 @@ A_REBASED: ; 1E:1E82, 0x03DE82
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set R6 to bank.
     PLA ; Pull index for routine in the bank, starting at 0x00, is based on 0x00 into bank here.
     RTS ; Leave.
-    LDX #$06
+ENGINE_R6_TO_BANK_0x00_THING_1: ; 1E:1E8B, 0x03DE8B
+    LDX #$06 ; Do.
     LDA #$00
     JMP ENGINE_SET_MAPPER_BANK_X_VAL_A
-    LDX #$06
+ENGINE_R6_TO_BANK_0x00_THING_2: ; 1E:1E92, 0x03DE92
+    LDX #$06 ; Do same as above lol. Mistake/idk.
     LDA #$00
     JMP ENGINE_SET_MAPPER_BANK_X_VAL_A
 ENGINE_MAP_DISPLAY?: ; 1E:1E99, 0x03DE99
@@ -4748,6 +4853,7 @@ STREAM_NEG_SET: ; 1E:1ED7, 0x03DED7
     DEC GAME_SLOT_CURRENT? ; --
     BNE LOOP_NONZERO ; != 0, loop.
     JSR INIT_PTR_WRAM_6800/COUNT_UNK ; Reinit.
+L_1E:1EE1: ; 1E:1EE1, 0x03DEE1
     LDY #$00 ; Stream index.
     LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
     BEQ STREAM_EQ_0x00 ; == 0, goto.
@@ -4757,7 +4863,7 @@ STREAM_NEG_SET: ; 1E:1ED7, 0x03DED7
 STREAM_EQ_0x00: ; 1E:1EEF, 0x03DEEF
     JSR ENGINE_FPTR_COL/ROW_MOD/FORWARD?
     DEC GAME_SLOT_CURRENT?
-    BNE 1E:1EE1
+    BNE L_1E:1EE1
     JMP ENGINE_WRAM_STATE_WRITE_DISABLED
 STREAMS_UNK_LOGICAL?: ; 1E:1EF9, 0x03DEF9
     LDY #$11 ; Stream index.
@@ -4777,19 +4883,19 @@ STREAM_POSITIVE: ; 1E:1F12, 0x03DF12
     CLC ; Prep add.
     LDA SCRIPT_PAIR_PTR_B?[2] ; Load ??
     ADC #$60 ; Add with.
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Store to.
+    STA MISC_USE_A ; Store to.
     LDA SCRIPT_PAIR_PTR_B?+1 ; Load ??
     ADC #$00 ; Carry add.
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Store to.
+    STA MISC_USE_B ; Store to.
     SEC ; Prep sub.
     LDY #$04 ; Stream index.
     LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
-    SBC ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Sub with.
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Store result.
+    SBC MISC_USE_A ; Sub with.
+    STA MISC_USE_A ; Store result.
     INY ; Stream++
     LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
-    SBC ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Sub with carry.
-    STA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Store result.
+    SBC MISC_USE_B ; Sub with carry.
+    STA MISC_USE_B ; Store result.
     CLC ; Prep add.
     LDA SCRIPT_PAIR_PTR?[2] ; Load ??
     ADC #$A4 ; += 0xA4
@@ -4807,7 +4913,7 @@ STREAM_POSITIVE: ; 1E:1F12, 0x03DF12
     SBC SAVE_GAME_MOD_PAGE_PTR+1 ; Mod val.
     STA SAVE_GAME_MOD_PAGE_PTR+1 ; Store result.
     LDY #$08 ; Stream index.
-    LDA ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Load.
+    LDA MISC_USE_B ; Load.
     AND #$04 ; Keep bit.
     ASL A ; << 5, *32.
     ASL A
@@ -4827,10 +4933,10 @@ STREAM_POSITIVE: ; 1E:1F12, 0x03DF12
     ORA [ENGINE_FPTR_30[2]],Y ; Set at ptr.
     STA [ENGINE_FPTR_30[2]],Y
     INY ; Stream++
-    LDA ENGINE_PALETTE_FPTR/BITS/GEN_USE[2] ; Load val.
-    LSR ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; Shift down.
+    LDA MISC_USE_A ; Load val.
+    LSR MISC_USE_B ; Shift down.
     ROR A ; Into A.
-    LSR ENGINE_PALETTE_FPTR/BITS/GEN_USE+1 ; 2x
+    LSR MISC_USE_B ; 2x
     ROR A
     STA [ENGINE_FPTR_30[2]],Y ; Store at ptr.
     INY ; Stream++
@@ -4840,7 +4946,7 @@ STREAM_POSITIVE: ; 1E:1F12, 0x03DF12
     LSR SAVE_GAME_MOD_PAGE_PTR+1 ; 2x
     ROR A
     STA [ENGINE_FPTR_30[2]],Y ; Store at ptr.
-    LDA **:$003E ; Load ??
+    LDA R_**:$003E ; Load ??
     BMI VAL_NEGATIVE ; Negative, goto.
     LDY #$04 ; Stream index.
     LDA STREAM_WRITE_ARR_UNK[4] ; Move arr to stream.
@@ -4861,7 +4967,7 @@ STREAM_POSITIVE: ; 1E:1F12, 0x03DF12
     LDA STREAM_DEEP_C ; 2x
     STA [ENGINE_FPTR_30[2]],Y
     INY
-    LDA **:$00A7 ; 3x
+    LDA R_**:$00A7 ; 3x
     STA [ENGINE_FPTR_30[2]],Y
     LDY STREAM_DEEP_INDEX ; Load val.
     LDA GAME_SLOT_CURRENT? ; Load ??
@@ -4878,21 +4984,22 @@ VAL_NEGATIVE: ; 1E:1FB8, 0x03DFB8
 INVERT_EQ_0x00: ; 1E:1FBC, 0x03DFBC
     STA [ARR_BITS_TO_UNK+2],Y ; Store to stream.
     RTS ; Leave.
-    LDY #$11
-    LDA [ENGINE_FPTR_30[2]],Y
+LIB_STREAM_SETUP_UNK: ; 1E:1FBF, 0x03DFBF
+    LDY #$11 ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Move ??
     STA STREAM_DEEP_INDEX
-    INY
-    LDA [ENGINE_FPTR_30[2]],Y
+    INY ; Stream++
+    LDA [ENGINE_FPTR_30[2]],Y ; Move ??
     STA STREAM_DEEP_C
-    INY
-    LDA [ENGINE_FPTR_30[2]],Y
-    STA **:$00A7
-    LDA #$00
-    LDY STREAM_DEEP_INDEX
-    STA [STREAM_DEEP_C],Y
-    LDY #$00
-    STA [ENGINE_FPTR_30[2]],Y
-    RTS
+    INY ; Stream++
+    LDA [ENGINE_FPTR_30[2]],Y ; Move ??
+    STA R_**:$00A7
+    LDA #$00 ; Val ??
+    LDY STREAM_DEEP_INDEX ; Load stream index.
+    STA [STREAM_DEEP_C],Y ; Clear ptr.
+    LDY #$00 ; Stream reset.
+    STA [ENGINE_FPTR_30[2]],Y ; Load from.
+    RTS ; Leave.
 STREAMS_UNK_SPRITE_READ?: ; 1E:1FDA, 0x03DFDA
     LDA CURRENT_SAVE_MANIPULATION_PAGE+543 ; Load ??
     LSR A ; >> 1, /2.
@@ -4908,8 +5015,8 @@ CARRY_CLEAR_VALS: ; 1E:1FEC, 0x03DFEC
     STX ENGINE_FPTR_30+1
     STY GAME_SLOT_CURRENT? ; Store ??
     LDA #$18
-    STA **:$00E3 ; Set ??
+    STA R_**:$00E3 ; Set ??
     LDA #$00
-    STA **:$0300 ; Set ??
+    STA R_**:$0300 ; Set ??
     LDX #$08 ; Val ??
     JSR ENGINE_WRAM_STATE_WRITEABLE ; Enable writes.

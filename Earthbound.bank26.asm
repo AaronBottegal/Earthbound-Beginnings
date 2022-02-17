@@ -154,13 +154,13 @@ RTN_0x4: ; 1A:00CD, 0x0340CD
     BNE DELTA_0x8 ; != 0, goto, always taken. Seeded.
     LDA #$20 ; Seed row.
 DELTA_0x8: ; 1A:00F5, 0x0340F5
-    STA **:$0043 ; Set delta for PPU addr.
+    STA R_**:$0043 ; Set delta for PPU addr.
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
     LDA #$05 ; Update packet type, unique+1 data.
     STA NMI_PPU_CMD_PACKETS_BUF[64]
     LDY #$04 ; Stream index.
     LDA [FPTR_SPRITES?[2]],Y ; Load from file.
-    STA **:$0042 ; Set count of to do.
+    STA R_**:$0042 ; Set count of to do.
     DEY ; Stream--
     LDA [FPTR_SPRITES?[2]],Y ; Load from stream.
     STA NMI_PPU_CMD_PACKETS_BUF+1 ; Set addr H.
@@ -188,11 +188,11 @@ STREAM_NONZERO: ; 1A:0125, 0x034125
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index to trigger.
     LDA #$80
     STA NMI_FLAG_E5_TODO ; Set flag.
-    DEC **:$0042 ; Count--
+    DEC R_**:$0042 ; Count--
     BEQ RTS ; == 0, leave.
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
     CLC ; Prep add.
-    LDA **:$0043 ; Load delta.
+    LDA R_**:$0043 ; Load delta.
     ADC NMI_PPU_CMD_PACKETS_BUF+3 ; Add with, 16-bit.
     STA NMI_PPU_CMD_PACKETS_BUF+3
     LDA #$00
@@ -235,25 +235,25 @@ MEMCPY_POSITIVE: ; 1A:0159, 0x034159
     TAX
     LDA [FPTR_SPRITES?[2]],Y
     AND #$80
-    STA **:$0301,X
+    STA R_**:$0301,X
     INY
     LDA [FPTR_SPRITES?[2]],Y
-    STA **:$0300,X
+    STA R_**:$0300,X
     INY
     LDA [FPTR_SPRITES?[2]],Y
-    STA **:$0302,X
+    STA R_**:$0302,X
     INY
     LDA [FPTR_SPRITES?[2]],Y
-    STA **:$0303,X
+    STA R_**:$0303,X
     INY
     LDA [FPTR_SPRITES?[2]],Y
-    STA **:$0306,X
+    STA R_**:$0306,X
     INY
     LDA [FPTR_SPRITES?[2]],Y
-    STA **:$0307,X
+    STA R_**:$0307,X
     LDA #$00
-    STA **:$0304,X
-    STA **:$0305,X
+    STA R_**:$0304,X
+    STA R_**:$0305,X
     LDY #$07
     RTS
     JSR ENGINE_SETTLE_ALL_UPDATES?
@@ -266,18 +266,18 @@ MEMCPY_POSITIVE: ; 1A:0159, 0x034159
     CLC
     INY
     LDA [FPTR_SPRITES?[2]],Y
-    ADC **:$0306,X
-    STA **:$0306,X
+    ADC R_**:$0306,X
+    STA R_**:$0306,X
     INY
     LDA [FPTR_SPRITES?[2]],Y
-    ADC **:$0307,X
-    STA **:$0307,X
+    ADC R_**:$0307,X
+    STA R_**:$0307,X
     INY
     LDA [FPTR_SPRITES?[2]],Y
-    STA **:$0304,X
+    STA R_**:$0304,X
     INY
     LDA [FPTR_SPRITES?[2]],Y
-    STA **:$0305,X
+    STA R_**:$0305,X
     LDY #$06
     RTS
     INY
@@ -313,7 +313,7 @@ STREAM_REPLACE: ; 1A:0206, 0x034206
     ASL A
     TAX ; To X index. Sprite slot.
     LDA #$00
-    STA **:$0300,X ; Clear ??
+    STA R_**:$0300,X ; Clear ??
     INY ; Stream++
     RTS ; Leave.
     INY ; Stream++

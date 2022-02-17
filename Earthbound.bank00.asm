@@ -3070,48 +3070,51 @@
     .db 00
     .db 00
     .db 00
-    .db 2A
-    .db 8C
-    .db 42
-    .db 8C
-    .db 52
-    .db 8C
-    .db 84
-    .db 8C
-    .db 34
-    .db 8D
-    .db C8
-    .db 8C
-    .db D0
-    .db 8C
-    .db 3A
-    .db 8C
-    .db E0
-    .db 8C
-    .db 34
-    .db 8D
-    .db 8C
-    .db 8C
-    .db A0
-    .db 8C
-    .db D8
-    .db 8C
-    .db F0
-    .db 8C
-    .db B0
-    .db 8C
-    .db E8
-    .db 8C
-    .db F8
-    .db 8C
-    .db 0C
-    .db 8D
-    .db C0
-    .db 8C
-    .db 6B
-    .db 8C
-    .db 20
-    .db 8D
+PTR_TABLE_UNK_L: ; 00:0C00, 0x000C00
+    LOW(FILE_A)
+PTR_TABLE_UNK_H: ; 00:0C01, 0x000C01
+    HIGH(FILE_A)
+    LOW(FILE_B)
+    HIGH(FILE_B)
+    LOW(FILE_C)
+    HIGH(FILE_C)
+    LOW(FILE_D)
+    HIGH(FILE_D)
+    LOW(FILE_E)
+    HIGH(FILE_E)
+    LOW(FILE_F)
+    HIGH(FILE_F)
+    LOW(FILE_G)
+    HIGH(FILE_G)
+    LOW(FILE_H)
+    HIGH(FILE_H)
+    LOW(FILE_I)
+    HIGH(FILE_I)
+    LOW(FILE_E)
+    HIGH(FILE_E)
+    LOW(FILE_J)
+    HIGH(FILE_J)
+    LOW(FILE_K)
+    HIGH(FILE_K)
+    LOW(FILE_L)
+    HIGH(FILE_L)
+    LOW(FILE_M)
+    HIGH(FILE_M)
+    LOW(FILE_N)
+    HIGH(FILE_N)
+    LOW(FILE_O)
+    HIGH(FILE_O)
+    LOW(FILE_P)
+    HIGH(FILE_P)
+    LOW(FILE_Q)
+    HIGH(FILE_Q)
+    LOW(FILE_R)
+    HIGH(FILE_R)
+    LOW(FILE_S)
+    HIGH(FILE_S)
+    LOW(FILE_T)
+    HIGH(FILE_T)
+FILE_A: ; 00:0C2A, 0x000C2A
     .db 01
     .db 00
     .db 01
@@ -3128,6 +3131,7 @@
     .db 54
     .db 8D
     .db FF
+FILE_H: ; 00:0C3A, 0x000C3A
     .db FF
     .db 00
     .db 09
@@ -3136,6 +3140,7 @@
     .db 38
     .db 8D
     .db FF
+FILE_B: ; 00:0C42, 0x000C42
     .db 01
     .db 00
     .db 13
@@ -3152,6 +3157,7 @@
     .db 85
     .db 8D
     .db FF
+FILE_C: ; 00:0C52, 0x000C52
     .db 01
     .db 0B
     .db 11
@@ -3177,6 +3183,7 @@
     .db D6
     .db 8D
     .db FF
+FILE_S: ; 00:0C6B, 0x000C6B
     .db 01
     .db 0B
     .db 11
@@ -3202,6 +3209,7 @@
     .db D6
     .db 8D
     .db FF
+FILE_D: ; 00:0C84, 0x000C84
     .db FF
     .db 00
     .db 1B
@@ -3210,6 +3218,7 @@
     .db 38
     .db 8D
     .db FF
+FILE_J: ; 00:0C8C, 0x000C8C
     .db 01
     .db 01
     .db 11
@@ -3230,6 +3239,7 @@
     .db 01
     .db 8E
     .db FF
+FILE_K: ; 00:0CA0, 0x000CA0
     .db 01
     .db 0F
     .db 11
@@ -3246,6 +3256,7 @@
     .db 11
     .db 8E
     .db FF
+FILE_N: ; 00:0CB0, 0x000CB0
     .db 01
     .db 05
     .db 11
@@ -3262,6 +3273,7 @@
     .db 23
     .db 8E
     .db FF
+FILE_R: ; 00:0CC0, 0x000CC0
     .db 01
     .db 07
     .db 11
@@ -3270,6 +3282,7 @@
     .db 29
     .db 8E
     .db FF
+FILE_F: ; 00:0CC8, 0x000CC8
     .db 01
     .db 07
     .db 06
@@ -3278,6 +3291,7 @@
     .db 32
     .db 8E
     .db FF
+FILE_G: ; 00:0CD0, 0x000CD0
     .db 01
     .db 07
     .db 07
@@ -3286,6 +3300,7 @@
     .db 32
     .db 8E
     .db FF
+FILE_L: ; 00:0CD8, 0x000CD8
     .db 01
     .db 11
     .db FF
@@ -3294,6 +3309,7 @@
     .db 2C
     .db 8E
     .db FF
+FILE_I: ; 00:0CE0, 0x000CE0
     .db 01
     .db 03
     .db FF
@@ -3302,6 +3318,7 @@
     .db 2C
     .db 8E
     .db FF
+FILE_O: ; 00:0CE8, 0x000CE8
     .db 01
     .db FF
     .db FF
@@ -3310,6 +3327,7 @@
     .db 2C
     .db 8E
     .db FF
+FILE_M: ; 00:0CF0, 0x000CF0
     .db 01
     .db FF
     .db FF
@@ -3318,6 +3336,7 @@
     .db 30
     .db 8E
     .db FF
+FILE_P: ; 00:0CF8, 0x000CF8
     .db 01
     .db 0B
     .db 17
@@ -3338,6 +3357,7 @@
     .db 48
     .db 8E
     .db FF
+FILE_Q: ; 00:0D0C, 0x000D0C
     .db 01
     .db 0B
     .db 17
@@ -3358,6 +3378,7 @@
     .db 5A
     .db 8E
     .db FF
+FILE_T: ; 00:0D20, 0x000D20
     .db 01
     .db 0B
     .db 17
@@ -3378,6 +3399,7 @@
     .db 6C
     .db 8E
     .db FF
+FILE_E: ; 00:0D34, 0x000D34
     .db 22
     .db 00
     .db 20

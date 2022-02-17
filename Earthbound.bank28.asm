@@ -410,9 +410,9 @@ DATA_UNK: ; [20], 1C:00E6, 0x0380E6
     LDY #$1D
     STA SOUND_WRITE_DEST[2]
     STX **:$00BD
-    LDA **:$07F0,X
+    LDA R_**:$07F0,X
     BEQ 1C:020D
-    STA **:$00BF
+    STA R_**:$00BF
     STA **:$00B2
     LDY #$80
     STY SOUND_WRITE_DEST+1
@@ -578,7 +578,7 @@ SOUND_WRITES: ; 1C:02C6, 0x0382C6
     JSR $8099
     BEQ 1C:030A
     JSR $809D
-    LDA **:$00BF
+    LDA R_**:$00BF
     STA SOUND_UNK_REQUEST?[7],X
     LDA #$00
     STA **:$07DA,X
@@ -606,7 +606,7 @@ SOUND_WRITES: ; 1C:02C6, 0x0382C6
     LDY #$14
     JSR $82DC
     LDA #$02
-    STA **:$07F3
+    STA R_**:$07F3
     LDA **:$00BB
     AND #$F7
     AND #$0F
@@ -701,7 +701,7 @@ SOUND_WRITES: ; 1C:02C6, 0x0382C6
     LDX #$A1
     JMP $8450
     LDA #$02
-    STA **:$00BF
+    STA R_**:$00BF
     LDA #$40
     LDY #$08
     JMP $82DC
@@ -767,7 +767,7 @@ SOUND_WRITES: ; 1C:02C6, 0x0382C6
     JMP $8415
     STA **:$07D9
     JSR $80A1
-    LDA **:$00BF
+    LDA R_**:$00BF
     STA SOUND_UNK_REQUEST?+4
     LDX #$01
     STX **:$07C8
@@ -859,8 +859,8 @@ SOUND_WRITES: ; 1C:02C6, 0x0382C6
     STA APU_SQ2_LTIMER
     RTS
     BRK
-    ORA [**:$0002,X]
-    ORA [**:$0000,X]
+    ORA [R_**:$0002,X]
+    ORA [R_**:$0000,X]
     ???
     INC $A9FF,X
     ASL A
@@ -868,7 +868,7 @@ SOUND_WRITES: ; 1C:02C6, 0x0382C6
     JMP $82DC
     ???
     ???
-    STY **:$00D3,X
+    STY R_**:$00D3,X
     LDA **:$07E4
     BEQ 1C:05C1
     INC **:$07E0
@@ -1296,20 +1296,20 @@ SOUND_WRITES: ; 1C:02C6, 0x0382C6
     BEQ 1C:092B
     CMP #$19
     BCC 1C:0936
-    STA **:$00BF
+    STA R_**:$00BF
     SEC
     SBC #$19
     STA **:$07CC
     JMP $894E
     CMP #$06
     BNE 1C:0946
-    LDA **:$6707
+    LDA R_**:$6707
     CMP #$01
     BEQ 1C:0945
     LDA #$07
     BNE 1C:0946
     TYA
-    STA **:$00BF
+    STA R_**:$00BF
     STA **:$07CC
     DEC **:$07CC
     LDA #$7F
@@ -1575,7 +1575,7 @@ SOUND_WRITES: ; 1C:02C6, 0x0382C6
     STA **:$07A0,X
     JMP $8B65
     JSR $829C
-    LDA **:$00BF
+    LDA R_**:$00BF
     STA SOUND_UNK_REQUEST?+5
     CMP #$32
     BEQ 1C:0B06
@@ -1991,7 +1991,7 @@ SOUND_WRITES: ; 1C:02C6, 0x0382C6
     LDY #$02
     STA APU_DMC_LENGTH
     STY APU_DMC_ADDR
-    LDA **:$07F7
+    LDA R_**:$07F7
     BNE 1C:0E7B
     LDA SOUND_WRITE_DEST+1
     STA APU_DMC_CTRL
