@@ -206,11 +206,26 @@ R_**:$00AB:                                   .rs 1 ; 0x00AB
 SCRIPT_LOADED_SHIFTED_|VAL:                   .rs 2 ; 0x00AC to 0x00AD
 R_**:$00AE:                                   .rs 1 ; 0x00AE
 R_**:$00AF:                                   .rs 1 ; 0x00AF
-SOUND_WRITE_DEST:                             .rs 2 ; 0x00B0 to 0x00B1
+SOUND_PTR_B0:                                 .rs 2 ; 0x00B0 to 0x00B1
+SND_PTR_B2:                                   .rs 2 ; 0x00B2 to 0x00B3
+R_**:$00B4:                                   .rs 1 ; 0x00B4
 
 
-          .rsset 0x00BF
-R_**:$00BF:                                   .rs 1 ; 0x00BF
+          .rsset 0x00B6
+SND_PTR_UNK:                                  .rs 2 ; 0x00B6 to 0x00B7
+
+
+          .rsset 0x00B7
+R_**:$00B7:                                   .rs 1 ; 0x00B7
+
+
+          .rsset 0x00BA
+R_**:$00BA:                                   .rs 1 ; 0x00BA
+SND_UNK_BB:                                   .rs 1 ; 0x00BB
+SND_UNK_BC:                                   .rs 1 ; 0x00BC
+SUN_UNK_BD_INDEX:                             .rs 1 ; 0x00BD
+SND_BE_UNK:                                   .rs 1 ; 0x00BE
+SND_UNK_BF:                                   .rs 1 ; 0x00BF
 CTRL_BIT_0x0:                                 .rs 1 ; 0x00C0
 CTRL_BIT_0x1:                                 .rs 1 ; 0x00C1
 R_**:$00C2:                                   .rs 1 ; 0x00C2
@@ -333,15 +348,121 @@ R_**:$0700:                                   .rs 1 ; 0x0700
 
           .rsset 0x076C
 ARR_UNK:                                      .rs 20 ; 0x076C to 0x077F
+R_**:$0780:                                   .rs 1 ; 0x0780
+R_**:$0781:                                   .rs 1 ; 0x0781
 
 
-          .rsset 0x078C
+          .rsset 0x0784
+R_**:$0784:                                   .rs 1 ; 0x0784
+R_**:$0785:                                   .rs 1 ; 0x0785
+SOUND_UNK_786:                                .rs 1 ; 0x0786
+
+
+          .rsset 0x078A
+SND_FLAG?_UNK:                                .rs 1 ; 0x078A
+SOUND_UNK_78B:                                .rs 1 ; 0x078B
 VAL_CMP_UNK:                                  .rs 1 ; 0x078C
 
 
+          .rsset 0x0790
+R_**:$0790:                                   .rs 1 ; 0x0790
+R_**:$0791:                                   .rs 1 ; 0x0791
+R_**:$0792:                                   .rs 1 ; 0x0792
+R_**:$0793:                                   .rs 1 ; 0x0793
+
+
+          .rsset 0x079A
+R_**:$079A:                                   .rs 1 ; 0x079A
+
+
+          .rsset 0x079C
+SND_UNK_79C:                                  .rs 1 ; 0x079C
+R_**:$079D:                                   .rs 1 ; 0x079D
+
+
+          .rsset 0x079F
+R_**:$079F:                                   .rs 1 ; 0x079F
+SND_ARR_UNK:                                  .rs 4 ; 0x07A0 to 0x07A3
+
+
+          .rsset 0x07A7
+R_**:$07A7:                                   .rs 1 ; 0x07A7
+R_**:$07A8:                                   .rs 1 ; 0x07A8
+
+
+          .rsset 0x07AC
+SND_ARR_B6_FPTR_INDEXES:                      .rs 1 ; 0x07AC
+
+
+          .rsset 0x07B0
+SND_ARR_UNK_7B0:                              .rs 1 ; 0x07B0
+
+
+          .rsset 0x07B4
+R_**:$07B4:                                   .rs 1 ; 0x07B4
+R_**:$07B5:                                   .rs 1 ; 0x07B5
+R_**:$07B6:                                   .rs 1 ; 0x07B6
+R_**:$07B7:                                   .rs 1 ; 0x07B7
+R_**:$07B8:                                   .rs 1 ; 0x07B8
+
+
+          .rsset 0x07BC
+SND_TIMER_ARR_UNK:                            .rs 1 ; 0x07BC
+
+
+          .rsset 0x07C0
+R_**:$07C0:                                   .rs 1 ; 0x07C0
+R_**:$07C1:                                   .rs 1 ; 0x07C1
+
+
+          .rsset 0x07C3
+R_**:$07C3:                                   .rs 1 ; 0x07C3
+
+
+          .rsset 0x07C7
+SND_ARR_INDEX_UNK:                            .rs 1 ; 0x07C7
+SND_UNK_7C8:                                  .rs 1 ; 0x07C8
+SND_UNK_7C9:                                  .rs 1 ; 0x07C9
+SND_UNK_7CA:                                  .rs 1 ; 0x07CA
+
+
+          .rsset 0x07CC
+SND_REBASED_UNK:                              .rs 1 ; 0x07CC
+SND_ARR_UNK_7CD:                              .rs 1 ; 0x07CD
+
+
+          .rsset 0x07D1
+SND_ARR_UNK_7D1:                              .rs 1 ; 0x07D1
+
+
+          .rsset 0x07D5
+SND_CMP_ARR_UNK:                              .rs 6 ; 0x07D5 to 0x07DA
+
+
+          .rsset 0x07DA
+SND_TIMER_ARR_UNK:                            .rs 5 ; 0x07DA to 0x07DE
+SND_ARR_UNK_7DF:                              .rs 1 ; 0x07DF
+SND_SQ1_VALS_HELPER:                          .rs 1 ; 0x07E0
+
+
+          .rsset 0x07E2
+R_**:$07E2:                                   .rs 1 ; 0x07E2
+SND_ARR_UNK_7E3:                              .rs 1 ; 0x07E3
+R_**:$07E4:                                   .rs 1 ; 0x07E4
+
+
+          .rsset 0x07E6
+R_**:$07E6:                                   .rs 1 ; 0x07E6
+SND_ARR_UNK_7E7:                              .rs 1 ; 0x07E7
+R_**:$07E8:                                   .rs 1 ; 0x07E8
+
+
           .rsset 0x07EF
-SCRIPT_UNK_TESTED:                            .rs 1 ; 0x07EF
-R_**:$07F0:                                   .rs 1 ; 0x07F0
+SCRIPT_UNK_TESTED:                            .rs 6 ; 0x07EF to 0x07F4
+
+
+          .rsset 0x07F0
+SND_CODE_HELPER_ARR:                          .rs 1 ; 0x07F0
 R_**:$07F1:                                   .rs 1 ; 0x07F1
 
 
@@ -354,6 +475,7 @@ VAL_CMP_DIFFERS_STORED_UNK:                   .rs 1 ; 0x07F5
           .rsset 0x07F7
 R_**:$07F7:                                   .rs 1 ; 0x07F7
 SOUND_UNK_REQUEST?:                           .rs 7 ; 0x07F8 to 0x07FE
+SND_UNK_7FF:                                  .rs 1 ; 0x07FF
 
 
           .rsset 0x6222

@@ -8,48 +8,48 @@
     LDA #$0C
     BNE 1B:0017
     LDA #$04
-    STA SOUND_WRITE_DEST[2]
+    STA SOUND_PTR_B0[2]
     LDA #$40
-    STA SOUND_WRITE_DEST+1
-    STY **:$00B2
-    STA **:$00B3
+    STA SOUND_PTR_B0+1
+    STY SND_PTR_B2[2]
+    STA SND_PTR_B2+1
     LDY #$00
-    LDA [**:$00B2],Y
-    STA [SOUND_WRITE_DEST[2]],Y
+    LDA [SND_PTR_B2[2]],Y
+    STA [SOUND_PTR_B0[2]],Y
     INY
     TYA
     CMP #$04
     BNE 1B:0023
     RTS
-    LDA **:$00BB
+    LDA SND_UNK_BB
     AND #$02
-    STA **:$07FF
-    LDA **:$00BC
+    STA SND_UNK_7FF
+    LDA SND_UNK_BC
     AND #$02
-    EOR **:$07FF
+    EOR SND_UNK_7FF
     CLC
     BEQ 1B:0040
     SEC
-    ROR **:$00BB
-    ROR **:$00BC
+    ROR SND_UNK_BB
+    ROR SND_UNK_BC
     RTS
-    LDX **:$00BD
-    INC **:$07DA,X
-    LDA **:$07DA,X
-    CMP **:$07D5,X
+    LDX SUN_UNK_BD_INDEX
+    INC SND_TIMER_ARR_UNK[5],X
+    LDA SND_TIMER_ARR_UNK[5],X
+    CMP SND_CMP_ARR_UNK[6],X
     BNE 1B:0057
     LDA #$00
-    STA **:$07DA,X
+    STA SND_TIMER_ARR_UNK[5],X
     RTS
     BRK
     BRK
     LDA #$0F
     STA APU_STATUS
     LDA #$55
-    STA **:$00BB
+    STA SND_UNK_BB
     LDA #$00
-    STA **:$0786
-    STA **:$078B
+    STA SOUND_UNK_786
+    STA SOUND_UNK_78B
     TAY
     LDA $8058,Y
     STA ARR_UNK[20],Y
@@ -76,7 +76,7 @@
     JSR $81A3
     LDA #$00
     LDX #$06
-    STA SCRIPT_UNK_TESTED,X
+    STA SCRIPT_UNK_TESTED[6],X
     DEX
     BNE 1B:00A3
     RTS
@@ -84,14 +84,14 @@
     JSR $80D7
     LDA #$00
     STA APU_DMC_LOAD
-    STA **:$079C
+    STA SND_UNK_79C
     RTS
     LDA #$00
-    STA **:$07C8
-    STA **:$07C9
-    STA **:$07CA
+    STA SND_UNK_7C8
+    STA SND_UNK_7C9
+    STA SND_UNK_7CA
     STA VAL_CMP_UNK
-    STA **:$078A
+    STA SND_FLAG?_UNK
     TAY
     LDA #$00
     STA SOUND_UNK_REQUEST?[7],Y
@@ -109,10 +109,10 @@
     LDA #$00
     STA APU_TRI_CTRL
     RTS
-    LDX **:$00BD
-    STA **:$07D5,X
+    LDX SUN_UNK_BD_INDEX
+    STA SND_CMP_ARR_UNK[6],X
     TXA
-    STA **:$07C7,X
+    STA SND_ARR_INDEX_UNK,X
     TYA
     BEQ 1B:011B
     TXA
@@ -131,14 +131,14 @@
     JSR $800D
     BEQ 1B:011B
     JSR $8011
-    LDA R_**:$00BF
+    LDA SND_UNK_BF
     STA SOUND_UNK_REQUEST?[7],X
     LDA #$00
-    STA **:$07DA,X
-    STA **:$07DF,X
-    STA **:$07E3,X
-    STA **:$07E7,X
-    STA **:$078A
+    STA SND_TIMER_ARR_UNK[5],X
+    STA SND_ARR_UNK_7DF,X
+    STA SND_ARR_UNK_7E3,X
+    STA SND_ARR_UNK_7E7,X
+    STA SND_FLAG?_UNK
     RTS
     JSR $8045
     BNE 1B:0141
@@ -147,22 +147,22 @@
     LDA #$10
     STA APU_NSE_CTRL
     RTS
-    STA **:$07D9
+    STA SND_CMP_ARR_UNK+4
     JSR $8015
-    LDA R_**:$00BF
+    LDA SND_UNK_BF
     STA SOUND_UNK_REQUEST?+4
     LDX #$01
-    STX **:$07C8
+    STX SND_UNK_7C8
     INX
-    STX **:$07C9
+    STX SND_UNK_7C9
     LDA #$00
-    STA **:$07DE
+    STA SND_TIMER_ARR_UNK+4
     STA SOUND_UNK_REQUEST?+1
     LDX #$01
     JMP $8125
     JSR $8181
     JSR $8192
-    INC **:$078A
+    INC SND_FLAG?_UNK
     LDA #$00
     STA SOUND_UNK_REQUEST?+4
     LDX #$01
@@ -175,14 +175,14 @@
     LDA #$10
     STA APU_SQ1_CTRL
     LDA #$00
-    STA **:$07C8
+    STA SND_UNK_7C8
     STA SOUND_UNK_REQUEST?+1
-    INC **:$078A
+    INC SND_FLAG?_UNK
     RTS
     LDA #$10
     STA APU_SQ2_CTRL
     LDA #$00
-    STA **:$07C9
+    STA SND_UNK_7C9
     STA SOUND_UNK_REQUEST?+2
     RTS
     JMP $80AA
@@ -197,10 +197,10 @@
     BEQ 1B:01B9
     CMP #$19
     BCC 1B:01C4
-    STA R_**:$00BF
+    STA SND_UNK_BF
     SEC
     SBC #$19
-    STA **:$07CC
+    STA SND_REBASED_UNK
     JMP $81DC
     CMP #$06
     BNE 1B:01D4
@@ -210,12 +210,12 @@
     LDA #$07
     BNE 1B:01D4
     TYA
-    STA R_**:$00BF
-    STA **:$07CC
-    DEC **:$07CC
+    STA SND_UNK_BF
+    STA SND_REBASED_UNK
+    DEC SND_REBASED_UNK
     LDA #$7F
-    STA **:$07C0
-    STA **:$07C1
+    STA R_**:$07C0
+    STA R_**:$07C1
     JSR $8341
     JMP $84D0
     LDA SOUND_UNK_REQUEST?+5
@@ -276,27 +276,27 @@
     TXA
     CMP #$03
     BEQ 1B:024A
-    LDA **:$079A,X
+    LDA R_**:$079A,X
     AND #$E0
     BEQ 1B:024A
-    STA SOUND_WRITE_DEST[2]
-    LDA **:$07C3,X
+    STA SOUND_PTR_B0[2]
+    LDA R_**:$07C3,X
     CMP #$02
     BEQ 1B:0247
-    LDY **:$00BE
-    LDA **:$0780,Y
-    STA SOUND_WRITE_DEST+1
+    LDY SND_BE_UNK
+    LDA R_**:$0780,Y
+    STA SOUND_PTR_B0+1
     JSR $8288
-    INC **:$07D1,X
+    INC SND_ARR_UNK_7D1,X
     RTS
-    LDA **:$00B2
+    LDA SND_PTR_B2[2]
     CMP #$31
     BNE 1B:0253
     LDA #$27
     TAY
     LDA $82DA,Y
     PHA
-    LDA **:$07C3,X
+    LDA R_**:$07C3,X
     CMP #$46
     BNE 1B:0264
     PLA
@@ -304,7 +304,7 @@
     BEQ 1B:02C2
     PLA
     JMP $82C2
-    LDA **:$00B2
+    LDA SND_PTR_B2[2]
     TAY
     CMP #$10
     BCS 1B:0275
@@ -312,16 +312,16 @@
     JMP $82C8
     LDA #$F6
     BNE 1B:02C8
-    LDA **:$07C3,X
+    LDA R_**:$07C3,X
     CMP #$4C
     BCC 1B:0284
     LDA #$FE
     BNE 1B:02C8
     LDA #$FE
     BNE 1B:02C8
-    LDA **:$07D1,X
-    STA **:$00B2
-    LDA SOUND_WRITE_DEST[2]
+    LDA SND_ARR_UNK_7D1,X
+    STA SND_PTR_B2[2]
+    LDA SOUND_PTR_B0[2]
     CMP #$20
     BEQ 1B:02A7
     CMP #$A0
@@ -334,14 +334,14 @@
     BEQ 1B:024B
     CMP #$C0
     BEQ 1B:024B
-    LDA **:$00B2
+    LDA SND_PTR_B2[2]
     CMP #$0A
     BNE 1B:02AF
     LDA #$00
     TAY
     LDA $8307,Y
     JMP $82C2
-    LDA **:$00B2
+    LDA SND_PTR_B2[2]
     CMP #$2B
     BNE 1B:02BE
     LDA #$21
@@ -349,15 +349,15 @@
     LDA $82E6,Y
     PHA
     TYA
-    STA **:$07D1,X
+    STA SND_ARR_UNK_7D1,X
     PLA
     PHA
-    LDA **:$07C8,X
+    LDA SND_UNK_7C8,X
     BNE 1B:02D8
     PLA
     CLC
-    ADC SOUND_WRITE_DEST+1
-    LDY **:$00BE
+    ADC SOUND_PTR_B0+1
+    LDY SND_BE_UNK
     STA APU_SQ1_LTIMER,Y
     RTS
     PLA
@@ -433,13 +433,13 @@
     .db F7
     .db F6
     .db F5
-    LDA **:$07CC
+    LDA SND_REBASED_UNK
     TAY
     LDA $89A7,Y
     TAY
     LDX #$00
     LDA $89C3,Y
-    STA **:$0790,X
+    STA R_**:$0790,X
     INY
     INX
     TXA
@@ -447,10 +447,10 @@
     BNE 1B:032B
     RTS
     LDA #$FF
-    STA **:$07A0,X
+    STA SND_ARR_UNK[4],X
     JMP $83BA
     JSR $80AD
-    LDA R_**:$00BF
+    LDA SND_UNK_BF
     STA SOUND_UNK_REQUEST?+5
     CMP #$33
     BEQ 1B:035B
@@ -463,170 +463,170 @@
     LDX #$00
     LDY #$00
     LDA $89CD,Y
-    STA **:$0790,X
+    STA R_**:$0790,X
     INY
     INX
     TXA
     CMP #$0A
     BNE 1B:035F
     JMP $8386
-    LDA **:$07CC
+    LDA SND_REBASED_UNK
     TAY
     LDA $898F,Y
     TAY
     LDX #$00
     LDA $89C3,Y
-    STA **:$0790,X
+    STA R_**:$0790,X
     INY
     INX
     TXA
     CMP #$0A
     BNE 1B:0379
     LDA #$01
-    STA **:$07B4
-    STA **:$07B5
-    STA **:$07B6
-    STA **:$07B7
+    STA R_**:$07B4
+    STA R_**:$07B5
+    STA R_**:$07B6
+    STA R_**:$07B7
     LDA #$00
-    STA **:$00BA
+    STA R_**:$00BA
     LDY #$08
-    STA **:$07A7,Y
+    STA R_**:$07A7,Y
     DEY
     BNE 1B:039A
     TAX
-    LDA **:$0792,X
-    STA **:$00B6
-    LDA **:$0793,X
+    LDA R_**:$0792,X
+    STA SND_PTR_UNK[2]
+    LDA R_**:$0793,X
     CMP #$FF
     BEQ 1B:0339
-    STA **:$00B7
-    LDY **:$07A8
-    LDA [**:$00B6],Y
-    STA **:$07A0,X
+    STA R_**:$00B7
+    LDY R_**:$07A8
+    LDA [SND_PTR_UNK[2]],Y
+    STA SND_ARR_UNK[4],X
     INY
-    LDA [**:$00B6],Y
-    STA **:$07A1,X
+    LDA [SND_PTR_UNK[2]],Y
+    STA SND_ARR_UNK+1,X
     INX
     INX
     TXA
     CMP #$08
     BNE 1B:03A1
     RTS
-    LDA **:$078A
+    LDA SND_FLAG?_UNK
     BEQ 1B:03F5
     CMP #$01
     BEQ 1B:03DF
     LDA #$7F
     STA APU_SQ2_SWEEP
-    LDA **:$0784
+    LDA R_**:$0784
     STA APU_SQ2_LTIMER
-    LDA **:$0785
+    LDA R_**:$0785
     STA APU_SQ2_LENGTH
     LDA #$7F
     STA APU_SQ1_SWEEP
-    LDA **:$0780
+    LDA R_**:$0780
     STA APU_SQ1_LTIMER
-    LDA **:$0781
+    LDA R_**:$0781
     STA APU_SQ1_LENGTH
     LDA #$00
-    STA **:$078A
+    STA SND_FLAG?_UNK
     RTS
     TXA
     CMP #$02
     BCS 1B:03F5
-    LDA **:$079A,X
+    LDA R_**:$079A,X
     AND #$1F
     BEQ 1B:045B
-    STA SOUND_WRITE_DEST+1
-    LDA **:$07C3,X
+    STA SOUND_PTR_B0+1
+    LDA R_**:$07C3,X
     CMP #$02
     BEQ 1B:0465
     LDY #$00
-    DEC SOUND_WRITE_DEST+1
+    DEC SOUND_PTR_B0+1
     BEQ 1B:0415
     INY
     INY
     BNE 1B:040D
     LDA $86DA,Y
-    STA **:$00B2
+    STA SND_PTR_B2[2]
     LDA $86DB,Y
-    STA **:$00B3
-    LDA **:$07CD,X
+    STA SND_PTR_B2+1
+    LDA SND_ARR_UNK_7CD,X
     LSR A
     TAY
-    LDA [**:$00B2],Y
-    STA **:$00B4
+    LDA [SND_PTR_B2[2]],Y
+    STA R_**:$00B4
     CMP #$FF
     BEQ 1B:045C
     CMP #$F0
     BEQ 1B:0461
-    LDA **:$07CD,X
+    LDA SND_ARR_UNK_7CD,X
     AND #$01
     BNE 1B:043F
-    LSR **:$00B4
-    LSR **:$00B4
-    LSR **:$00B4
-    LSR **:$00B4
-    LDA **:$00B4
+    LSR R_**:$00B4
+    LSR R_**:$00B4
+    LSR R_**:$00B4
+    LSR R_**:$00B4
+    LDA R_**:$00B4
     AND #$0F
-    STA SOUND_WRITE_DEST[2]
-    LDA **:$079D,X
+    STA SOUND_PTR_B0[2]
+    LDA R_**:$079D,X
     AND #$F0
-    ORA SOUND_WRITE_DEST[2]
+    ORA SOUND_PTR_B0[2]
     TAY
-    INC **:$07CD,X
-    LDA **:$07C8,X
+    INC SND_ARR_UNK_7CD,X
+    LDA SND_UNK_7C8,X
     BNE 1B:045B
     TYA
-    LDY **:$00BE
+    LDY SND_BE_UNK
     STA APU_SQ1_CTRL,Y
     RTS
-    LDY **:$079D,X
+    LDY R_**:$079D,X
     BNE 1B:0450
     LDY #$10
     BNE 1B:0450
     LDY #$10
     BNE 1B:044D
     INY
-    LDA [**:$00B6],Y
-    STA **:$0792,X
+    LDA [SND_PTR_UNK[2]],Y
+    STA R_**:$0792,X
     INY
-    LDA [**:$00B6],Y
-    STA **:$0793,X
-    LDA **:$0792,X
-    STA **:$00B6
-    LDA **:$0793,X
-    STA **:$00B7
+    LDA [SND_PTR_UNK[2]],Y
+    STA R_**:$0793,X
+    LDA R_**:$0792,X
+    STA SND_PTR_UNK[2]
+    LDA R_**:$0793,X
+    STA R_**:$00B7
     TXA
     LSR A
     TAX
     LDA #$00
     TAY
-    STA **:$07A8,X
+    STA R_**:$07A8,X
     JMP $84A8
     JSR $80AA
     RTS
     TXA
     ASL A
     TAX
-    LDA **:$0792,X
-    STA **:$00B6
-    LDA **:$0793,X
-    STA **:$00B7
+    LDA R_**:$0792,X
+    STA SND_PTR_UNK[2]
+    LDA R_**:$0793,X
+    STA R_**:$00B7
     TXA
     LSR A
     TAX
-    INC **:$07A8,X
-    INC **:$07A8,X
-    LDY **:$07A8,X
+    INC R_**:$07A8,X
+    INC R_**:$07A8,X
+    LDY R_**:$07A8,X
     TXA
     ASL A
     TAX
-    LDA [**:$00B6],Y
-    STA **:$07A0,X
+    LDA [SND_PTR_UNK[2]],Y
+    STA SND_ARR_UNK[4],X
     INY
-    LDA [**:$00B6],Y
-    STA **:$07A1,X
+    LDA [SND_PTR_UNK[2]],Y
+    STA SND_ARR_UNK+1,X
     CMP #$00
     BEQ 1B:048B
     CMP #$FF
@@ -635,15 +635,15 @@
     LSR A
     TAX
     LDA #$00
-    STA **:$07AC,X
+    STA SND_ARR_B6_FPTR_INDEXES,X
     LDA #$01
-    STA **:$07B4,X
+    STA R_**:$07B4,X
     BNE 1B:04EA
     JMP $848F
     JSR $83C5
     LDA #$00
     TAX
-    STA **:$00BE
+    STA SND_BE_UNK
     BEQ 1B:04EA
     TXA
     LSR A
@@ -652,28 +652,28 @@
     TXA
     CMP #$04
     BEQ 1B:048E
-    LDA **:$00BE
+    LDA SND_BE_UNK
     CLC
     ADC #$04
-    STA **:$00BE
+    STA SND_BE_UNK
     TXA
     ASL A
     TAX
-    LDA **:$07A0,X
-    STA **:$00B6
-    LDA **:$07A1,X
-    STA **:$00B7
-    LDA **:$07A1,X
+    LDA SND_ARR_UNK[4],X
+    STA SND_PTR_UNK[2]
+    LDA SND_ARR_UNK+1,X
+    STA R_**:$00B7
+    LDA SND_ARR_UNK+1,X
     CMP #$FF
     BEQ 1B:04DA
     TXA
     LSR A
     TAX
-    DEC **:$07B4,X
+    DEC R_**:$07B4,X
     BNE 1B:054F
     LDA #$00
-    STA **:$07CD,X
-    STA **:$07D1,X
+    STA SND_ARR_UNK_7CD,X
+    STA SND_ARR_UNK_7D1,X
     JSR $86D1
     BEQ 1B:04CD
     CMP #$9F
@@ -689,18 +689,18 @@
     CMP #$C0
     BEQ 1B:053D
     JMP $8588
-    LDA **:$07BC,X
+    LDA SND_TIMER_ARR_UNK,X
     BEQ 1B:054C
-    DEC **:$07BC,X
-    LDA **:$07B0,X
-    STA **:$07AC,X
+    DEC SND_TIMER_ARR_UNK,X
+    LDA SND_ARR_UNK_7B0,X
+    STA SND_ARR_B6_FPTR_INDEXES,X
     BNE 1B:054C
     TYA
     AND #$3F
-    STA **:$07BC,X
-    DEC **:$07BC,X
-    LDA **:$07AC,X
-    STA **:$07B0,X
+    STA SND_TIMER_ARR_UNK,X
+    DEC SND_TIMER_ARR_UNK,X
+    LDA SND_ARR_B6_FPTR_INDEXES,X
+    STA SND_ARR_UNK_7B0,X
     JMP $850E
     JSR $83F6
     JSR $8221
@@ -708,18 +708,18 @@
     JMP $866C
     JMP $8642
     JSR $86D1
-    STA **:$079A,X
+    STA R_**:$079A,X
     JSR $86D1
-    STA **:$079D,X
+    STA R_**:$079D,X
     JMP $850E
     JSR $86D1
     JSR $86D1
     JMP $850E
     JSR $86D1
-    STA **:$0791
+    STA R_**:$0791
     JMP $850E
     JSR $86D1
-    STA **:$0790
+    STA R_**:$0790
     JMP $850E
     TYA
     AND #$B0
@@ -728,10 +728,10 @@
     TYA
     AND #$0F
     CLC
-    ADC **:$0791
+    ADC R_**:$0791
     TAY
     LDA $891A,Y
-    STA **:$07B8,X
+    STA R_**:$07B8,X
     TAY
     TXA
     CMP #$02
@@ -739,81 +739,81 @@
     JSR $86D1
     TAY
     TYA
-    STA **:$07C3,X
+    STA R_**:$07C3,X
     TXA
     CMP #$03
     BEQ 1B:0558
     PHA
-    LDX **:$00BE
+    LDX SND_BE_UNK
     LDA $8891,Y
     BEQ 1B:05DC
-    LDA **:$0790
+    LDA R_**:$0790
     BPL 1B:05C8
     AND #$7F
-    STA **:$00B3
+    STA SND_PTR_B2+1
     TYA
     CLC
-    SBC **:$00B3
+    SBC SND_PTR_B2+1
     JMP $85CD
     TYA
     CLC
-    ADC **:$0790
+    ADC R_**:$0790
     TAY
     LDA $8891,Y
-    STA **:$0780,X
+    STA R_**:$0780,X
     LDA $8890,Y
     ORA #$08
-    STA **:$0781,X
+    STA R_**:$0781,X
     TAY
     PLA
     TAX
     TYA
     BNE 1B:05F1
     LDA #$00
-    STA SOUND_WRITE_DEST[2]
+    STA SOUND_PTR_B0[2]
     TXA
     CMP #$02
     BEQ 1B:05F6
     LDA #$10
-    STA SOUND_WRITE_DEST[2]
+    STA SOUND_PTR_B0[2]
     BNE 1B:05F6
-    LDA **:$079D,X
-    STA SOUND_WRITE_DEST[2]
+    LDA R_**:$079D,X
+    STA SOUND_PTR_B0[2]
     TXA
-    DEC **:$07C8,X
-    CMP **:$07C8,X
+    DEC SND_UNK_7C8,X
+    CMP SND_UNK_7C8,X
     BEQ 1B:063C
-    INC **:$07C8,X
-    LDY **:$00BE
+    INC SND_UNK_7C8,X
+    LDY SND_BE_UNK
     TXA
     CMP #$02
     BEQ 1B:061C
-    LDA **:$079A,X
+    LDA R_**:$079A,X
     AND #$1F
     BEQ 1B:061C
-    LDA SOUND_WRITE_DEST[2]
+    LDA SOUND_PTR_B0[2]
     CMP #$10
     BEQ 1B:061E
     AND #$F0
     ORA #$00
     BNE 1B:061E
-    LDA SOUND_WRITE_DEST[2]
+    LDA SOUND_PTR_B0[2]
     STA APU_SQ1_CTRL,Y
-    LDA **:$07C0,X
+    LDA R_**:$07C0,X
     STA APU_SQ1_SWEEP,Y
-    LDA **:$0780,Y
+    LDA R_**:$0780,Y
     STA APU_SQ1_LTIMER,Y
-    LDA **:$0781,Y
+    LDA R_**:$0781,Y
     STA APU_SQ1_LENGTH,Y
-    LDA **:$07B8,X
-    STA **:$07B4,X
+    LDA R_**:$07B8,X
+    STA R_**:$07B4,X
     JMP $84DD
-    INC **:$07C8,X
+    INC SND_UNK_7C8,X
     JMP $8633
-    LDA **:$079C
+    LDA SND_UNK_79C
     AND #$1F
     BNE 1B:0666
-    LDA **:$079C
+    LDA SND_UNK_79C
     AND #$C0
     BNE 1B:0653
     TYA
@@ -829,7 +829,7 @@
     CMP #$3C
     BCC 1B:0666
     LDA #$3C
-    STA **:$079F
+    STA R_**:$079F
     JMP $85A3
     TYA
     PHA
@@ -856,19 +856,19 @@
     BEQ 1B:06A9
     RTS
     LDA #$0E
-    STA SOUND_WRITE_DEST+1
+    STA SOUND_PTR_B0+1
     LDA #$07
     LDY #$00
     BEQ 1B:06B1
     LDA #$0E
-    STA SOUND_WRITE_DEST+1
+    STA SOUND_PTR_B0+1
     LDA #$0F
     LDY #$02
     STA APU_DMC_LENGTH
     STY APU_DMC_ADDR
     LDA R_**:$07F7
     BNE 1B:06D0
-    LDA SOUND_WRITE_DEST+1
+    LDA SOUND_PTR_B0+1
     STA APU_DMC_CTRL
     LDA #$0F
     STA APU_STATUS
@@ -877,9 +877,9 @@
     LDA #$1F
     STA APU_STATUS
     RTS
-    LDY **:$07AC,X
-    INC **:$07AC,X
-    LDA [**:$00B6],Y
+    LDY SND_ARR_B6_FPTR_INDEXES,X
+    INC SND_ARR_B6_FPTR_INDEXES,X
+    LDA [SND_PTR_UNK[2]],Y
     RTS
     .db 4C
     .db 87

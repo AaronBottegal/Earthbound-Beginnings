@@ -3245,7 +3245,7 @@ L_13:15C4: ; 13:15C4, 0x0275C4
     JMP ENGINE_WRAM_STATE_WRITE_DISABLED
     INY
     LDA [ENGINE_FPTR_32[2]],Y
-    STA R_**:$07F0
+    STA SND_CODE_HELPER_ARR
     INY
     RTS
     INY
@@ -4156,7 +4156,7 @@ RTN_TABLE_H: ; 13:1CFE, 0x027CFE
     HIGH(13:1E0E) ; FF val to CMP, idk.
 PALETTE_FADE_WITH_??: ; 13:1D0D, 0x027D0D
     LDA #$08 ; Set ??
-    STA R_**:$07F0
+    STA SND_CODE_HELPER_ARR
     JMP ENGINE_PALETTE_FADE_OUT
     LDA #$10
     STA R_**:$07F1 ; Set ??
@@ -4179,7 +4179,7 @@ SCRIPT_SET_??_PALETTE_FADE_OUT: ; 13:1D34, 0x027D34
 SCRIPT_PALETTE_COLOR: ; 13:1D3B, 0x027D3B
     JSR ENGINE_PALETTE_SCRIPT_TO_TARGET ; To target.
     LDA #$02
-    STA R_**:$07F0 ; Set ??
+    STA SND_CODE_HELPER_ARR ; Set ??
     LDA #$14 ; Seed.
 LOOP_COUNT: ; 13:1D45, 0x027D45
     PHA ; Save todo count.
@@ -4195,7 +4195,7 @@ LOOP_COUNT: ; 13:1D45, 0x027D45
     BNE LOOP_COUNT ; != 0, loop.
     RTS
     LDA #$09
-    STA R_**:$07F0 ; Set ??
+    STA SND_CODE_HELPER_ARR ; Set ??
     LDA #$11
     JSR PALETTE_TO_COLOR_A_AND_FORWARDED ; Palette to color.
     JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_RAM ; No sprites.
@@ -4259,7 +4259,7 @@ PTR_SUB_0x18: ; 13:1DAE, 0x027DAE
     LDA #$11 ; Seed color.
     JSR ENGINE_BG_COLOR_A
     LDA #$03
-    STA R_**:$07F0 ; Set ??
+    STA SND_CODE_HELPER_ARR ; Set ??
     JSR ENGINE_0x300_OBJECTS_UNK? ; Do ??
     LDX #$08 ; Index.
     LDY #$07 ; Data index/loop.

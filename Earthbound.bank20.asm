@@ -5732,7 +5732,7 @@ GAME_ENDING_SEQUENCE: ; 14:17A3, 0x0297A3
     LDX #$99 ; Fptr 14:19E0.
     JSR SUB_UNK_FILE_?? ; Do ??
     LDA #$09
-    STA R_**:$07F0 ; Set ??
+    STA SND_CODE_HELPER_ARR ; Set ??
     LDA #$01
     STA R_**:$07F4 ; Set ??
     LDA #$E9
@@ -5792,7 +5792,7 @@ SUB_UNK_FILE_??: ; 14:17D6, 0x0297D6
     EOR ENGINE_SCROLL_X
     STA ENGINE_SCROLL_X
     LDA #$0A
-    STA R_**:$07F0
+    STA SND_CODE_HELPER_ARR
     DEC ARR_BITS_TO_UNK+4
     BNE 14:1808
     PLA
