@@ -56,7 +56,7 @@ R_**:$0002:                                   .rs 1 ; 0x0002
 
           .rsset 0x0006
 COPY_PROTECTION_VAL:                          .rs 1 ; 0x0006
-ENGINE_BASE_R6_VAL?:                          .rs 1 ; 0x0007
+ENGINE_SOUND_ENGINE_BANK_VAL?:                .rs 1 ; 0x0007
 NMI_GFX_COUNTER:                              .rs 1 ; 0x0008
 WORLD_POS?_CARRY_ADDS_UNK:                    .rs 3 ; 0x0009 to 0x000B
 R_**:$000C:                                   .rs 1 ; 0x000C
@@ -212,15 +212,15 @@ SND_NIBBLY_TEMP:                              .rs 1 ; 0x00B4
 
 
           .rsset 0x00B6
-SND_CHANNEL_DATA_STREAM_PTR:                  .rs 2 ; 0x00B6 to 0x00B7
+SND_ENGINE_PRIMARY_USE_PTR_A:                 .rs 2 ; 0x00B6 to 0x00B7
 
 
           .rsset 0x00BA
 R_**:$00BA:                                   .rs 1 ; 0x00BA
-SND_UNK_NSE_PERIOD_DATA?:                     .rs 1 ; 0x00BB
+SND_UNK_NSE_PRD/TRI_L_DATA?:                  .rs 1 ; 0x00BB
 SND_UNK_BC:                                   .rs 1 ; 0x00BC
 SND_INDEX_WORKING_ON?:                        .rs 1 ; 0x00BD
-SND_BE_UNK:                                   .rs 1 ; 0x00BE
+SOUND_BE_WRITE_INDEXER_UNK:                   .rs 1 ; 0x00BE
 SND_UNK_BF:                                   .rs 1 ; 0x00BF
 CTRL_BIT_0x0:                                 .rs 1 ; 0x00C0
 CTRL_BIT_0x1:                                 .rs 1 ; 0x00C1
@@ -238,10 +238,10 @@ R_**:$00CC:                                   .rs 1 ; 0x00CC
 R_**:$00CD:                                   .rs 1 ; 0x00CD
 R_**:$00CE:                                   .rs 1 ; 0x00CE
 R_**:$00CF:                                   .rs 1 ; 0x00CF
-R_**:$00D0:                                   .rs 1 ; 0x00D0
-R_**:$00D1:                                   .rs 1 ; 0x00D1
-R_**:$00D2:                                   .rs 1 ; 0x00D2
-R_**:$00D3:                                   .rs 1 ; 0x00D3
+INPUT_COUNT_UNK_A:                            .rs 1 ; 0x00D0
+INP_COUNT_UNK_B:                              .rs 1 ; 0x00D1
+INP_COUNT_UNK_C:                              .rs 1 ; 0x00D2
+INPUT_COUNTER_MATCHED:                        .rs 1 ; 0x00D3
 
 
           .rsset 0x00D5
@@ -251,14 +251,14 @@ RAM_CODE_UNK:                                 .rs 3 ; 0x00D7 to 0x00D9
 CONTROL_ACCUMULATED?:                         .rs 2 ; 0x00DA to 0x00DB
 CTRL_NEWLY_PRESSED:                           .rs 2 ; 0x00DC to 0x00DD
 CTRL_BUTTONS_PREVIOUS:                        .rs 2 ; 0x00DE to 0x00DF
-NMI_FLAG_E0_TODO:                             .rs 1 ; 0x00E0
+NMI_FLAG_A_OVERRIDE?:                         .rs 1 ; 0x00E0
 BMI_FLAG_SET_DIFF_MODDED_UNK:                 .rs 1 ; 0x00E1
 NMI_FLAG_OBJECT_PROCESSING?:                  .rs 1 ; 0x00E2
 R_**:$00E3:                                   .rs 1 ; 0x00E3
 SPRITE_INDEX_SWAP:                            .rs 1 ; 0x00E4
-NMI_FLAG_E5_TODO:                             .rs 1 ; 0x00E5
+NMI_FLAG_B:                                   .rs 1 ; 0x00E5
 NMI_PPU_CMD_PACKETS_INDEX:                    .rs 1 ; 0x00E6
-NMI_FLAG_E7:                                  .rs 1 ; 0x00E7
+NMI_FLAG_C:                                   .rs 1 ; 0x00E7
 NMI_FP_UNK:                                   .rs 2 ; 0x00E8 to 0x00E9
 ENGINE_NMI_CONFIG_FLAGS_DIS:0x80:             .rs 1 ; 0x00EA
 ENGINE_IRQ_LATCH_CURRENT?:                    .rs 1 ; 0x00EB
@@ -321,8 +321,7 @@ R_**:$04A2:                                   .rs 1 ; 0x04A2
           .rsset 0x0500
 SCRIPT_PALETTE_UPLOADED?:                     .rs 32 ; 0x0500 to 0x051F
 SCRIPT_PALETTE_TARGET/ALT?:                   .rs 32 ; 0x0520 to 0x053F
-IRQ_SCRIPT_B:                                 .rs 1 ; 0x0540
-IRQ_SCRIPT_A:                                 .rs 1 ; 0x0541
+IRQ_SCRIPT_PTRS:                              .rs 6 ; 0x0540 to 0x0545
 
 
           .rsset 0x0580
@@ -338,14 +337,10 @@ STREAM_INDEXES_ARR_UNK:                       .rs 24 ; 0x0600 to 0x0617
 STREAM_PTRS_ARR_UNK:                          .rs 48 ; 0x0618 to 0x0647
 
 
-          .rsset 0x0700
-R_**:$0700:                                   .rs 1 ; 0x0700
-
-
           .rsset 0x076C
 ARR_UNK:                                      .rs 20 ; 0x076C to 0x077F
-SQ1_TIMER_COPY:                               .rs 1 ; 0x0780
-SQ1_LENGTH_COPY:                              .rs 1 ; 0x0781
+CHANNELS_LTIMER_COPY:                         .rs 1 ; 0x0780
+CHANNELS_LENGTH_COPY:                         .rs 1 ; 0x0781
 
 
           .rsset 0x0784
@@ -357,7 +352,7 @@ SOUND_UNK_786:                                .rs 1 ; 0x0786
           .rsset 0x078A
 SND_SQUARES_UPDATING_COUNT:                   .rs 1 ; 0x078A
 SOUND_UNK_78B:                                .rs 1 ; 0x078B
-VAL_CMP_UNK:                                  .rs 1 ; 0x078C
+SOUND_VAL_CMP_UNK:                            .rs 1 ; 0x078C
 
 
           .rsset 0x0790
@@ -365,23 +360,23 @@ SND_ARR_UNK_LARGER?:                          .rs 10 ; 0x0790 to 0x0799
 
 
           .rsset 0x0791
-R_**:$0791:                                   .rs 1 ; 0x0791
+SOUND_DELTA_UNK_791:                          .rs 1 ; 0x0791
 SOUND_CHANNEL_DATA_PTRS_L:                    .rs 1 ; 0x0792
 SOUND_CHANNEL_DATA_PTRS_H:                    .rs 1 ; 0x0793
 
 
           .rsset 0x079A
-R_**:$079A:                                   .rs 1 ; 0x079A
+SOUND_ARR_UNK_79A:                            .rs 1 ; 0x079A
 
 
           .rsset 0x079C
 SND_UNK_79C:                                  .rs 1 ; 0x079C
-R_**:$079D:                                   .rs 1 ; 0x079D
+SOUND_ARR_UNK_79D_UPPER_NIBBLE_UNK:           .rs 1 ; 0x079D
 
 
           .rsset 0x079F
-R_**:$079F:                                   .rs 1 ; 0x079F
-SND_ARR_DATA_PAIR_UNK:                        .rs 4 ; 0x07A0 to 0x07A3
+SOUND_UNK_79F:                                .rs 1 ; 0x079F
+SND_ARR_DATA_PTR:                             .rs 4 ; 0x07A0 to 0x07A3
 
 
           .rsset 0x07A7
@@ -399,7 +394,7 @@ SND_ARR_UNK_7B0:                              .rs 1 ; 0x07B0
 
           .rsset 0x07B4
 SND_FLAGS_ARR_CHANNELS_RELATED?:              .rs 4 ; 0x07B4 to 0x07B7
-R_**:$07B8:                                   .rs 1 ; 0x07B8
+SOUND_ARR_UNK_7B8:                            .rs 1 ; 0x07B8
 
 
           .rsset 0x07BC
@@ -407,17 +402,17 @@ SND_TIMER_ARR_UNK:                            .rs 1 ; 0x07BC
 
 
           .rsset 0x07C0
-R_**:$07C0:                                   .rs 1 ; 0x07C0
-R_**:$07C1:                                   .rs 1 ; 0x07C1
+CHANNELS_SWEEP_COPY:                          .rs 1 ; 0x07C0
+SOUND_UNK_7C1:                                .rs 1 ; 0x07C1
 
 
           .rsset 0x07C3
-R_**:$07C3:                                   .rs 1 ; 0x07C3
+SOUND_ARR_7C3:                                .rs 1 ; 0x07C3
 
 
           .rsset 0x07C7
 SND_ARR_INDEX_UNK:                            .rs 1 ; 0x07C7
-SND_UNK_7C8:                                  .rs 1 ; 0x07C8
+SND_DISABLE_WRITE_ARR_UNK:                    .rs 1 ; 0x07C8
 SND_UNK_7C9:                                  .rs 1 ; 0x07C9
 SND_UNK_7CA:                                  .rs 1 ; 0x07CA
 
@@ -442,13 +437,13 @@ SND_SQ1_VALS_HELPER/INDEX:                    .rs 1 ; 0x07E0
 
 
           .rsset 0x07E2
-R_**:$07E2:                                   .rs 1 ; 0x07E2
+SOUND_VAR_UNK_7E2:                            .rs 1 ; 0x07E2
 SND_ARR_UNK_7E3:                              .rs 1 ; 0x07E3
 SND_UNK_7E4:                                  .rs 1 ; 0x07E4
 
 
           .rsset 0x07E6
-R_**:$07E6:                                   .rs 1 ; 0x07E6
+SOUND_VAR_UNK_TRI_LENGTH?:                    .rs 1 ; 0x07E6
 SND_ARR_UNK_7E7:                              .rs 1 ; 0x07E7
 SND_UNK_7E8:                                  .rs 1 ; 0x07E8
 
@@ -469,7 +464,7 @@ VAL_CMP_DIFFERS_STORED_UNK:                   .rs 1 ; 0x07F5
 
 
           .rsset 0x07F7
-R_**:$07F7:                                   .rs 1 ; 0x07F7
+SOUND_SAMPLE_FLAG_DONT_RESET_LEVEL:           .rs 1 ; 0x07F7
 SOUND_UNK_REQUEST?:                           .rs 7 ; 0x07F8 to 0x07FE
 SND_UNK_7FF:                                  .rs 1 ; 0x07FF
 

@@ -5504,7 +5504,7 @@ VAL_EQ_0xFF: ; 14:1675, 0x029675
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index to queue.
     LDA #$01
-    STA NMI_FLAG_E5_TODO ; Set flag for upload.
+    STA NMI_FLAG_B ; Set flag for upload.
 RTS: ; 14:1684, 0x029684
     RTS ; Leave.
 HELPER_SINGLE_UPDATES: ; 14:1685, 0x029685
@@ -5545,7 +5545,7 @@ UPDATE_HELPER_SINGLES_WITH_COORD: ; 14:16B8, 0x0296B8
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index to trigger update.
     LDA #$01
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle update.
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_BUF+1 ; Set count.
@@ -5839,7 +5839,7 @@ SUB_UNK_FILE_??: ; 14:17D6, 0x0297D6
     STX ARR_BITS_TO_UNK+2
     JSR 14:188D
     LDA #$80
-    STA NMI_FLAG_E5_TODO
+    STA NMI_FLAG_B
     RTS
     LDX #$24
     STX MISC_USE_C
@@ -5939,14 +5939,14 @@ SUB_TODO: ; 14:1920, 0x029920
     LDX #$99
     JSR ENGINE_SET_GFX_BANKS_FPTR_AX
     LDA #$01
-    STA NMI_FLAG_E5_TODO
+    STA NMI_FLAG_B
     LDY #$04
     TYA
     PHA
     LDX #$20
     JSR $988F
     LDA #$80
-    STA NMI_FLAG_E5_TODO
+    STA NMI_FLAG_B
     PLA
     TAY
     DEY
@@ -5954,7 +5954,7 @@ SUB_TODO: ; 14:1920, 0x029920
     JSR $998B
     LDX #$03
     LDA $9A09,X
-    STA IRQ_SCRIPT_B,X
+    STA IRQ_SCRIPT_PTRS[6],X
     DEX
     BPL 14:1970
     LDA #$9F
@@ -5971,7 +5971,7 @@ SUB_TODO: ; 14:1920, 0x029920
     PHA
     JSR $988D
     LDA #$80
-    STA NMI_FLAG_E5_TODO
+    STA NMI_FLAG_B
     PLA
     SEC
     SBC #$01
@@ -6560,7 +6560,7 @@ INTRO/TITLE_HANDLER: ; 14:1D60, 0x029D60
     JSR ENGINE_SET_PALETTE_AND_QUEUE_UPLOAD ; Do to arr.
     JSR ENGINE_PALETTE_FADE_OUT ; Do.
     LDA #$16 ; Val ??
-    CMP VAL_CMP_UNK ; If _ var
+    CMP SOUND_VAL_CMP_UNK ; If _ var
     BEQ TARGET_MATCH ; ==, goto.
     STA VAL_CMP_DIFFERS_STORED_UNK ; Set ??
 TARGET_MATCH: ; 14:1D93, 0x029D93
@@ -6611,7 +6611,7 @@ CTRL_CHECK_TIMEOUT: ; 14:1DED, 0x029DED
     ADC #$96 ; Add 0x00/0x01
     STA **:$03E7 ; Store.
     LDA #$0A
-    STA NMI_FLAG_E5_TODO ; Set flag ??
+    STA NMI_FLAG_B ; Set flag ??
     CLC ; Prep add.
     LDA MISC_USE_A ; Load.
     ADC #$04 ; Add
@@ -6624,8 +6624,8 @@ CTRL_CHECKER_PORTION: ; 14:1E0D, 0x029E0D
     LDA CONTROL_ACCUMULATED?[2] ; CTRL?
     AND #$10 ; Test.
     BNE EARLY_EXIT ; Pressed, goto.
-    LDA NMI_FLAG_E5_TODO
-    ORA NMI_FLAG_E0_TODO
+    LDA NMI_FLAG_B
+    ORA NMI_FLAG_A_OVERRIDE?
     BNE CTRL_CHECKER_PORTION ; Loop, nonzero.
     BEQ CTRL_CHECK_TIMEOUT ; == 0, loop, timeout for check.
 EARLY_EXIT: ; 14:1E1B, 0x029E1B

@@ -7,9 +7,9 @@
     STA MMC3_MIRRORING ; Set V mirroring.
     LDA #$00
     STA NMI_LATCH_FLAG ; Clear flag.
-    LDA NMI_FLAG_E7
+    LDA NMI_FLAG_C
     AND #$BF ; Keep 1011.1111 only.
-    STA NMI_FLAG_E7
+    STA NMI_FLAG_C
     LDA #$00
     STA NMI_FP_UNK[2] ; Clear ??
     STA NMI_FP_UNK+1
@@ -23,7 +23,7 @@
     LDA #$FF
     JSR STORE_IF_MISMATCH_OTHERWISE_WAIT_MENU_DEPTH? ; Set ??
     LDA #$1B
-    STA ENGINE_BASE_R6_VAL? ; Set ??
+    STA ENGINE_SOUND_ENGINE_BANK_VAL? ; Set ??
     JSR ENGINE_NMI_0x01_SET/WAIT ; Wait.
     LDA #$D3 ; Set FPTR 1A:02D3
     STA FPTR_SPRITES?[2]
@@ -100,7 +100,7 @@ RTN_PTRS_H: ; 1A:0069, 0x034069
 WAIT_X_TIMES: ; 1A:0094, 0x034094
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle updates.
     LDA #$01
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     DEX ; Count.
     BNE WAIT_X_TIMES ; != 09, goto.
     INY ; Stream++
@@ -187,7 +187,7 @@ STREAM_NONZERO: ; 1A:0125, 0x034125
     STA NMI_PPU_CMD_PACKETS_BUF+4,X ; EOF for packet.
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index to trigger.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     DEC R_**:$0042 ; Count--
     BEQ RTS ; == 0, leave.
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
@@ -223,7 +223,7 @@ MEMCPY_POSITIVE: ; 1A:0159, 0x034159
     STA NMI_PPU_CMD_PACKETS_BUF+1 ; Set EOF.
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index to trigger.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     LDY #$11 ; Stream reset.
     RTS ; Leave.
     JSR ENGINE_SETTLE_ALL_UPDATES?
@@ -358,7 +358,7 @@ LOOP_PACKET_MODDED: ; 1A:0275, 0x034275
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     DEX ; X--
     BEQ EXIT_RESTREAM ; == 0, leave.
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.

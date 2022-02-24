@@ -665,7 +665,7 @@ L_1F:03CD: ; 1F:03CD, 0x03E3CD
     CPX SAVE_GAME_MOD_PAGE_PTR+1
     CPX R_**:$008F
     CPX FIRST_LAUNCHER_HOLD_FLAG?
-    ASL NMI_FLAG_E5_TODO
+    ASL NMI_FLAG_B
     TAX
     AND #$30
     BEQ L_1F:03EF
@@ -1450,7 +1450,7 @@ L_1F:094C: ; 1F:094C, 0x03E94C
     LDA #$88
     STA SCRIPT_UNK_DATA_SELECT_??
     LDA #$00
-    STA NMI_FLAG_E7
+    STA NMI_FLAG_C
     STA NMI_FP_UNK[2]
     STA NMI_FP_UNK+1
     JSR L_1F:0733
@@ -1511,7 +1511,7 @@ L_1F:09B3: ; 1F:09B3, 0x03E9B3
     LDA [ENGINE_FPTR_30[2]],Y
     AND #$40
     ORA ACTION_BUTTONS_RESULT
-    STA NMI_FLAG_E7
+    STA NMI_FLAG_C
     LDY #$0C
     LDA [ENGINE_FPTR_30[2]],Y
     STA NMI_FP_UNK[2]
@@ -1771,7 +1771,7 @@ L_1F:0B76: ; 1F:0B76, 0x03EB76
     STA R_**:$003E
     JSR L_1F:0607
     LDA ACTION_BUTTONS_RESULT
-    STA NMI_FLAG_E7
+    STA NMI_FLAG_C
     LDA L_1F:0BF3,X
     STA NMI_FP_UNK[2]
     LDA L_1F:0BF4,X
@@ -1980,7 +1980,7 @@ HELPER_FADE_AND_SET_LATCHED_IDK: ; 1F:0C65, 0x03EC65
     LDX #$09 ; Index ??
 MOVE_ALL_POSITIVE: ; 1F:0C94, 0x03EC94
     LDA ROM_DATA_ARR_FUCK,X ; Move ??
-    STA IRQ_SCRIPT_B,X
+    STA IRQ_SCRIPT_PTRS[6],X
     DEX ; Index--
     BPL MOVE_ALL_POSITIVE ; Positive, goto.
     JSR LATCH_0x59_HIGHER_HELPER ; Latch helper.
@@ -2045,7 +2045,7 @@ ROM_DATA_ARR_FUCK: ; 1F:0CF2, 0x03ECF2
     LDX #$14
 L_1F:0D08: ; 1F:0D08, 0x03ED08
     LDA #$01
-    STA NMI_FLAG_E5_TODO
+    STA NMI_FLAG_B
     JSR ENGINE_SETTLE_ALL_UPDATES?
     JSR LATCH_0x59_HIGHER_HELPER
     DEX
@@ -2295,7 +2295,7 @@ CREATE_PALETTE_UPLOAD_PACKET_X_WAIT: ; 1F:0EB5, 0x03EEB5
     STA NMI_PPU_CMD_PACKETS_BUF+1 ; EOF.
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index, new update.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     JMP ENGINE_DELAY_X_FRAMES ; Goto.
 ENGINE_SETTLE_EXTENDED_0x2000_SCREEN: ; 1F:0EC8, 0x03EEC8
     LDX #$00 ; Seed scroll.
@@ -2862,7 +2862,7 @@ ENGINE_SET_MAPPER_R6_TO_0x00: ; 1F:1247, 0x03F247
     PLA
     RTS
 LIB_COMPARED_OVERWRITE_IF_MISMATCH: ; 1F:1255, 0x03F255
-    CMP VAL_CMP_UNK ; If _ val
+    CMP SOUND_VAL_CMP_UNK ; If _ val
     BEQ VAL_CMP_EQ ; ==, goto.
     STA VAL_CMP_DIFFERS_STORED_UNK ; Store if differs.
 VAL_CMP_EQ: ; 1F:125D, 0x03F25D
@@ -3296,7 +3296,7 @@ L_1F:14A3: ; 1F:14A3, 0x03F4A3
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     RTS ; Leave.
 L_1F:14B6: ; 1F:14B6, 0x03F4B6
     LDA #$0F
@@ -3669,7 +3669,7 @@ L_1F:1724: ; 1F:1724, 0x03F724
     LDX ARR_BITS_TO_UNK[8]
     STA R_**:$0300,X
     LDA #$01
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     LDX #$08
     JMP ENGINE_WAIT_X_TIMES_UNK ; Wait and leave abuse rts.
 ENGINE_PALETTE_SIZE_UPDATE_FPTR_XY: ; 1F:1732, 0x03F732
@@ -3683,7 +3683,7 @@ VAL_POSITIVE: ; 1F:173B, 0x03F73B
     DEY ; Stream/index--
     BPL VAL_POSITIVE ; Positive, do more.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set ??
+    STA NMI_FLAG_B ; Set ??
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_INDEX ; Clear ??
     RTS ; Leave.
@@ -3753,19 +3753,19 @@ POSITIVE: ; 1F:17A7, 0x03F7A7
     STX PPU_OAM_ADDR ; DMA sprites.
     STA OAM_DMA
     LDY NMI_PPU_CMD_PACKETS_INDEX ; Load index.
-    LDA NMI_FLAG_E0_TODO
-    BEQ NMI_EQ_ZERO ; == 0, goto.
-    LDA NMI_FLAG_E5_TODO
-    BNE NMI_BUF_PROCESSOR_CHECK ; != 0, goto.
-    BEQ PAST_SETTLE_LOADED ; == 0, goto.
-NMI_EQ_ZERO: ; 1F:17C2, 0x03F7C2
-    LDA NMI_FLAG_E5_TODO ; Load.
-    BEQ PAST_SETTLE_LOADED ; == 0, goto.
+    LDA NMI_FLAG_A_OVERRIDE?
+    BEQ NMI_FLAG_NO_OVERRIDE? ; == 0, goto.
+    LDA NMI_FLAG_B
+    BNE NMI_BUF_PROCESSOR_CHECK ; != 0, goto always.
+    BEQ NMI_FLAGS_CHECKED ; == 0, goto.
+NMI_FLAG_NO_OVERRIDE?: ; 1F:17C2, 0x03F7C2
+    LDA NMI_FLAG_B ; Load.
+    BEQ NMI_FLAGS_CHECKED ; == 0, goto.
     AND #$7F ; Keep bits.
-    STA NMI_FLAG_E0_TODO ; Set modded.
+    STA NMI_FLAG_A_OVERRIDE? ; Set modded as other.
 NMI_BUF_PROCESSOR_CHECK: ; 1F:17CA, 0x03F7CA
     LDA NMI_PPU_CMD_PACKETS_BUF[64],Y ; Load from buf.
-    BEQ NMI_UPDATE_FINSIHED ; == 0, goto.
+    BEQ EXIT_UPDATES_CLEAR_FLAG_B ; == 0, goto.
     BMI LOWER_DIRECTLY_TO_BUFFER ; Negative, directly to buffer.
     ASL A ; << 1, *2.
     TAX ; To X index.
@@ -3777,12 +3777,12 @@ NMI_BUF_PROCESSOR_CHECK: ; 1F:17CA, 0x03F7CA
 LOWER_DIRECTLY_TO_BUFFER: ; 1F:17DC, 0x03F7DC
     AND #$7F ; Keep bits.
     STA NMI_PPU_CMD_PACKETS_BUF[64],Y ; Store to buf.
-    BNE PAST_SETTLE_LOADED ; != 0, goto.
-NMI_UPDATE_FINSIHED: ; 1F:17E3, 0x03F7E3
-    STA NMI_FLAG_E5_TODO ; Clear.
-PAST_SETTLE_LOADED: ; 1F:17E5, 0x03F7E5
+    BNE NMI_FLAGS_CHECKED ; != 0, goto.
+EXIT_UPDATES_CLEAR_FLAG_B: ; 1F:17E3, 0x03F7E3
+    STA NMI_FLAG_B ; Clear flag, updates ran.
+NMI_FLAGS_CHECKED: ; 1F:17E5, 0x03F7E5
     LDX NMI_LATCH_FLAG
-    BEQ FLAG_CLEAR ; == 0, goto.
+    BEQ NO_LATCH ; == 0, goto.
     LDA #$FF
     STA MMC3_IRQ_LATCH ; Set latch.
     STA MMC3_IRQ_RELOAD
@@ -3807,7 +3807,7 @@ PAST_SETTLE_LOADED: ; 1F:17E5, 0x03F7E5
     STX ENGINE_IRQ_LATCH_CURRENT?
     STA ENGINE_IRQ_RTN_INDEX ; Clear.
     CLI ; Enable interrupts.
-FLAG_CLEAR: ; 1F:1827, 0x03F827
+NO_LATCH: ; 1F:1827, 0x03F827
     LDA ENGINE_SCROLL_X ; Set scroll.
     LDX ENGINE_SCROLL_Y
     STA PPU_SCROLL
@@ -3826,7 +3826,7 @@ FLAG_CLEAR: ; 1F:1827, 0x03F827
     LDA MAPPER_BANK_VALS+7
     PHA
     LDA NMI_GFX_COUNTER ; Load.
-    BEQ SKIP_UNK ; == 0, goto.
+    BEQ SKIP_GFX_MOD ; == 0, goto.
     LSR A ; >> 1, /2.
     AND #$03 ; Keep bottom bits.
     ORA #$44 ; Set 0100.01XX
@@ -3835,30 +3835,30 @@ FLAG_CLEAR: ; 1F:1827, 0x03F827
     LDX #$03 ; GFX bank R3.
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A
     DEC NMI_GFX_COUNTER ; --
-SKIP_UNK: ; 1F:185F, 0x03F85F
-    JSR ENGINE_SET_BASE_R6/R7_0x1D ; Set.
-    JSR $8000 ; Do banked handler.
+SKIP_GFX_MOD: ; 1F:185F, 0x03F85F
+    JSR ENGINE_SWAP_TO_SOUND_ENGINE_HELPER ; Set sound banks.
+    JSR JMP_SOUND_ENTRY_FORWARD ; Do banked handler.
     LDA NMI_FLAG_OBJECT_PROCESSING? ; Load ??
-    BMI NMI_RESTORE_STATE ; Negative, goto.
-    LDA NMI_FLAG_E7 ; Load.
+    BMI NMI_RESTORE_ENGINE_STATE/READ_INPUT ; Negative, goto.
+    LDA NMI_FLAG_C ; Load.
     AND #$3F ; Keep 0011.1111
     STA BMI_FLAG_SET_DIFF_MODDED_UNK ; Store to.
-    LDA NMI_FLAG_E0_TODO ; LOad.
+    LDA NMI_FLAG_A_OVERRIDE? ; Load.
     BNE NONZERO ; != 0, goto.
     JSR NMI_SPRITE_SWAP_UNK ; Swap sprites.
-    JMP NMI_RESTORE_STATE ; Goto.
+    JMP NMI_RESTORE_ENGINE_STATE/READ_INPUT ; Goto.
 NONZERO: ; 1F:1879, 0x03F879
     CLC ; Sub -1
     SBC BMI_FLAG_SET_DIFF_MODDED_UNK ; Sub with, extra.
     BCS SUB_NO_UNDERFLOW ; No underflow, goto.
-    LDX NMI_FLAG_E0_TODO ; Load ??
+    LDX NMI_FLAG_A_OVERRIDE? ; Load ??
     DEX ; Index--
-    STX BMI_FLAG_SET_DIFF_MODDED_UNK ; Store modded.,
+    STX BMI_FLAG_SET_DIFF_MODDED_UNK ; Store modded.
     LDA #$00 ; Seed clear.
 SUB_NO_UNDERFLOW: ; 1F:1885, 0x03F885
-    STA NMI_FLAG_E0_TODO ; Store flag.
+    STA NMI_FLAG_A_OVERRIDE? ; Store flag.
     JSR SUB_TODOOOOOOOOOOOOO ; Do, scrolly?
-NMI_RESTORE_STATE: ; 1F:188A, 0x03F88A
+NMI_RESTORE_ENGINE_STATE/READ_INPUT: ; 1F:188A, 0x03F88A
     PLA ; Restore R7 val.
     LDX #$07 ; R7.
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Bank it in.
@@ -4138,7 +4138,7 @@ SUB_TODOOOOOOOOOOOOO: ; 1F:1A81, 0x03FA81
     STA R_**:$00CE ; Clear ??
     STA R_**:$00CF
     LDX BMI_FLAG_SET_DIFF_MODDED_UNK ; Load.
-    BIT NMI_FLAG_E7
+    BIT NMI_FLAG_C
     BVC BIT_0x40_CLEAR ; Clear, goto.
     LDY #$00 ; Stream index.
 COUNT_POSITIVE: ; 1F:1A96, 0x03FA96
@@ -4512,26 +4512,26 @@ CLEAR_PAGE: ; 1F:1CF1, 0x03FCF1
     LDA #$00
     STA MMC3_MIRRORING ; V mirroring, H unique.
     RTS ; Leave.
-ENGINE_SND_INIT?: ; 1F:1D14, 0x03FD14
+ENGINE_SOUND_INIT_HELPER: ; 1F:1D14, 0x03FD14
     LDA #$1C
-    STA ENGINE_BASE_R6_VAL? ; Set R6, 0x1C.
+    STA ENGINE_SOUND_ENGINE_BANK_VAL? ; Set R6, 0x1C. Sound bank.
     LDA #$00 ; Clear.
-    LDX #$00 ; Index. Not TAX like the other?! Hmm. :)
+    LDX #$00 ; Index. Not TAX like the other?! Hmm. :) Diff programmers?
 CLEAR_0x700_PAGE: ; 1F:1D1C, 0x03FD1C
-    STA R_**:$0700,X ; Clear.
+    STA **:$0700,X ; Clear sound page.
     INX ; Index++
     BNE CLEAR_0x700_PAGE ; != 0, goto.
-    JSR ENGINE_SET_BASE_R6/R7_0x1D ; Set engine.
-    JMP SOUND_ENTRY_JMP_INIT? ; Goto.
+    JSR ENGINE_SWAP_TO_SOUND_ENGINE_HELPER ; Set engine.
+    JMP JMP_SOUND_ENGINE_SELF_INIT ; Goto.
 STORE_IF_MISMATCH_OTHERWISE_WAIT_MENU_DEPTH?: ; 1F:1D28, 0x03FD28
-    CMP VAL_CMP_UNK ; If _ var
+    CMP SOUND_VAL_CMP_UNK ; If _ var
     BEQ JUST_WAIT
     STA VAL_CMP_DIFFERS_STORED_UNK ; Store if mismatch. TODO: Why.
 JUST_WAIT: ; 1F:1D30, 0x03FD30
     JMP ENGINE_NMI_0x01_SET/WAIT ; Wait, abuse RTS.
 ENGINE_SETTLE_ALL_UPDATES?: ; 1F:1D33, 0x03FD33
-    LDA NMI_FLAG_E5_TODO ; Load.
-    ORA NMI_FLAG_E0_TODO ; Or with other.
+    LDA NMI_FLAG_B ; Load.
+    ORA NMI_FLAG_A_OVERRIDE? ; Or with other.
     BNE ENGINE_SETTLE_ALL_UPDATES? ; Nonzero, redo.
     RTS ; Leave.
 ENGINE_DELAY_X_FRAMES: ; 1F:1D3A, 0x03FD3A
@@ -4600,7 +4600,7 @@ LOOP_CLEARING_ADDR_ADJUST: ; 1F:1D9F, 0x03FD9F
     LDX #$00
     LDA #$80
     STX NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
-    STA NMI_FLAG_E5_TODO ; Set flag ??
+    STA NMI_FLAG_B ; Set flag ??
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle engine.
     CLC ; Prep add.
     LDA NMI_PPU_CMD_PACKETS_BUF+3 ; To next 
@@ -4614,9 +4614,9 @@ LOOP_CLEARING_ADDR_ADJUST: ; 1F:1D9F, 0x03FD9F
     RTS ; Leave.
 ENGINE_0x300_OBJECTS_UNK?: ; 1F:1DC0, 0x03FDC0
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
-    LDA NMI_FLAG_E7 ; Load.
+    LDA NMI_FLAG_C ; Load.
     AND #$BF ; Keep 1011.1111
-    STA NMI_FLAG_E7 ; Cleared 0x40 store.
+    STA NMI_FLAG_C ; Cleared 0x40 store.
     LDA #$00
     STA NMI_FP_UNK[2] ; Clear ??
     STA NMI_FP_UNK+1
@@ -4668,21 +4668,21 @@ VECTOR_IRQ: ; 1F:1E13, 0x03FE13
     PHA
     TYA
     PHA
-    LDA MAPPER_INDEX_LAST_WRITTEN ; Save.
+    LDA MAPPER_INDEX_LAST_WRITTEN ; Save because of our possible changes to mapper config.
     PHA
     JSR ENGINE_IRQ_SCRIPT_RUN?
     PLA ; Restore.
     ORA ENGINE_MAPPER_CONFIG_STATUS_NO_BANK ; Set CFG.
     STA MMC3_BANK_CFG ; Set mapper.
     LDX ENGINE_IRQ_RTN_INDEX ; Move index.
-    INX ; Index++
+    INX ; Index += 2
     INX
     STX ENGINE_IRQ_RTN_INDEX ; Store index.
-    LDA IRQ_SCRIPT_A,X ; Load from.
-    BNE VAL_NOT_NULL ; Nonzero, valid.
+    LDA IRQ_SCRIPT_PTRS+1,X ; Load from.
+    BNE VALID_VALUE ; Nonzero, valid.
     STA MMC3_IRQ_DISABLE ; Disable IRQ's.
     STA ENGINE_IRQ_LATCH_CURRENT? ; Store to.
-VAL_NOT_NULL: ; 1F:1E34, 0x03FE34
+VALID_VALUE: ; 1F:1E34, 0x03FE34
     PLA ; Leave IRQ.
     TAY
     PLA
@@ -4692,9 +4692,9 @@ VAL_NOT_NULL: ; 1F:1E34, 0x03FE34
 ENGINE_IRQ_SCRIPT_RUN?: ; 1F:1E3A, 0x03FE3A
     STA MMC3_IRQ_DISABLE
     LDX ENGINE_IRQ_RTN_INDEX ; Index from.
-    LDA IRQ_SCRIPT_A,X ; Load rtn from index.
+    LDA IRQ_SCRIPT_PTRS+1,X ; Load rtn from index.
     PHA
-    LDA IRQ_SCRIPT_B,X
+    LDA IRQ_SCRIPT_PTRS[6],X
     PHA
     STA MMC3_IRQ_ENABLE ; Enable IRQ's.
     RTS ; Run routine.
@@ -4740,22 +4740,22 @@ CTRL_READS_MATCHED: ; 1F:1E79, 0x03FE79
 SUB_CTRL_TODO: ; 1F:1E86, 0x03FE86
     LDA CTRL_NEWLY_PRESSED[2] ; Load newly pressed.
     BNE BUTTONS_NEWLY_PRESSED ; != 0, some newly pressed, goto.
-    LDA R_**:$00D3 ; Load.
+    LDA INPUT_COUNTER_MATCHED ; Load.
     CMP #$2A ; If _ #$2A
     BCC VAR_LT_0x2A ; <, goto.
     RTS ; Leave.
 BUTTONS_NEWLY_PRESSED: ; 1F:1E91, 0x03FE91
     LDA #$00
-    STA R_**:$00D3 ; Clear ??
+    STA INPUT_COUNTER_MATCHED ; Clear matched count.
 VAR_LT_0x2A: ; 1F:1E95, 0x03FE95
-    INC R_**:$00D0 ; ++
+    INC INPUT_COUNT_UNK_A ; ++
     BNE RTS ; != 0, leave.
-    INC R_**:$00D3 ; ++
-    INC R_**:$00D1 ; ++
+    INC INPUT_COUNTER_MATCHED ; ++
+    INC INP_COUNT_UNK_B ; ++
     BNE RTS ; != 0, leave.
-    INC R_**:$00D2 ; ++
+    INC INP_COUNT_UNK_C ; ++
 RTS: ; 1F:1EA1, 0x03FEA1
-    RTS
+    RTS ; Leave.
     .db FF
     .db FF
     .db FF
@@ -4964,7 +4964,7 @@ MMC3_CLOCKING_BORKED: ; 1F:1F95, 0x03FF95
     LDA #$00
     STA MMC3_BANK_CFG ; Ret R0.
     JSR SETUP_SPRITES/ENGINE ; Setup.
-    JSR ENGINE_SND_INIT? ; Sound init?
+    JSR ENGINE_SOUND_INIT_HELPER ; Sound init?
     LDX #$07
     LDA #$13
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set R7, bank 0x13.
@@ -4975,8 +4975,8 @@ MMC3_CLOCKING_BORKED: ; 1F:1F95, 0x03FF95
     STA PPU_CTRL ; Store to PPU.
     CLI ; Enable interrupts.
     JMP SYSTEM_SETUP_COMPLETED ; Goto. <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-ENGINE_SET_BASE_R6/R7_0x1D: ; 1F:1FC5, 0x03FFC5
-    LDA ENGINE_BASE_R6_VAL? ; Value.
+ENGINE_SWAP_TO_SOUND_ENGINE_HELPER: ; 1F:1FC5, 0x03FFC5
+    LDA ENGINE_SOUND_ENGINE_BANK_VAL? ; Load sound bank.
     LDX #$06 ; R6.
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set.
     LDA #$1D ; Bank val.

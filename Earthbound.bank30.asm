@@ -1,4 +1,4 @@
-    .db FF
+    .db FF ; DMC sample.
     .db FF
     .db FF
     .db FF
@@ -111,7 +111,7 @@
     .db 44
     .db 00
     .db AB
-    .db 6A
+    .db 6A ; DMC sample end.
     .db D5
     .db 44
     .db 44
@@ -126,7 +126,7 @@
     .db 52
     .db 00
     .db 00
-    .db FF
+    .db FF ; Drum sample here, 0xF1 bytes.
     .db B7
     .db 20
     .db 0B
@@ -367,7 +367,7 @@
     .db A9
     .db C5
     .db A4
-    .db 42
+    .db 42 ; Drum sample end.
     .db 34
     .db 26
     .db 54
@@ -617,24 +617,24 @@ LATCH_NO_FLAG_RTN: ; 1E:0274, 0x03C274
     LDA #$00
     STA NMI_LATCH_FLAG ; Clear ??
     LDA #$FF
-    STA R_**:$07F7 ; Set ??
+    STA SOUND_SAMPLE_FLAG_DONT_RESET_LEVEL ; Set ??
     LDA #$0F
     STA APU_STATUS ; Enable APU channels.
     JSR ENGINE_NMI_0x01_SET/WAIT ; Wait.
     LDX #$00 ; IRQ index.
 SLOT_LT_0x1A?: ; 1E:0296, 0x03C296
     LDA #$25 ; Load PTR L.
-    STA IRQ_SCRIPT_B,X ; Store it.
+    STA IRQ_SCRIPT_PTRS[6],X ; Store it.
     INX ; Index++
     LDA #$C2 ; Load PTR H.
-    STA IRQ_SCRIPT_B,X ; Store it.
+    STA IRQ_SCRIPT_PTRS[6],X ; Store it.
     INX ; Index++
     CPX #$1A ; If _ #$1A
     BNE SLOT_LT_0x1A? ; !=, loop.
     LDA #$00
-    STA IRQ_SCRIPT_B,X ; Clear PTR L. For end signal?
+    STA IRQ_SCRIPT_PTRS[6],X ; Clear PTR L. For end signal?
     INX ; Index++
-    STA IRQ_SCRIPT_B,X ; Clear PTR H.
+    STA IRQ_SCRIPT_PTRS[6],X ; Clear PTR H.
     LDA #$0F
     STA NMI_LATCH_FLAG ; Set latch.
 LATCH_FLAG_RTN: ; 1E:02B3, 0x03C2B3
@@ -663,9 +663,9 @@ SWITCH_NONZERO: ; 1E:02B6, 0x03C2B6
     PLA ; Pull A.
     TAX ; To X.
     PLA ; Pull A.
-    CMP IRQ_SCRIPT_B,X ; If _ arr
+    CMP IRQ_SCRIPT_PTRS[6],X ; If _ arr
     BCC VAL_LT_ARR ; << goto.
-    STA IRQ_SCRIPT_B,X ; >=, store.
+    STA IRQ_SCRIPT_PTRS[6],X ; >=, store.
 VAL_LT_ARR: ; 1E:02E9, 0x03C2E9
     LDA ENGINE_SCRIPT_SWITCH_VAL? ; Load.
     CMP #$00 ; If _ #$00
@@ -678,9 +678,9 @@ VAL_NONZERO: ; 1E:02F0, 0x03C2F0
     PLA ; Pull A.
     TAX ; To index.
     PLA ; Pull A.
-    CMP IRQ_SCRIPT_B,X ; If _ arr
+    CMP IRQ_SCRIPT_PTRS[6],X ; If _ arr
     BCC VAL_LT ; <, goto.
-    STA IRQ_SCRIPT_B,X ; >=, store.
+    STA IRQ_SCRIPT_PTRS[6],X ; >=, store.
 VAL_LT: ; 1E:0303, 0x03C303
     JMP LATCH_FLAG_RTN ; Do ??
 SCRIPT_UPDATES_AND_MORE_UNK: ; 1E:0306, 0x03C306
@@ -690,7 +690,7 @@ SCRIPT_UPDATES_AND_MORE_UNK: ; 1E:0306, 0x03C306
     STA NMI_PPU_CMD_PACKETS_BUF[64],X ; Clear for EOF.
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     LDA #$19
     LDX #$1D
     LDY #$A3
@@ -874,9 +874,9 @@ LIB_OBJECTS_AND_SETTLE_AND_FLAGS_UNK: ; 1E:03F4, 0x03C3F4
     JSR ENGINE_SETTLE_UPDATES_TODO ; Settle.
     JSR ENGINE_0x300_OBJECTS_UNK? ; Do ??
     LDA #$01
-    STA NMI_FLAG_E5_TODO ; Set ??
+    STA NMI_FLAG_B ; Set ??
     LDA #$00
-    STA R_**:$07F7 ; Clear ??
+    STA SOUND_SAMPLE_FLAG_DONT_RESET_LEVEL ; Clear ??
     PLP ; Pull status.
     RTS ; Leave.
 TODO_ROUTINE_NO_MASK_ENTRY: ; 1E:0406, 0x03C406
@@ -1275,7 +1275,7 @@ ENGINE_A_TO_UPDATE_PACKET: ; 1E:068B, 0x03C68B
     STA NMI_PPU_CMD_PACKETS_BUF+5 ; End of file.
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     RTS ; Leave.
 ENGINE_PACKET_FINALIZATION_HELPER: ; 1E:06B6, 0x03C6B6
     LDA R_**:$0070 ; Load ??
@@ -1314,7 +1314,7 @@ ALT_ENTRY: ; 1E:06E8, 0x03C6E8
     STA NMI_PPU_CMD_PACKETS_BUF[64],Y ; EOF the packet.
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag ??
+    STA NMI_FLAG_B ; Set flag ??
 ADDS_IDFK: ; 1E:06F9, 0x03C6F9
     JSR ENGINE_UNK_CARRY_ADDS_??? ; Add because ??
     LDA ENGINE_SCRIPT_SWITCH_VAL? ; Load.
@@ -1385,7 +1385,7 @@ PACKET_END: ; 1E:077B, 0x03C77B
     STA NMI_PPU_CMD_PACKETS_BUF+5
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set ??
+    STA NMI_FLAG_B ; Set ??
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
     BIT SCRIPT_UNK_TESTED[6] ; Test.
     BVC BIT_0x40_CLEAR ; 0x40 set.
@@ -1467,7 +1467,7 @@ L_1E:07FD: ; 1E:07FD, 0x03C7FD
     SBC #$29
     TAX
     LDA #$80
-    STA NMI_FLAG_E5_TODO
+    STA NMI_FLAG_B
     CPX #$5C
     BCS L_1E:07D4
     RTS
@@ -1946,7 +1946,7 @@ SETTLE_PORTION: ; 1E:0AE1, 0x03CAE1
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index to trigger.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     LDA #$10
     STA FPTR_PACKET_CREATION[2] ; Set fptr 0x0110 for data read in.
     LDA #$01
@@ -2065,7 +2065,7 @@ STATES_COMBINED_ANY_SET_HANDLER: ; 1E:0BEB, 0x03CBEB
     CMP #$A2 ; If _ #$A2
     BEQ MAIN_ALT_CHECKS_END_OF_GAME ; ==, goto.
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
-    LDA VAL_CMP_UNK ; Load ??
+    LDA SOUND_VAL_CMP_UNK ; Load ??
     PHA ; Save it.
     JSR LIB_BATTLE_ENDED? ; Do ??
     PLA ; Pull A.
@@ -2095,14 +2095,14 @@ BUTTONS_UPDATE_AND_MORE_OH_MY: ; 1E:0C2B, 0x03CC2B
     CMP #$07 ; If _ #$07, ??
     BCS ACTION_RESULT_GTE_0x7 ; >=, goto.
     LDA #$10
-    STA NMI_FLAG_E5_TODO ; Set flag ??
+    STA NMI_FLAG_B ; Set flag ??
     JSR SCRIPT_PTR_MOD_AND_??_THEN_CHAIN_?? ; Do ??
     JSR UNK_GFX_AND_?? ; Do ??
 WAIT_E5_FLAG: ; 1E:0C3B, 0x03CC3B
-    LDA NMI_FLAG_E5_TODO
+    LDA NMI_FLAG_B
     BNE WAIT_E5_FLAG ; != 0, loop on.
 LOOP_GTE_0x9: ; 1E:0C3F, 0x03CC3F
-    LDA NMI_FLAG_E0_TODO ; Load.
+    LDA NMI_FLAG_A_OVERRIDE? ; Load.
     CMP #$09 ; If _ #$09
     BCS LOOP_GTE_0x9 ; >=, goto.
     SEC ; Prep carry 1.
@@ -2114,7 +2114,7 @@ LOOP_GTE_0x9: ; 1E:0C3F, 0x03CC3F
     STA NMI_PPU_CMD_PACKETS_BUF[64],X ; EOF.
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     BNE ALT_RTN ; Always taken.
 ACTION_RESULT_GTE_0x7: ; 1E:0C5D, 0x03CC5D
     JSR SCRIPT_PTR_MOD_AND_??_THEN_CHAIN_?? ; Do ??
@@ -2124,12 +2124,12 @@ ACTION_RESULT_GTE_0x7: ; 1E:0C5D, 0x03CC5D
     STA NMI_PPU_CMD_PACKETS_BUF[64],X ; EOF.
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$10
-    STA NMI_FLAG_E5_TODO ; Set flag ??
+    STA NMI_FLAG_B ; Set flag ??
     LDA ACTION_BUTTONS_RESULT ; Load.
     CMP #$0F ; If _ #$0F
     BCS ALT_RTN ; >=, goto.
 VAL_NONZERO: ; 1E:0C77, 0x03CC77
-    LDA NMI_FLAG_E5_TODO ; Load.
+    LDA NMI_FLAG_B ; Load.
     BNE VAL_NONZERO ; != 0, wait.
     SEC ; Seed lock.
     ROR NMI_FLAG_OBJECT_PROCESSING? ; Set lock bit.
@@ -2144,7 +2144,7 @@ ALT_RTN: ; 1E:0C83, 0x03CC83
     STA NMI_PPU_CMD_PACKETS_BUF[64],X ; EOF.
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
 SHIFT_CC: ; 1E:0C96, 0x03CC96
     BIT SCRIPT_UNK_DATA_SELECT_?? ; Test ??
     BMI RTS ; If negative, leave.
@@ -2188,7 +2188,7 @@ L_1E:0CC6: ; 1E:0CC6, 0x03CCC6
     STA ENGINE_PPU_MASK_COPY
     JSR WAIT_ANY_BUTTONS_PRESSED_RET_PRESSED
     JMP L_1E:0D79
-    LDA VAL_CMP_UNK
+    LDA SOUND_VAL_CMP_UNK
     PHA
     LDA #$FF
     STA R_**:$000F
@@ -2344,7 +2344,7 @@ DATA_TABLE_UNK: ; 1E:0DB7, 0x03CDB7
     .db 0F
 ENGINE_COMPARES/MISMATCH_RTN_UNK: ; 1E:0DE4, 0x03CDE4
     PHA ; Save passed.
-    LDA VAL_CMP_UNK ; Load.
+    LDA SOUND_VAL_CMP_UNK ; Load.
     TAX ; To index.
     PLA ; Pull passed.
     JSR STORE_IF_MISMATCH_OTHERWISE_WAIT_MENU_DEPTH? ; Do ??
@@ -2353,7 +2353,7 @@ ENGINE_COMPARES/MISMATCH_RTN_UNK: ; 1E:0DE4, 0x03CDE4
 VAL_NONZERO: ; 1E:0DF1, 0x03CDF1
     BIT CONTROL_ACCUMULATED?[2] ; Test buttons.
     BVS BUTTON_B_PRESSED ; If set, goto.
-    LDA VAL_CMP_UNK ; LOad.
+    LDA SOUND_VAL_CMP_UNK ; LOad.
     BNE VAL_NONZERO ; If nonzero, loop wait.
 BUTTON_B_PRESSED: ; 1E:0DFA, 0x03CDFA
     LDA #$00
@@ -2385,7 +2385,7 @@ LOOP_0x800: ; 1E:0E30, 0x03CE30
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set ??
+    STA NMI_FLAG_B ; Set ??
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
     JSR ENGINE_WRAM_STATE_WRITEABLE ; Enable WRAM with writing.
     LDY #$00 ; Index.
@@ -2464,7 +2464,7 @@ ENGINE_LARGE_UNIQUE_PPU_PACKET_HELPER: ; 1E:0EB2, 0x03CEB2
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_INDEX ; Clear index.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     RTS ; Leave.
 ENGINE_HELPER_R7_0x13: ; 1E:0ED3, 0x03CED3
     LDA #$13
@@ -2642,7 +2642,7 @@ VABIT_SET: ; 1E:0FFB, 0x03CFFB
     STA NMI_PPU_CMD_PACKETS_BUF[64],X ; End of packet.
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     DEC R_**:$009B ; --
     BEQ TIMER_EQ_0x00 ; == 0, goto.
     LDA R_**:$009B ; Load left.
@@ -2668,7 +2668,7 @@ TIMER_EQ_0x00: ; 1E:102E, 0x03D02E
     STA NMI_PPU_CMD_PACKETS_BUF+1 ; EOF.
     STA NMI_PPU_CMD_PACKETS_INDEX ; Index reset.
     LDA #$80
-    STA NMI_FLAG_E5_TODO ; Set flag.
+    STA NMI_FLAG_B ; Set flag.
     LDA #$88
     STA SCRIPT_UNK_DATA_SELECT_?? ; Set ??
     LDA #$00
@@ -2968,7 +2968,7 @@ LOWER_NONZERO: ; 1E:1218, 0x03D218
 EXIT_RTS: ; 1E:121B, 0x03D21B
     RTS ; Leave.
 WAIT_UPDATE: ; 1E:121C, 0x03D21C
-    LDA NMI_FLAG_E5_TODO ; Wait on.
+    LDA NMI_FLAG_B ; Wait on.
     BNE WAIT_UPDATE ; != 0, loop.
     LDA SCRIPT_UNK_DATA_SELECT_?? ; Load ??
     BMI VAL_NEGATIVE ; Val negative, goto.
@@ -2983,7 +2983,7 @@ VAL_NEGATIVE: ; 1E:122F, 0x03D22F
     LDX #$00 ; Seed ??
     RTS ; Leave.
 FLAG_HOLD_WAIT_AND_UPDATES_UNK: ; 1E:1232, 0x03D232
-    LDA NMI_FLAG_E5_TODO
+    LDA NMI_FLAG_B
     BNE FLAG_HOLD_WAIT_AND_UPDATES_UNK ; != 0, goto.
     LDA SCRIPT_UNK_DATA_SELECT_?? ; Load ??
     BMI VAL_NEGATIVE ; != 0, goto.
@@ -4185,7 +4185,7 @@ L_1E:1A3C: ; 1E:1A3C, 0x03DA3C
     CPX #$04
     BCC L_1E:1A1E
     LDA #$01
-    STA NMI_FLAG_E5_TODO
+    STA NMI_FLAG_B
     JMP ENGINE_SETTLE_ALL_UPDATES?
 LIB_UNK: ; 1E:1A48, 0x03DA48
     LDA SLOT/DATA_OFFSET_USE? ; Move ??. If 0x00, loops forever to crash game.
@@ -4617,7 +4617,7 @@ DONE_FORWARD: ; 1E:1D2B, 0x03DD2B
     BNE EXIT_NO_WRITES ; != 0, goto.
     LDA SCRIPT_PAIR_PTR_B?[2] ; Load ??
     AND #$C0 ; Keep upper.
-    ORA VAL_CMP_UNK ; Set ??
+    ORA SOUND_VAL_CMP_UNK ; Set ??
     LDX SCRIPT_PAIR_PTR_B?+1 ; X from.
     STA CURRENT_SAVE_MANIPULATION_PAGE+4 ; Store ??
     STX CURRENT_SAVE_MANIPULATION_PAGE+5

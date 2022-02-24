@@ -193,8 +193,8 @@ MAIN_RTN_MENU?_UNK: ; 13:0123, 0x026123
     LDA #$80 ; Val for setting, too. Nice trick.
     BIT **:$00D4 ; Test ??
     BNE RTS ; Was set, leave.
-    LDX R_**:$00D2 ; Load ??
-    LDY R_**:$00D1
+    LDX INP_COUNT_UNK_C ; Load ??
+    LDY INP_COUNT_UNK_B
     CPX #$06 ; If _ #$06
     BCC RTS ; <, goto.
     CPY #$90 ; If _ #$90
@@ -1140,7 +1140,7 @@ BUTTON_B_NOT_PRESSED: ; 13:0899, 0x026899
     LDX #$04 ; GFX.
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A
     LDA #$00
-    STA R_**:$07F7 ; Clear ??
+    STA SOUND_SAMPLE_FLAG_DONT_RESET_LEVEL ; Clear ??
     JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_RAM ; Settle clean.
     JMP ENGINE_SETTLE_UPDATES_TODO ; Do.
 HELPER_SPRITE_0_ATTR: ; 13:08D4, 0x0268D4
@@ -4247,7 +4247,7 @@ PTR_SUB_0x18: ; 13:1DAE, 0x027DAE
     CPX #$28 ; If _ #$28
     BCC INDEX_LT_0x28 ; <, goto.
     LDA #$08
-    STA NMI_FLAG_E5_TODO ; Set flag ??
+    STA NMI_FLAG_B ; Set flag ??
     PLA ; Pull A.
     TAY ; To Y.
     DEY ; --
