@@ -104,14 +104,12 @@ GAME_SLOT_CURRENT?:                           .rs 1 ; 0x0036
 SLOT/DATA_OFFSET_USE?:                        .rs 1 ; 0x0037
 R6_BANKED_ADDR_MOVED:                         .rs 2 ; 0x0038 to 0x0039
 STREAM_WRITE_ARR_UNK:                         .rs 4 ; 0x003A to 0x003D
-R_**:$003E:                                   .rs 1 ; 0x003E
-R_**:$003F:                                   .rs 1 ; 0x003F
-FPTR_SPRITES?:                                .rs 2 ; 0x0040 to 0x0041
-R_**:$0042:                                   .rs 1 ; 0x0042
-R_**:$0043:                                   .rs 1 ; 0x0043
+ROUTINE_SWITCH_UNK:                           .rs 1 ; 0x003E
+OBJ_PROCESS_COUNT_LEFT?:                      .rs 1 ; 0x003F
+GFX_BANKS:                                    .rs 4 ; 0x0040 to 0x0043
 R_**:$0044:                                   .rs 1 ; 0x0044
-R_**:$0045:                                   .rs 1 ; 0x0045
-R_**:$0046:                                   .rs 1 ; 0x0046
+ENGINE_FLAG_LATCHY_GFX_FLAGS:                 .rs 1 ; 0x0045
+LATCH_VAL_ADDL?:                              .rs 1 ; 0x0046
 STREAM_REPLACE_COUNT?:                        .rs 1 ; 0x0047
 FLAG_UNK_48:                                  .rs 1 ; 0x0048
 R_**:$0049:                                   .rs 1 ; 0x0049
@@ -143,7 +141,7 @@ FPTR_5C_UNK:                                  .rs 2 ; 0x005C to 0x005D
 MISC_USE_A:                                   .rs 1 ; 0x0060
 MISC_USE_B:                                   .rs 1 ; 0x0061
 MISC_USE_C:                                   .rs 1 ; 0x0062
-ENGINE_TO_DECIMAL_INDEX_POSITION:             .rs 1 ; 0x0063
+MISC_USE_D/DECIMAL_POS?:                      .rs 1 ; 0x0063
 SAVE_GAME_MOD_PAGE_PTR:                       .rs 2 ; 0x0064 to 0x0065
 ALT_STUFF_INDEX?:                             .rs 1 ; 0x0066
 ALT_COUNT_UNK:                                .rs 1 ; 0x0067
@@ -198,7 +196,7 @@ STREAM_UNK_DEEP_A:                            .rs 2 ; 0x00A2 to 0x00A3
 STREAM_DEEP_B:                                .rs 1 ; 0x00A4
 R_**:$00A5:                                   .rs 1 ; 0x00A5
 STREAM_DEEP_C:                                .rs 1 ; 0x00A6
-R_**:$00A7:                                   .rs 1 ; 0x00A7
+STREAM_DEEP_D?:                               .rs 1 ; 0x00A7
 SCRIPT_COUNT_UNK:                             .rs 1 ; 0x00A8
 R_**:$00A9:                                   .rs 1 ; 0x00A9
 SCRIPT_LOADED_SHIFTED_UNK:                    .rs 1 ; 0x00AA
@@ -224,17 +222,16 @@ SOUND_BE_WRITE_INDEXER_UNK:                   .rs 1 ; 0x00BE
 SND_UNK_BF:                                   .rs 1 ; 0x00BF
 CTRL_BIT_0x0:                                 .rs 1 ; 0x00C0
 CTRL_BIT_0x1:                                 .rs 1 ; 0x00C1
-R_**:$00C2:                                   .rs 1 ; 0x00C2
+OBJ_INDEX_TEMP?:                              .rs 1 ; 0x00C2
 UPDATE_PACKET_COUNT/GROUPS:                   .rs 1 ; 0x00C3
-R_**:$00C4:                                   .rs 1 ; 0x00C4
-R_**:$00C5:                                   .rs 1 ; 0x00C5
+OBJ_FPTR_TODO:                                .rs 2 ; 0x00C4 to 0x00C5
 R_**:$00C6:                                   .rs 1 ; 0x00C6
 R_**:$00C7:                                   .rs 1 ; 0x00C7
 R_**:$00C8:                                   .rs 1 ; 0x00C8
 R_**:$00C9:                                   .rs 1 ; 0x00C9
 R_**:$00CA:                                   .rs 1 ; 0x00CA
 R_**:$00CB:                                   .rs 1 ; 0x00CB
-R_**:$00CC:                                   .rs 1 ; 0x00CC
+CC_INDEX_UNK:                                 .rs 1 ; 0x00CC
 R_**:$00CD:                                   .rs 1 ; 0x00CD
 R_**:$00CE:                                   .rs 1 ; 0x00CE
 R_**:$00CF:                                   .rs 1 ; 0x00CF
@@ -254,7 +251,7 @@ CTRL_BUTTONS_PREVIOUS:                        .rs 2 ; 0x00DE to 0x00DF
 NMI_FLAG_A_OVERRIDE?:                         .rs 1 ; 0x00E0
 BMI_FLAG_SET_DIFF_MODDED_UNK:                 .rs 1 ; 0x00E1
 NMI_FLAG_OBJECT_PROCESSING?:                  .rs 1 ; 0x00E2
-R_**:$00E3:                                   .rs 1 ; 0x00E3
+E3_TARGET_UNK:                                .rs 1 ; 0x00E3
 SPRITE_INDEX_SWAP:                            .rs 1 ; 0x00E4
 NMI_FLAG_B:                                   .rs 1 ; 0x00E5
 NMI_PPU_CMD_PACKETS_INDEX:                    .rs 1 ; 0x00E6
@@ -287,14 +284,14 @@ NMI_PPU_READ_BUF_UNK:                         .rs 64 ; 0x0110 to 0x014F
 
           .rsset 0x0200
 SPRITE_PAGE:                                  .rs 256 ; 0x0200 to 0x02FF
-R_**:$0300:                                   .rs 1 ; 0x0300
+OBJ_STATUS?:                                  .rs 1 ; 0x0300
 R_**:$0301:                                   .rs 1 ; 0x0301
 R_**:$0302:                                   .rs 1 ; 0x0302
 R_**:$0303:                                   .rs 1 ; 0x0303
 R_**:$0304:                                   .rs 1 ; 0x0304
 R_**:$0305:                                   .rs 1 ; 0x0305
-R_**:$0306:                                   .rs 1 ; 0x0306
-R_**:$0307:                                   .rs 1 ; 0x0307
+OBJ_UNK_A:                                    .rs 1 ; 0x0306
+OBJ_UNK_A_PAIR:                               .rs 1 ; 0x0307
 
 
           .rsset 0x03E0
@@ -303,19 +300,11 @@ SPRITE_SLOT_Y_OFF_SCREEN_UNK:                 .rs 1 ; 0x03E1
 
 
           .rsset 0x0400
-NMI_PPU_CMD_PACKETS_BUF:                      .rs 64 ; 0x0400 to 0x043F
-
-
-          .rsset 0x0444
-R_**:$0444:                                   .rs 1 ; 0x0444
+NMI_PPU_CMD_PACKETS_BUF:                      .rs 69 ; 0x0400 to 0x0444
 
 
           .rsset 0x045B
 R_**:$045B:                                   .rs 1 ; 0x045B
-
-
-          .rsset 0x04A2
-R_**:$04A2:                                   .rs 1 ; 0x04A2
 
 
           .rsset 0x0500
@@ -487,7 +476,7 @@ R_**:$6702:                                   .rs 1
 R_**:$6704:                                   .rs 1
 R_**:$6705:                                   .rs 1
 R_**:$6706:                                   .rs 1
-R_**:$6707:                                   .rs 1
+COUNT_LOOPS?_UNK:                             .rs 1
 
 
           .rsset 0x670A

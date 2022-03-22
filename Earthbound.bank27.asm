@@ -204,7 +204,7 @@
     JMP $81DC
     CMP #$06
     BNE 1B:01D4
-    LDA R_**:$6707
+    LDA COUNT_LOOPS?_UNK
     CMP #$01
     BEQ 1B:01D3
     LDA #$07

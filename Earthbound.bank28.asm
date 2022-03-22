@@ -1495,7 +1495,7 @@ VAL_GTE_0x19: ; 1C:092B, 0x03892B
 VAL_LT_0x19: ; 1C:0936, 0x038936
     CMP #$06 ; If _ #$06
     BNE STORE_PATH ; !=, goto.
-    LDA R_**:$6707 ; Load ??
+    LDA COUNT_LOOPS?_UNK ; Load ??
     CMP #$01 ; If _ #$01
     BEQ Y_TO_A_PATH ; ==, goto.
     LDA #$07 ; Seed ??
