@@ -111,7 +111,7 @@ R_**:$0044:                                   .rs 1 ; 0x0044
 ENGINE_FLAG_LATCHY_GFX_FLAGS:                 .rs 1 ; 0x0045
 LATCH_VAL_ADDL?:                              .rs 1 ; 0x0046
 STREAM_REPLACE_COUNT?:                        .rs 1 ; 0x0047
-FLAG_UNK_48:                                  .rs 1 ; 0x0048
+SOUND_MAIN_SONG_ID:                           .rs 1 ; 0x0048
 R_**:$0049:                                   .rs 1 ; 0x0049
 R_**:$004A:                                   .rs 1 ; 0x004A
 R_**:$004B:                                   .rs 1 ; 0x004B
@@ -181,7 +181,7 @@ R_**:$0094:                                   .rs 1 ; 0x0094
 
 
           .rsset 0x0096
-B800_PTR_L_ADD_UNK:                           .rs 1 ; 0x0096
+B800_PTR_ADDL:                                .rs 1 ; 0x0096
 SCRIPT_INVERT_UNK:                            .rs 1 ; 0x0097
 R_**:$0098:                                   .rs 1 ; 0x0098
 R_**:$0099:                                   .rs 1 ; 0x0099
@@ -200,8 +200,9 @@ STREAM_DEEP_D?:                               .rs 1 ; 0x00A7
 SCRIPT_COUNT_UNK:                             .rs 1 ; 0x00A8
 R_**:$00A9:                                   .rs 1 ; 0x00A9
 SCRIPT_LOADED_SHIFTED_UNK:                    .rs 1 ; 0x00AA
-R_**:$00AB:                                   .rs 1 ; 0x00AB
-SCRIPT_LOADED_SHIFTED_|VAL:                   .rs 2 ; 0x00AC to 0x00AD
+SCRIPT_USE_UNK_A:                             .rs 1 ; 0x00AB
+SCRIPT_USE_UNK_B:                             .rs 1 ; 0x00AC
+SCRIPT_USE_UNK_C:                             .rs 1 ; 0x00AD
 R_**:$00AE:                                   .rs 1 ; 0x00AE
 R_**:$00AF:                                   .rs 1 ; 0x00AF
 SOUND_PTR_REGISTER/DATA:                      .rs 2 ; 0x00B0 to 0x00B1
@@ -284,14 +285,13 @@ NMI_PPU_READ_BUF_UNK:                         .rs 64 ; 0x0110 to 0x014F
 
           .rsset 0x0200
 SPRITE_PAGE:                                  .rs 256 ; 0x0200 to 0x02FF
-OBJ_STATUS?:                                  .rs 1 ; 0x0300
-R_**:$0301:                                   .rs 1 ; 0x0301
-R_**:$0302:                                   .rs 1 ; 0x0302
-R_**:$0303:                                   .rs 1 ; 0x0303
-R_**:$0304:                                   .rs 1 ; 0x0304
-R_**:$0305:                                   .rs 1 ; 0x0305
-OBJ_UNK_A:                                    .rs 1 ; 0x0306
-OBJ_UNK_A_PAIR:                               .rs 1 ; 0x0307
+OBJ?_BYTE_0x0_STATUS?:                        .rs 1 ; 0x0300
+OBJ?_BYTE_0x1_UNK:                            .rs 1 ; 0x0301
+OBJ?_BYTE_0x2_UNK:                            .rs 1 ; 0x0302
+OBJ?_BYTE_0x3_UNK:                            .rs 1 ; 0x0303
+OBJ?_BYTE_0x4_UNK:                            .rs 1 ; 0x0304
+OBJ?_BYTE_0x5_BYTE:                           .rs 1 ; 0x0305
+OBJ?_PTR?:                                    .rs 2 ; 0x0306 to 0x0307
 
 
           .rsset 0x03E0
@@ -463,7 +463,7 @@ WRAM/RAM_ARR_UNK_WRAM:                        .rs 4
 
 
           .rsset 0x6600
-R_**:$6600:                                   .rs 1
+WRAM_PAGE_LARGE_UNK:                          .rs 384
 
 
           .rsset 0x6700

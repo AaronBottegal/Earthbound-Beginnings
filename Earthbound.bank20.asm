@@ -5267,7 +5267,7 @@ GAME_SELECT_MENUS: ; 14:150E, 0x02950E
     LDA #$FF ; Tile to use.
     JMP ENGINE_POS_TO_UPDATE_UNK ; Goto, abuse RTS.
 ROUTINE_CHECK_MANY_COMBINED_UNK: ; 14:1516, 0x029516
-    LDA FLAG_UNK_48 ; Load ??
+    LDA SOUND_MAIN_SONG_ID ; Load ??
     ORA FIRST_LAUNCHER_HOLD_FLAG? ; Combine many.
     ORA MAIN_FLAG_UNK
     ORA SCRIPT_FLAG_0x22
@@ -5276,7 +5276,7 @@ ROUTINE_CHECK_MANY_COMBINED_UNK: ; 14:1516, 0x029516
     BNE RTS ; Nonzero, leave.
     BIT SCRIPT_UNK_DATA_SELECT_??
     BMI RTS ; Negative, leave.
-    JSR 14:15D3 ; Do ?? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    JSR CHECKER_CAN_MOD_ALL_COLORS_AND_IDFK ; Do.
     LDX SCRIPT_R6_ROUTINE_SELECT ; Index from.
     LDA ROM_DATA_UNK,X ; Load ??
 ATTEMPT_EXIT: ; 14:1530, 0x029530
@@ -5284,7 +5284,7 @@ ATTEMPT_EXIT: ; 14:1530, 0x029530
     STA CLEAR_AFTER_HELL_ALOT_LOL ; Clear.
 EXIT_CLEAR_UNK: ; 14:1534, 0x029534
     LDA #$00 ; Clear.
-    STA FLAG_UNK_48 ; Clear ??
+    STA SOUND_MAIN_SONG_ID ; Clear ??
 RTS: ; 14:1538, 0x029538
     RTS ; Leave.
 VAL_NONZERO: ; 14:1539, 0x029539
@@ -5332,7 +5332,7 @@ LOOP_ADDS: ; 14:1573, 0x029573
     TAY ; To Y.
     LDA [ARR_BITS_TO_UNK[8]],Y ; Load from stream.
     BEQ LOOP_ADDS ; ==, goto.
-    STA FLAG_UNK_48 ; Store nonzero.
+    STA SOUND_MAIN_SONG_ID ; Store nonzero.
     LDA #$19 ; Bank.
     LDX #$A6
     LDY #$A4 ; Addr. Routine 19:0605
@@ -5412,58 +5412,64 @@ ROM_DATA_UNK: ; 14:1593, 0x029593
     .db 00
     .db DC
     .db 00
-    LDX #$00
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+8,X
-    BEQ 14:162A
-    JSR CREATE_PTR_UNK
-    LDY #$01
-    LDA [MISC_USE_A],Y
-    LSR A
-    BCC 14:15E8
-    LDA #$07
-    BNE 14:15ED
-    LSR A
-    BCC 14:162A
-    LDA #$07
-    STA SAVE_GAME_MOD_PAGE_PTR[2]
-    CLC
-    TXA
-    ADC R_**:$00D5
-    AND SAVE_GAME_MOD_PAGE_PTR[2]
-    BNE 14:162A
-    JSR ENGINE_WRAM_STATE_WRITEABLE
-    SEC
-    LDY #$14
-    LDA [MISC_USE_A],Y
-    SBC #$01
-    STA SAVE_GAME_MOD_PAGE_PTR[2]
-    INY
-    LDA [MISC_USE_A],Y
-    SBC #$00
-    STA SAVE_GAME_MOD_PAGE_PTR+1
-    BCC 14:161B
-    LDA SAVE_GAME_MOD_PAGE_PTR[2]
-    ORA SAVE_GAME_MOD_PAGE_PTR+1
-    BEQ 14:161B
-    LDA SAVE_GAME_MOD_PAGE_PTR+1
-    STA [MISC_USE_A],Y
-    DEY
-    LDA SAVE_GAME_MOD_PAGE_PTR[2]
-    STA [MISC_USE_A],Y
-    JSR ENGINE_WRAM_STATE_WRITE_DISABLED
-    TXA
-    PHA
-    LDA #$16
-    JSR ENGINE_ALL_COLOR_TO_A
-    JSR ENGINE_PALETTE_UPLOAD_WITH_PACKET_HELPER
-    PLA
+CHECKER_CAN_MOD_ALL_COLORS_AND_IDFK: ; 14:15D3, 0x0295D3
+    LDX #$00 ; Index ??
+CHECK_INDEX: ; 14:15D5, 0x0295D5
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+8,X ; Load ??
+    BEQ NEXT_INDEX ; == 0, goto.
+    JSR CREATE_PTR_IN_MISC_USE_UNK ; Create ptr.
+    LDY #$01 ; Stream index.
+    LDA [MISC_USE_A],Y ; Load from stream.
+    LSR A ; >> 1, /2.
+    BCC PORTION_CLEAR ; Clear, goto.
+    LDA #$07 ; Seed ??
+    BNE VAL_SEEDED ; Always taken.
+PORTION_CLEAR: ; 14:15E8, 0x0295E8
+    LSR A ; >> 1, /2.
+    BCC NEXT_INDEX ; Clear, goto.
+    LDA #$07 ; Seed value too.
+VAL_SEEDED: ; 14:15ED, 0x0295ED
+    STA SAVE_GAME_MOD_PAGE_PTR[2] ; Store to. ??
+    CLC ; Prep add.
+    TXA ; Index to AA.
+    ADC R_**:$00D5 ; Add with.
+    AND SAVE_GAME_MOD_PAGE_PTR[2] ; Keep bits.
+    BNE NEXT_INDEX ; Any set, goto.
+    JSR ENGINE_WRAM_STATE_WRITEABLE ; Writeable WRAM.
+    SEC ; Prep sub.
+    LDY #$14 ; Seed index.
+    LDA [MISC_USE_A],Y ; Load index.
+    SBC #$01 ; -= 0x1
+    STA SAVE_GAME_MOD_PAGE_PTR[2] ; Store to.
+    INY ; Stream++
+    LDA [MISC_USE_A],Y ; Load from stream.
+    SBC #$00 ; Carry sub.
+    STA SAVE_GAME_MOD_PAGE_PTR+1 ; Store to.
+    BCC SUB_NO_UNDERFLOW ; No underflow, goto.
+    LDA SAVE_GAME_MOD_PAGE_PTR[2] ; Load val.
+    ORA SAVE_GAME_MOD_PAGE_PTR+1 ; Combined with pair.
+    BEQ SUB_NO_UNDERFLOW ; == 0, goto.
+    LDA SAVE_GAME_MOD_PAGE_PTR+1 ; Load value.
+    STA [MISC_USE_A],Y ; Store to stream.
+    DEY ; Stream--
+    LDA SAVE_GAME_MOD_PAGE_PTR[2] ; Load from.
+    STA [MISC_USE_A],Y ; Store to stream, pair lower.
+SUB_NO_UNDERFLOW: ; 14:161B, 0x02961B
+    JSR ENGINE_WRAM_STATE_WRITE_DISABLED ; Back to disabled.
+    TXA ; Index to A.
+    PHA ; Save it.
+    LDA #$16 ; Seed reddish.
+    JSR ENGINE_ALL_COLOR_TO_A ; All to color.
+    JSR ENGINE_PALETTE_UPLOAD_WITH_PACKET_HELPER ; Upload.
+    PLA ; Restore index.
     TAX
-    INX
-    CPX #$04
-    BCC 14:15D5
-    RTS
+NEXT_INDEX: ; 14:162A, 0x02962A
+    INX ; Index++
+    CPX #$04 ; If _ #$04
+    BCC CHECK_INDEX ; <, goto.
+    RTS ; Leave.
 SCREEN_TRANSITIONER: ; 14:1630, 0x029630
-    LDA FLAG_UNK_48 ; Load.
+    LDA SOUND_MAIN_SONG_ID ; Load.
     CMP #$A2 ; If _ #$A2
     BEQ RTS ; ==, goto, leave.
     LDA #$30
@@ -5711,7 +5717,7 @@ SCRIPTY_TODO: ; 14:1779, 0x029779
     LDX #$99
     JSR SUB_UNK_FILE_??
     LDA #$FF ; Depth?
-    JSR STORE_IF_MISMATCH_OTHERWISE_SOUND? ; Do.
+    JSR SOUND_ASSIGN_NEW_MAIN_SONG ; Do.
     LDX #$B4
     JSR ENGINE_DELAY_X_FRAMES ; Delay.
     LDA #$0F
@@ -5727,7 +5733,7 @@ GAME_ENDING_SEQUENCE: ; 14:17A3, 0x0297A3
     LDX #$99 ; Fptr, 14:19D5.
     JSR SUB_UNK_FILE_?? ; Do ??
     LDA #$FF ; Set.
-    JSR STORE_IF_MISMATCH_OTHERWISE_SOUND? ; Set.
+    JSR SOUND_ASSIGN_NEW_MAIN_SONG ; Set.
     LDA #$E0
     LDX #$99 ; Fptr 14:19E0.
     JSR SUB_UNK_FILE_?? ; Do ??
@@ -5918,7 +5924,7 @@ SUB_UNK_FILE_??: ; 14:17D6, 0x0297D6
 SUB_TODO: ; 14:1920, 0x029920
     STA ARR_BITS_TO_UNK+2 ; Set ??
     LDA #$0B ; Val todo.
-    JSR STORE_IF_MISMATCH_OTHERWISE_SOUND?
+    JSR SOUND_ASSIGN_NEW_MAIN_SONG
     JSR SCROLLY_HELPER?
     JSR ENGINE_HELPER_SETTLE_CLEAR_LATCH_SET_SCROLL_TODO_MORE
     JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_RAM

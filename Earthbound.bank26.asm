@@ -21,7 +21,7 @@
     STX ENGINE_SCROLL_X ; Set scroll.
     STY ENGINE_SCROLL_Y
     LDA #$FF
-    JSR STORE_IF_MISMATCH_OTHERWISE_SOUND? ; Set ??
+    JSR SOUND_ASSIGN_NEW_MAIN_SONG ; Set ??
     LDA #$1B
     STA ENGINE_SOUND_ENGINE_BANK_VAL? ; Set ??
     JSR ENGINE_NMI_0x01_SET/WAIT ; Wait.
@@ -235,25 +235,25 @@ MEMCPY_POSITIVE: ; 1A:0159, 0x034159
     TAX
     LDA [GFX_BANKS[4]],Y
     AND #$80
-    STA R_**:$0301,X
+    STA OBJ?_BYTE_0x1_UNK,X
     INY
     LDA [GFX_BANKS[4]],Y
-    STA OBJ_STATUS?,X
+    STA OBJ?_BYTE_0x0_STATUS?,X
     INY
     LDA [GFX_BANKS[4]],Y
-    STA R_**:$0302,X
+    STA OBJ?_BYTE_0x2_UNK,X
     INY
     LDA [GFX_BANKS[4]],Y
-    STA R_**:$0303,X
+    STA OBJ?_BYTE_0x3_UNK,X
     INY
     LDA [GFX_BANKS[4]],Y
-    STA OBJ_UNK_A,X
+    STA OBJ?_PTR?[2],X
     INY
     LDA [GFX_BANKS[4]],Y
-    STA OBJ_UNK_A_PAIR,X
+    STA OBJ?_PTR?+1,X
     LDA #$00
-    STA R_**:$0304,X
-    STA R_**:$0305,X
+    STA OBJ?_BYTE_0x4_UNK,X
+    STA OBJ?_BYTE_0x5_BYTE,X
     LDY #$07
     RTS
     JSR ENGINE_SETTLE_ALL_UPDATES?
@@ -266,23 +266,23 @@ MEMCPY_POSITIVE: ; 1A:0159, 0x034159
     CLC
     INY
     LDA [GFX_BANKS[4]],Y
-    ADC OBJ_UNK_A,X
-    STA OBJ_UNK_A,X
+    ADC OBJ?_PTR?[2],X
+    STA OBJ?_PTR?[2],X
     INY
     LDA [GFX_BANKS[4]],Y
-    ADC OBJ_UNK_A_PAIR,X
-    STA OBJ_UNK_A_PAIR,X
+    ADC OBJ?_PTR?+1,X
+    STA OBJ?_PTR?+1,X
     INY
     LDA [GFX_BANKS[4]],Y
-    STA R_**:$0304,X
+    STA OBJ?_BYTE_0x4_UNK,X
     INY
     LDA [GFX_BANKS[4]],Y
-    STA R_**:$0305,X
+    STA OBJ?_BYTE_0x5_BYTE,X
     LDY #$06
     RTS
     INY
     LDA [GFX_BANKS[4]],Y
-    JSR STORE_IF_MISMATCH_OTHERWISE_SOUND?
+    JSR SOUND_ASSIGN_NEW_MAIN_SONG
     INY
     RTS
     INY ; Stream++
@@ -313,7 +313,7 @@ STREAM_REPLACE: ; 1A:0206, 0x034206
     ASL A
     TAX ; To X index. Sprite slot.
     LDA #$00
-    STA OBJ_STATUS?,X ; Clear ??
+    STA OBJ?_BYTE_0x0_STATUS?,X ; Clear ??
     INY ; Stream++
     RTS ; Leave.
     INY ; Stream++

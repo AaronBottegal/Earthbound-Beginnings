@@ -21,7 +21,7 @@ WRITE_CLEAR: ; 1F:001B, 0x03E01B
     LDY #$08 ; Stream mod.
 VAL_LT_0xE: ; 1F:0024, 0x03E024
     LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
-    STA OBJ_STATUS?,X ; Store ??
+    STA OBJ?_BYTE_0x0_STATUS?,X ; Store ??
     INX ; Index++
     INY ; Stream++
     CPY #$0E ; If _ #$0E
@@ -33,12 +33,12 @@ VAL_LT_0xE: ; 1F:0024, 0x03E024
     LDA #$04 ; Seed ??
 SPRITE_NO_HFLIP: ; 1F:0039, 0x03E039
     ADC [ENGINE_FPTR_30[2]],Y ; Add with stream.
-    STA OBJ_STATUS?,X ; To ??
+    STA OBJ?_BYTE_0x0_STATUS?,X ; To ??
     INX ; Indexes++
     INY
     LDA #$00 ; Seed carry add.
     ADC [ENGINE_FPTR_30[2]],Y ; Add with carry.
-    STA OBJ_STATUS?,X ; To ??
+    STA OBJ?_BYTE_0x0_STATUS?,X ; To ??
     INX ; Index++
     BEQ EXIT_WRAM_WDISABLED ; == 0, goto.
     LDA SLOT/DATA_OFFSET_USE? ; Load ??
@@ -50,7 +50,7 @@ USE_CLEAR: ; 1F:004F, 0x03E04F
     BNE VAL_NONZERO_LOOP ; != 0, GOTO.
 X_NO_OVERFLOW: ; 1F:0056, 0x03E056
     LDA #$00
-    STA OBJ_STATUS?,X ; Clear ??
+    STA OBJ?_BYTE_0x0_STATUS?,X ; Clear ??
     CLC ; Prep add. X += 8
     TXA
     ADC #$08
@@ -61,16 +61,16 @@ EXIT_WRAM_WDISABLED: ; 1F:0062, 0x03E062
 OBJECTS_MOVE?: ; 1F:0065, 0x03E065
     LDX #$00 ; Reset index.
 LOOP_INDEXES: ; 1F:0067, 0x03E067
-    LDA OBJ_STATUS?,X ; Load ??
+    LDA OBJ?_BYTE_0x0_STATUS?,X ; Load ??
     AND #$40 ; Test ??
     BEQ TO_NEXT_SLOT ; == 0, goto.
     SEC ; Prep sub.
-    LDA OBJ_UNK_A,X ; Load data.
+    LDA OBJ?_PTR?[2],X ; Load data.
     SBC #$04 ; -= 0x4
-    STA OBJ_UNK_A,X ; Store back.
-    LDA OBJ_UNK_A_PAIR,X ; Carry sub.
+    STA OBJ?_PTR?[2],X ; Store back.
+    LDA OBJ?_PTR?+1,X ; Carry sub.
     SBC #$00
-    STA OBJ_UNK_A_PAIR,X
+    STA OBJ?_PTR?+1,X
 TO_NEXT_SLOT: ; 1F:007F, 0x03E07F
     CLC ; Prep add.
     TXA ; X to A.
@@ -92,10 +92,10 @@ LOOP_NONZERO: ; 1F:0094, 0x03E094
     BMI FLAGGED_DATA ; Negative, goto.
     LDY MISC_USE_C ; Alt stream index.
     LDA [MISC_USE_A],Y ; Load from stream.
-    STA R_**:$0302,X ; Store to arr.
+    STA OBJ?_BYTE_0x2_UNK,X ; Store to arr.
     INY ; Stream++
     LDA [MISC_USE_A],Y ; Load from stream.
-    STA R_**:$0303,X ; Store to arr.
+    STA OBJ?_BYTE_0x3_UNK,X ; Store to arr.
     INY ; Stream++
     LDA [MISC_USE_A],Y ; Load from stream.
     STA MISC_USE_D/DECIMAL_POS? ; Store to.
@@ -104,25 +104,25 @@ LOOP_NONZERO: ; 1F:0094, 0x03E094
     LDA [MISC_USE_A],Y ; Load from stream.
     LDY #$16 ; Alt stream index.
     ADC [ENGINE_FPTR_30[2]],Y ; Add with stream.
-    STA OBJ_UNK_A,X ; Store to arr.
+    STA OBJ?_PTR?[2],X ; Store to arr.
     INY ; Stream++
     LDA #$00 ; Seed carry.
     ADC [ENGINE_FPTR_30[2]],Y ; Add with stream.
-    STA OBJ_UNK_A_PAIR,X ; Store to arr.
+    STA OBJ?_PTR?+1,X ; Store to arr.
     LDY #$08 ; Stream index.
     LDA [ENGINE_FPTR_30[2]],Y ; Load from arr.
     AND #$3F ; Keep lower.
     ASL A ; << 1, *2.
     ASL MISC_USE_D/DECIMAL_POS? ; << 1, *2.
     ROR A ; Rotate carry into A.
-    STA OBJ_STATUS?,X ; Store to arr.
+    STA OBJ?_BYTE_0x0_STATUS?,X ; Store to arr.
     LDA #$70 ; Load ??
     ASL MISC_USE_D/DECIMAL_POS? ; << 1, *2.
     ROR A ; Rotate into A.
-    STA R_**:$0301,X ; Store to.
+    STA OBJ?_BYTE_0x1_UNK,X ; Store to.
     LDA #$00
-    STA R_**:$0304,X ; Clear ??
-    STA R_**:$0305,X
+    STA OBJ?_BYTE_0x4_UNK,X ; Clear ??
+    STA OBJ?_BYTE_0x5_BYTE,X
     CLC ; Prep add.
     TXA ; Index to A.
     ADC #$08 ; Index mod.
@@ -141,18 +141,18 @@ ENGINE_HELPER_LOAD_7400_INDEX_A&3F: ; 1F:00F2, 0x03E0F2
     TAX ; To X index.
     LDA CURRENT_SAVE_MANIPULATION_PAGE[768],X ; Load from.
     RTS ; Leave.
-SWITCH_MAP/SCREEN?: ; 1F:00F9, 0x03E0F9
+SWITCH_SCRIPTS?: ; 1F:00F9, 0x03E0F9
     ASL A ; << 2, *4.
     ASL A
     TAX ; To X index.
-    LDA SWITCH_RTNS_H,X ; Routine is first.
+    LDA SCRIPT_SWITCH_RTNS_L,X ; Routine RTS addr to stack.
     PHA
-    LDA SWITCH_RTNS_L,X
+    LDA SCRIPT_SWITCH_RTNS_H,X
     PHA
     RTS ; Run it.
-SWITCH_RTNS_L: ; 1F:0105, 0x03E105
+SCRIPT_SWITCH_RTNS_H: ; 1F:0105, 0x03E105
     LOW(1F:01BC) ; 0x00
-SWITCH_RTNS_H: ; 1F:0106, 0x03E106
+SCRIPT_SWITCH_RTNS_L: ; 1F:0106, 0x03E106
     HIGH(1F:01BC) ; RTS
 ROUTINE_ATTR_A: ; 1F:0107, 0x03E107
     .db 00
@@ -190,8 +190,8 @@ ROUTINE_ATTR_B: ; 1F:0108, 0x03E108
     HIGH(1F:096B)
     .db 04
     .db 60
-    LOW(L_1F:0B39)
-    HIGH(L_1F:0B39)
+    LOW(RTS)
+    HIGH(RTS)
     .db 09
     .db 20
     LOW(1F:0B91)
@@ -310,8 +310,8 @@ ROUTINE_ATTR_B: ; 1F:0108, 0x03E108
     HIGH(1F:0787)
     .db 04
     .db A6
-    LOW(L_1F:06D8) ; AB
-    HIGH(L_1F:06D8)
+    LOW(RTS) ; AB
+    HIGH(RTS)
     .db 04
     .db C6
     LOW(1F:08D1) ; AC
@@ -366,7 +366,7 @@ L_1F:01D4: ; 1F:01D4, 0x03E1D4
     SBC SAVE_GAME_MOD_PAGE_PTR[2]
     LDA #$03
     SBC SAVE_GAME_MOD_PAGE_PTR+1
-    BCC L_1F:020E
+    BCC RTS
     LDA SCRIPT_PAIR_PTR_B?[2]
     SBC #$40
     STA MISC_USE_A
@@ -385,7 +385,7 @@ L_1F:01D4: ; 1F:01D4, 0x03E1D4
     SBC MISC_USE_A
     LDA #$04
     SBC MISC_USE_B
-L_1F:020E: ; 1F:020E, 0x03E20E
+RTS: ; 1F:020E, 0x03E20E
     RTS
     JSR SETUP_PTR_6780_UNK
     LDY #$15
@@ -394,12 +394,12 @@ L_1F:020E: ; 1F:020E, 0x03E20E
     ASL A
     ASL A
     TAX
-    LDA L_1F:0BF1,X
+    LDA DATA_UNK_C,X
     ASL A
     TAX
     STA OBJ_PROCESS_COUNT_LEFT?
     LDY #$11
-    LDA L_1F:0BF4,X
+    LDA DATA_UNK_B,X
     ASL A
     ASL A
     ASL A
@@ -415,11 +415,11 @@ L_1F:020E: ; 1F:020E, 0x03E20E
     STA STREAM_DEEP_D?
     CLC
     LDA STREAM_DEEP_INDEX
-    ADC L_1F:0BF3,X
+    ADC DATA_UNK_A,X
     TAX
     EOR STREAM_DEEP_INDEX
     AND #$F0
-    BEQ L_1F:0258
+    BEQ EXIT_WRITE_INDEX
     LDA STREAM_DEEP_INDEX
     AND #$F0
     STA STREAM_DEEP_INDEX
@@ -430,10 +430,10 @@ L_1F:020E: ; 1F:020E, 0x03E20E
     LDA STREAM_DEEP_D?
     EOR #$01
     STA STREAM_DEEP_D?
-L_1F:0258: ; 1F:0258, 0x03E258
-    STX STREAM_DEEP_INDEX
+EXIT_WRITE_INDEX: ; 1F:0258, 0x03E258
+    STX STREAM_DEEP_INDEX ; Store to.
     JSR SUB_STREAM_RESET_TO_??_AND_PTR/VAL_RTN ; Do.
-SUB_MOVE_PTR_0x32_TO_0x30: ; 1F:025D, 0x03E25D
+EXIT_PTR_MOVE: ; 1F:025D, 0x03E25D
     LDX ENGINE_FPTR_32[2] ; Move PTR to PTR.
     LDY ENGINE_FPTR_32+1
     STX ENGINE_FPTR_30[2]
@@ -446,7 +446,7 @@ LIB_RTN_PTR_CREATION/SHIFT+CLEAR_UNK_MOVE_PTR_DOWN_UNK: ; 1F:0266, 0x03E266
     ASL MAIN_FLAG_UNK ; << ??
     LDX #$00
     STX MAIN_FLAG_UNK ; Clear ??
-    BEQ SUB_MOVE_PTR_0x32_TO_0x30 ; Always taken.
+    BEQ EXIT_PTR_MOVE ; Always taken.
 SUB_STREAM_RESET_TO_??_AND_PTR/VAL_RTN: ; 1F:0275, 0x03E275
     LDY STREAM_DEEP_INDEX ; Load stream index.
     LDA [STREAM_DEEP_C],Y ; Load ??
@@ -493,7 +493,7 @@ RTS: ; 1F:02A1, 0x03E2A1
     LSR A
     STA [ENGINE_FPTR_30[2]],Y
     JSR ENGINE_WRAM_STATE_WRITE_DISABLED
-    LDA L_1F:0BF1,X
+    LDA DATA_UNK_C,X
     CLC
     LDY #$16
     ADC [ENGINE_FPTR_30[2]],Y
@@ -508,19 +508,19 @@ RTS: ; 1F:02A1, 0x03E2A1
     LDY #$10
     LDA [ENGINE_FPTR_30[2]],Y
     TAY
-    LDA OBJ_STATUS?,Y
+    LDA OBJ?_BYTE_0x0_STATUS?,Y
     AND #$3F
     STA OBJ_PROCESS_COUNT_LEFT?
     BEQ RTS ; == 0, leave.
     LDA MISC_USE_A
-    STA OBJ_UNK_A,Y
+    STA OBJ?_PTR?[2],Y
     LDA MISC_USE_B
-    STA OBJ_UNK_A_PAIR,Y
-    LDA R_**:$0302,Y
+    STA OBJ?_PTR?+1,Y
+    LDA OBJ?_BYTE_0x2_UNK,Y
     STA ARR_BITS_TO_UNK[8]
-    LDA R_**:$0303,Y
+    LDA OBJ?_BYTE_0x3_UNK,Y
     STA ARR_BITS_TO_UNK+1
-    LDA R_**:$0301,Y
+    LDA OBJ?_BYTE_0x1_UNK,Y
     ASL A
     ASL A
     TAX
@@ -602,8 +602,8 @@ INC_X_INDEX_ONLY: ; 1F:0369, 0x03E369
 EXIT_OBJECT_PROCESSING: ; 1F:0373, 0x03E373
     ASL NMI_FLAG_OBJECT_PROCESSING? ; Unlock.
     RTS ; Leave.
-L_1F:0376: ; 1F:0376, 0x03E376
-    LDA SCRIPT_LOADED_SHIFTED_|VAL+1 ; Load ??
+SCRIPT_UNK_R6_ANBD_FILE_UNK: ; 1F:0376, 0x03E376
+    LDA SCRIPT_USE_UNK_C ; Load ??
     LSR A ; Nibble down.
     LSR A
     LSR A
@@ -612,12 +612,12 @@ L_1F:0376: ; 1F:0376, 0x03E376
     ORA #$01 ; Set bottom.
     LDX #$06 ; Set R6.
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A ; Set bank.
-    LDA SCRIPT_LOADED_SHIFTED_|VAL+1 ; Load ??
+    LDA SCRIPT_USE_UNK_C ; Load ??
     LSR A ; >> 2
     LSR A
     AND #$07 ; Keep bottom.
     STA ARR_BITS_TO_UNK+1 ; Store bits here.
-    LDA R_**:$00AB ; Load ??
+    LDA SCRIPT_USE_UNK_A ; Load ??
     AND #$FC ; Keep 1111.1100
     CLC ; Prep add.
     STA ARR_BITS_TO_UNK[8] ; Store bits.
@@ -674,97 +674,97 @@ RTN_PTRS_H: ; 1F:03CD, 0x03E3CD
     LOW(1F:048F) ; Banks, returns CS.
     HIGH(1F:048F)
 RTN_ARR_RTN_C: ; 1F:03DE, 0x03E3DE
-    .db 20
-    ASL NMI_FLAG_B
-    TAX
-    AND #$30
-    BEQ L_1F:03EF
-    AND #$20
-    BEQ L_1F:0400
+    .db 20 ; Do.
+    ASL NMI_FLAG_B ; << 1
+    TAX ; To X index.
+    AND #$30 ; Keep 0011.0000
+    BEQ VAL_EQ_0x00 ; == 0, goto.
+    AND #$20 ; Keep other bit.
+    BEQ EXIT_JMP_R6_SET ; Clear, goto.
     TXA
     AND #$1C
-    BNE L_1F:0400
-L_1F:03EF: ; 1F:03EF, 0x03E3EF
+    BNE EXIT_JMP_R6_SET
+VAL_EQ_0x00: ; 1F:03EF, 0x03E3EF
     LDX #$FF
     LDY #$00
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     TAX
     AND #$20
     BEQ L_1F:0425
     TXA
     AND #$03
     BEQ L_1F:0425
-L_1F:0400: ; 1F:0400, 0x03E400
+EXIT_JMP_R6_SET: ; 1F:0400, 0x03E400
     JMP R6_BANK_WITH_RET_CS
 RTN_ARR_RTN_G: ; 1F:0403, 0x03E403
-    JSR L_1F:0506
+    JSR SUB_SEED_UNK_AND_UNK
     TAX
     AND #$30
     BEQ L_1F:0414
     AND #$20
-    BEQ L_1F:0400
+    BEQ EXIT_JMP_R6_SET
     TXA
     AND #$13
-    BNE L_1F:0400
+    BNE EXIT_JMP_R6_SET
 L_1F:0414: ; 1F:0414, 0x03E414
     LDX #$01
     LDY #$00
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     TAX
     AND #$20
     BEQ L_1F:0425
     TXA
     AND #$0C
-    BNE L_1F:0400
+    BNE EXIT_JMP_R6_SET
 L_1F:0425: ; 1F:0425, 0x03E425
     JMP R6_BANK_WITH_RET_CC
 RTN_ARR_RTN_A: ; 1F:0428, 0x03E428
-    JSR L_1F:0506
+    JSR SUB_SEED_UNK_AND_UNK
     AND #$16
     BNE R6_BANK_WITH_RET_CS
     LDX #$00
     LDY #$10
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$09
     BNE R6_BANK_WITH_RET_CS
     BEQ R6_BANK_WITH_RET_CC
 RTN_ARR_RTN_B: ; 1F:043C, 0x03E43C
-    JSR L_1F:0506
+    JSR SUB_SEED_UNK_AND_UNK
     AND #$14
     BNE R6_BANK_WITH_RET_CS
     LDX #$00
     LDY #$10
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$08
     BNE R6_BANK_WITH_RET_CS
     LDX #$FF
     LDY #$00
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$02
     BNE R6_BANK_WITH_RET_CS
     LDX #$FF
     LDY #$10
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$01
     BNE R6_BANK_WITH_RET_CS
     BEQ R6_BANK_WITH_RET_CC
 RTN_ARR_RTN_H: ; 1F:0466, 0x03E466
-    JSR L_1F:0506
+    JSR SUB_SEED_UNK_AND_UNK
     AND #$12
     BNE R6_BANK_WITH_RET_CS
     LDX #$00
     LDY #$10
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$01
     BNE R6_BANK_WITH_RET_CS
     LDX #$01
     LDY #$00
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$04
     BNE R6_BANK_WITH_RET_CS
     LDX #$01
     LDY #$10
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$08
     BNE R6_BANK_WITH_RET_CS
     BEQ R6_BANK_WITH_RET_CC
@@ -779,190 +779,190 @@ R6_BANK_WITH_RET_CC: ; 1F:0497, 0x03E497
     CLC ; Ret CC.
     RTS ; Leave.
 RTN_ARR_RTN_E: ; 1F:049E, 0x03E49E
-    JSR L_1F:0506
-    AND #$19
-    BNE R6_BANK_WITH_RET_CS
-    LDX #$00
+    JSR SUB_SEED_UNK_AND_UNK ; Do.
+    AND #$19 ; Keep 0001.1001
+    BNE R6_BANK_WITH_RET_CS ; Set, goto.
+    LDX #$00 ; Seed ??
     LDY #$F0
-    JSR L_1F:0510
-    AND #$06
-    BNE R6_BANK_WITH_RET_CS
-    BEQ R6_BANK_WITH_RET_CC
+    JSR STREAMS_AND_SPRITE_CHECK_IDK ; Do.
+    AND #$06 ; Keep 0000.0110
+    BNE R6_BANK_WITH_RET_CS ; Set, goto.
+    BEQ R6_BANK_WITH_RET_CC ; == 0, goto.
 RTN_ARR_RTN_D: ; 1F:04B2, 0x03E4B2
-    JSR L_1F:0506
+    JSR SUB_SEED_UNK_AND_UNK
     AND #$18
     BNE R6_BANK_WITH_RET_CS
     LDX #$00
     LDY #$F0
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$04
     BNE R6_BANK_WITH_RET_CS
     LDX #$FF
     LDY #$00
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$01
     BNE R6_BANK_WITH_RET_CS
     LDX #$FF
     LDY #$F0
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$02
     BNE R6_BANK_WITH_RET_CS
     BEQ R6_BANK_WITH_RET_CC
 RTN_ARR_RTN_F: ; 1F:04DC, 0x03E4DC
-    JSR L_1F:0506
+    JSR SUB_SEED_UNK_AND_UNK
     AND #$11
     BNE R6_BANK_WITH_RET_CS
     LDX #$00
     LDY #$F0
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$02
     BNE R6_BANK_WITH_RET_CS
     LDX #$01
     LDY #$00
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$08
     BNE R6_BANK_WITH_RET_CS
     LDX #$01
     LDY #$F0
-    JSR L_1F:0510
+    JSR STREAMS_AND_SPRITE_CHECK_IDK
     AND #$04
     BNE R6_BANK_WITH_RET_CS
     BEQ R6_BANK_WITH_RET_CC
-L_1F:0506: ; 1F:0506, 0x03E506
-    LDX #$00
+SUB_SEED_UNK_AND_UNK: ; 1F:0506, 0x03E506
+    LDX #$00 ; Seed ??
     LDY #$00
-    JSR L_1F:0510
-    STA OBJ_PROCESS_COUNT_LEFT?
-    RTS
-L_1F:0510: ; 1F:0510, 0x03E510
-    CLC
-    TYA
-    ADC STREAM_DEEP_INDEX
-    STA STREAM_UNK_DEEP_A+1
-    CLC
-    TXA
-    ADC STREAM_UNK_DEEP_A+1
-    TAY
-    EOR STREAM_UNK_DEEP_A+1
-    AND #$F0
-    BEQ L_1F:052F
-    LDA STREAM_UNK_DEEP_A+1
-    AND #$F0
-    STA STREAM_UNK_DEEP_A+1
-    TYA
-    AND #$0F
-    ORA STREAM_UNK_DEEP_A+1
-    TAY
-    LDA #$01
-L_1F:052F: ; 1F:052F, 0x03E52F
-    EOR STREAM_DEEP_D?
-    CLC
-    ADC #$FC
-    STA STREAM_UNK_DEEP_A+1
+    JSR STREAMS_AND_SPRITE_CHECK_IDK ; Do ??
+    STA OBJ_PROCESS_COUNT_LEFT? ; Store ??
+    RTS ; Leave.
+STREAMS_AND_SPRITE_CHECK_IDK: ; 1F:0510, 0x03E510
+    CLC ; Prep add.
+    TYA ; Y to A.
+    ADC STREAM_DEEP_INDEX ; Add with.
+    STA STREAM_UNK_DEEP_A+1 ; Store result.
+    CLC ; Prep add.
+    TXA ; X to A.
+    ADC STREAM_UNK_DEEP_A+1 ; Add to.
+    TAY ; Value to Y.
+    EOR STREAM_UNK_DEEP_A+1 ; Invert ??
+    AND #$F0 ; Keep upper nibble.
+    BEQ UPPER_EQ_0x00 ; == 0, goto.
+    LDA STREAM_UNK_DEEP_A+1 ; Load ??
+    AND #$F0 ; Keep nibble.
+    STA STREAM_UNK_DEEP_A+1 ; Store back.
+    TYA ; Y to A.
+    AND #$0F ; Keep lower.
+    ORA STREAM_UNK_DEEP_A+1 ; Combine with.
+    TAY ; To Y index.
+    LDA #$01 ; Seed invert ??
+UPPER_EQ_0x00: ; 1F:052F, 0x03E52F
+    EOR STREAM_DEEP_D? ; Invert with.
+    CLC ; Prep add.
+    ADC #$FC ; Add with.
+    STA STREAM_UNK_DEEP_A+1 ; Store to, PTR H.
     LDA #$00
-    STA STREAM_DEEP_B
-    LDA [STREAM_UNK_DEEP_A[2]],Y
-    BMI L_1F:0541
-    LDA SCRIPT_R6_UNK
-    BIT SPRITE_PAGE+165
-    LSR A
-    ROR STREAM_DEEP_B
-    ADC #$80
-    STA R_**:$00A5
-    LDA [STREAM_UNK_DEEP_A[2]],Y
-    AND #$7F
-    TAY
-    LDA [STREAM_DEEP_B],Y
-    RTS
-L_1F:0552: ; 1F:0552, 0x03E552
-    JSR 3E_TO_X_INDEX
-    LDY #$0C
-    LDA L_1F:0BF3,X
+    STA STREAM_DEEP_B ; Clear ??
+    LDA [STREAM_UNK_DEEP_A[2]],Y ; Load stream.
+    BMI STREAM_NEGATIVE ; Negative, goto.
+    LDA SCRIPT_R6_UNK ; Load ??
+    BIT SPRITE_PAGE+165 ; Test ?? TODO: Bug? Why?
+    LSR A ; A >> 1
+    ROR STREAM_DEEP_B ; Rotate into.
+    ADC #$80 ; Add with.
+    STA R_**:$00A5 ; Store to.
+    LDA [STREAM_UNK_DEEP_A[2]],Y ; Load from stream.
+    AND #$7F ; Keep lower.
+    TAY ; To Y index.
+    LDA [STREAM_DEEP_B],Y ; Load other stream.
+    RTS ; Return stream val.
+DATA_INDEX_SWITCH_MOVE_UNK_SHIFTED: ; 1F:0552, 0x03E552
+    JSR ROUTINE_SWITCH_TO_DATA_SLOT_INDEX_X ; Get data index.
+    LDY #$0C ; Stream index ??
+    LDA DATA_UNK_A,X ; Load ??
+    ASL A ; << 1, *2.
+    STA [ENGINE_FPTR_30[2]],Y ; Store to engine ptr.
+    INY ; Stream++
+    LDA DATA_UNK_B,X ; Load data.
+    ASL A ; << 1, *2.
+    STA [ENGINE_FPTR_30[2]],Y ; Store to PTR.
+    JMP ENTRY_UNK ; Goto.
+DATA_INDEX_SWITCH_MOVE_UNK: ; 1F:0567, 0x03E567
+    JSR ROUTINE_SWITCH_TO_DATA_SLOT_INDEX_X ; Get data index.
+    LDY #$0C ; Stream index ??
+    LDA DATA_UNK_A,X ; Move from data to engine.
+    STA [ENGINE_FPTR_30[2]],Y
+    INY ; Stream++
+    LDA DATA_UNK_B,X ; Move data from engine.
+    STA [ENGINE_FPTR_30[2]],Y
+ENTRY_UNK: ; 1F:0577, 0x03E577
+    LDY #$08 ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from file.
+    AND #$3F ; Keep lower.
+    ORA #$40 ; Set ??
+    STA MISC_USE_A ; Store to.
+    LDA ROUTINE_SWITCH_UNK ; Load val.
+    LSR A ; >> 1, /2.
+    AND #$40 ; Keep bit.
+    EOR MISC_USE_A ; Invert with.
+    STA [ENGINE_FPTR_30[2]],Y ; Store to ptr.
+    LDY #$09 ; Stream index. ??
+    LDA #$38 ; Move ??
+    STA [ENGINE_FPTR_30[2]],Y
+    LDY #$15 ; Stream index ??
+    LDA [ENGINE_FPTR_30[2]],Y ; Load fptr.
+    ASL A ; << 3, *8.
     ASL A
-    STA [ENGINE_FPTR_30[2]],Y
-    INY
-    LDA L_1F:0BF4,X
     ASL A
-    STA [ENGINE_FPTR_30[2]],Y
-    JMP L_1F:0577
-L_1F:0567: ; 1F:0567, 0x03E567
-    JSR 3E_TO_X_INDEX
-    LDY #$0C
-    LDA L_1F:0BF3,X
-    STA [ENGINE_FPTR_30[2]],Y
-    INY
-    LDA L_1F:0BF4,X
-    STA [ENGINE_FPTR_30[2]],Y
-L_1F:0577: ; 1F:0577, 0x03E577
-    LDY #$08
-    LDA [ENGINE_FPTR_30[2]],Y
-    AND #$3F
-    ORA #$40
-    STA MISC_USE_A
-    LDA ROUTINE_SWITCH_UNK
-    LSR A
-    AND #$40
-    EOR MISC_USE_A
-    STA [ENGINE_FPTR_30[2]],Y
-    LDY #$09
-    LDA #$38
-    STA [ENGINE_FPTR_30[2]],Y
-    LDY #$15
-    LDA [ENGINE_FPTR_30[2]],Y
-    ASL A
-    ASL A
-    ASL A
-    TAX
-    LDA L_1F:0BF1,X
-L_1F:059B: ; 1F:059B, 0x03E59B
-    CLC
-    LDY #$16
-    ADC [ENGINE_FPTR_30[2]],Y
-    LDY #$0E
-    STA [ENGINE_FPTR_30[2]],Y
-    LDA #$00
-    LDY #$17
-    ADC [ENGINE_FPTR_30[2]],Y
-    LDY #$0F
-    STA [ENGINE_FPTR_30[2]],Y
-    RTS
-L_1F:05AF: ; 1F:05AF, 0x03E5AF
-    JSR SUB_INDEX_AND_MODS_UNK
-    ASL STREAM_WRITE_ARR_UNK[4]
-    ROL STREAM_WRITE_ARR_UNK+1
-    ASL STREAM_WRITE_ARR_UNK+2
-    ROL STREAM_WRITE_ARR_UNK+3
-    JMP L_1F:05C0
-L_1F:05BD: ; 1F:05BD, 0x03E5BD
-    JSR SUB_INDEX_AND_MODS_UNK
-L_1F:05C0: ; 1F:05C0, 0x03E5C0
-    CLC
-    LDY #$04
-    LDA [ENGINE_FPTR_30[2]],Y
-    ADC STREAM_WRITE_ARR_UNK[4]
-    STA STREAM_WRITE_ARR_UNK[4]
-    AND #$C0
-    STA SCRIPT_LOADED_SHIFTED_UNK[1]
-    INY
-    LDA [ENGINE_FPTR_30[2]],Y
-    ADC STREAM_WRITE_ARR_UNK+1
-    STA STREAM_WRITE_ARR_UNK+1
-    STA R_**:$00AB
-    CLC
-    LDY #$06
-    LDA [ENGINE_FPTR_30[2]],Y
+    TAX ; To X index.
+    LDA DATA_UNK_C,X ; Load data.
+EXIT_STREAM_MIX_UNK: ; 1F:059B, 0x03E59B
+    CLC ; Prep add.
+    LDY #$16 ; Stream index.
+    ADC [ENGINE_FPTR_30[2]],Y ; Add with.
+    LDY #$0E ; Stream index.
+    STA [ENGINE_FPTR_30[2]],Y ; Store to.
+    LDA #$00 ; Seed ??
+    LDY #$17 ; Stream index.
+    ADC [ENGINE_FPTR_30[2]],Y ; Add with.
+    LDY #$0F ; Stream index.
+    STA [ENGINE_FPTR_30[2]],Y ; Store to other.
+    RTS ; Leave.
+INDEX_AND_MODS_WITH_SHIFT_UNK: ; 1F:05AF, 0x03E5AF
+    JSR SUB_INDEX_AND_MODS_UNK ; Do index and mods.
+    ASL STREAM_WRITE_ARR_UNK[4] ; << 1.
+    ROL STREAM_WRITE_ARR_UNK+1 ; Rotate.
+    ASL STREAM_WRITE_ARR_UNK+2 ; << 1.
+    ROL STREAM_WRITE_ARR_UNK+3 ; Rotate.
+    JMP ENTRY_UNK
+INDEX_AND_MODS_NO_SHIFT_UNK: ; 1F:05BD, 0x03E5BD
+    JSR SUB_INDEX_AND_MODS_UNK ; Do sub.
+ENTRY_UNK: ; 1F:05C0, 0x03E5C0
+    CLC ; Prep add.
+    LDY #$04 ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
+    ADC STREAM_WRITE_ARR_UNK[4] ; Add with.
+    STA STREAM_WRITE_ARR_UNK[4] ; Store to.
+    AND #$C0 ; Keep upper.
+    STA SCRIPT_LOADED_SHIFTED_UNK[1] ; Store to.
+    INY ; Stream++
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
+    ADC STREAM_WRITE_ARR_UNK+1 ; Add with.
+    STA STREAM_WRITE_ARR_UNK+1 ; Store to.
+    STA SCRIPT_USE_UNK_A ; And to ??
+    CLC ; Prep add.
+    LDY #$06 ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
     ADC STREAM_WRITE_ARR_UNK+2
-    STA STREAM_WRITE_ARR_UNK+2
-    AND #$C0
-    STA SCRIPT_LOADED_SHIFTED_|VAL[2]
-    INY
-    LDA [ENGINE_FPTR_30[2]],Y
-    ADC STREAM_WRITE_ARR_UNK+3
-    STA STREAM_WRITE_ARR_UNK+3
-    STA SCRIPT_LOADED_SHIFTED_|VAL+1
-    JMP SETUP_DEEP_STREAM_UNK
+    STA STREAM_WRITE_ARR_UNK+2 ; Store to.
+    AND #$C0 ; Keep upper.
+    STA SCRIPT_USE_UNK_B ; Store to upper.
+    INY ; Stream++
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
+    ADC STREAM_WRITE_ARR_UNK+3 ; Add with.
+    STA STREAM_WRITE_ARR_UNK+3 ; Store to.
+    STA SCRIPT_USE_UNK_C ; Store to.
+    JMP SETUP_DEEP_STREAM_UNK ; Goto.
 SUB_INDEX_AND_MODS_UNK: ; 1F:05EF, 0x03E5EF
-    JSR 3E_TO_X_INDEX
+    JSR ROUTINE_SWITCH_TO_DATA_SLOT_INDEX_X ; Switch to slot index.
     LDA LUT_MOD_ARRAY_UNK[4],X ; Move from arr to other.
     STA STREAM_WRITE_ARR_UNK[4]
     LDA LUT_MOD_ARRAY_UNK+1,X
@@ -971,139 +971,140 @@ SUB_INDEX_AND_MODS_UNK: ; 1F:05EF, 0x03E5EF
     STA STREAM_WRITE_ARR_UNK+2
     LDA LUT_MOD_ARRAY_UNK+3,X
     STA STREAM_WRITE_ARR_UNK+3
-    RTS
-3E_TO_X_INDEX: ; 1F:0607, 0x03E607
+    RTS ; Leave.
+ROUTINE_SWITCH_TO_DATA_SLOT_INDEX_X: ; 1F:0607, 0x03E607
     LDA ROUTINE_SWITCH_UNK ; Load ??
     ASL A ; << 3, *8.
     ASL A
     ASL A
     TAX ; To X index.
     RTS ; Leave.
-L_1F:060E: ; 1F:060E, 0x03E60E
-    JSR STREAM_PTR_30_PTR_DATA_TO_32
-    LDY #$14
-    LDA [ENGINE_FPTR_30[2]],Y
-    AND #$0F
-    TAY
-    LDA [ENGINE_FPTR_32[2]],Y
-    INY
-    CMP #$05
-    BEQ L_1F:0625
-    CMP #$06
-    BEQ L_1F:062F
-    BNE L_1F:062D
-L_1F:0625: ; 1F:0625, 0x03E625
-    JSR L_1F:0646
-    AND LUT_INDEX_TO_BITS_0x80-0x01,X
-    BNE L_1F:0637
-L_1F:062D: ; 1F:062D, 0x03E62D
-    CLC
+SUB_PTR_SETUP_CHECK_IDFK_GOSH: ; 1F:060E, 0x03E60E
+    JSR SETUP_PTR_FROM_PTR_TODO ; Do ptr setup.
+    LDY #$14 ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
+    AND #$0F ; Keep lower.
+    TAY ; To Y index.
+    LDA [ENGINE_FPTR_32[2]],Y ; Load other stream.
+    INY ; Stream++
+    CMP #$05 ; If 2nd _ #$05
+    BEQ TEST_EXIT ; ==, goto.
+    CMP #$06 ; If _ #$06
+    BEQ TEST_EXIT_ALT ; ==, goto.
+    BNE EXIT_CC ; !=, exit CC.
+TEST_EXIT: ; 1F:0625, 0x03E625
+    JSR GET_STREAM_INDEX_AND_VALUE_TODO ; Do.
+    AND LUT_INDEX_TO_BITS_0x80-0x01,X ; And with LUT.
+    BNE VALUE_SET ; Set, goto.
+EXIT_CC: ; 1F:062D, 0x03E62D
+    CLC ; Not set, ret CC.
+    RTS ; Leave.
+TEST_EXIT_ALT: ; 1F:062F, 0x03E62F
+    JSR GET_STREAM_INDEX_AND_VALUE_TODO ; Get value.
+    AND LUT_INDEX_TO_BITS_0x80-0x01,X ; Test bit.
+    BNE EXIT_CC ; If set, exit CC.
+VALUE_SET: ; 1F:0637, 0x03E637
+    LDY #$00 ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from FPTR.
+    ORA #$80 ; Set top bit.
+    STA [ENGINE_FPTR_30[2]],Y ; Store back.
+    SEC ; Ret CS.
     RTS
-L_1F:062F: ; 1F:062F, 0x03E62F
-    JSR L_1F:0646
-    AND LUT_INDEX_TO_BITS_0x80-0x01,X
-    BNE L_1F:062D
-L_1F:0637: ; 1F:0637, 0x03E637
-    LDY #$00
-    LDA [ENGINE_FPTR_30[2]],Y
-    ORA #$80
-    STA [ENGINE_FPTR_30[2]],Y
-    SEC
-    RTS
-L_1F:0641: ; 1F:0641, 0x03E641
-    JSR STREAM_PTR_30_PTR_DATA_TO_32
-    LDY #$04
-L_1F:0646: ; 1F:0646, 0x03E646
-    LDA [ENGINE_FPTR_32[2]],Y
-    AND #$07
-    TAX
-    LDA [ENGINE_FPTR_32[2]],Y
+SETUP_PTR_AND_STREAM_PAGE_VAL_TODO: ; 1F:0641, 0x03E641
+    JSR SETUP_PTR_FROM_PTR_TODO
+    LDY #$04 ; Seed stream index ??
+GET_STREAM_INDEX_AND_VALUE_TODO: ; 1F:0646, 0x03E646
+    LDA [ENGINE_FPTR_32[2]],Y ; Load alt stream.
+    AND #$07 ; Keep lower.
+    TAX ; To X index.
+    LDA [ENGINE_FPTR_32[2]],Y ; Load alt stream.
+    LSR A ; Shift off value to Y.
     LSR A
     LSR A
-    LSR A
-    TAY
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+512,Y
+    TAY ; To Y index.
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+512,Y ; Load from page.
     RTS
-STREAM_PTR_30_PTR_DATA_TO_32: ; 1F:0655, 0x03E655
+SETUP_PTR_FROM_PTR_TODO: ; 1F:0655, 0x03E655
     LDY #$02 ; Stream index.
     LDA [ENGINE_FPTR_30[2]],Y ; Move from PTR L from stream to other.
     STA ENGINE_FPTR_32[2]
     INY ; Stream++
     LDA [ENGINE_FPTR_30[2]],Y ; Move PTR H.
     STA ENGINE_FPTR_32+1
-    RTS
+    RTS ; Leave.
 MAP_RTN_AD: ; 1F:0661, 0x03E661
-    JSR L_1F:0641
-    ORA LUT_INDEX_TO_BITS_0x80-0x01,X
-    BNE L_1F:0672
+    JSR SETUP_PTR_AND_STREAM_PAGE_VAL_TODO ; Do.
+    ORA LUT_INDEX_TO_BITS_0x80-0x01,X ; Set bit.
+    BNE BIT_SET_ENTRY ; Always taken.
 MAP_RTN_AE: ; 1F:0669, 0x03E669
-    JSR L_1F:0641
-    ORA LUT_INDEX_TO_BITS_0x80-0x01,X
-    EOR LUT_INDEX_TO_BITS_0x80-0x01,X
-L_1F:0672: ; 1F:0672, 0x03E672
-    STA CURRENT_SAVE_MANIPULATION_PAGE+512,Y
-    JMP MAP_RTN_W
+    JSR SETUP_PTR_AND_STREAM_PAGE_VAL_TODO ; Do.
+    ORA LUT_INDEX_TO_BITS_0x80-0x01,X ; Set bit.
+    EOR LUT_INDEX_TO_BITS_0x80-0x01,X ; Invert it, turning it off.
+BIT_SET_ENTRY: ; 1F:0672, 0x03E672
+    STA CURRENT_SAVE_MANIPULATION_PAGE+512,Y ; Store to page.
+    JMP MAP_RTN_W ; Goto.
 MAP_RTN_D: ; 1F:0678, 0x03E678
-    LDY #$1B
-    LDA [ENGINE_FPTR_30[2]],Y
-    BNE L_1F:0694
-    JMP L_1F:072E
+    LDY #$1B ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
+    BNE STREAM_NE_0x00 ; !=, goto.
+    JMP SUB_SWITCH_SET_0x88 ; Goto.
 MAP_RTN_B: ; 1F:0681, 0x03E681
-    LDY #$15
-    LDA [ENGINE_FPTR_30[2]],Y
-    ORA #$40
-    LDY #$1B
-    EOR [ENGINE_FPTR_30[2]],Y
-    AND #$4F
-    BEQ L_1F:0694
-    JSR L_1F:072E
-    CLC
+    LDY #$15 ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
+    ORA #$40 ; Set ??
+    LDY #$1B ; Stream index.
+    EOR [ENGINE_FPTR_30[2]],Y ; Invert with.
+    AND #$4F ; Keep 0100.1111
+    BEQ STREAM_NE_0x00 ; == 0, goto.
+    JSR SUB_SWITCH_SET_0x88 ; Set switch.
+    CLC ; Ret CC.
     RTS
-L_1F:0694: ; 1F:0694, 0x03E694
-    JSR STREAM_PTR_30_PTR_DATA_TO_32
-    LDY #$04
-    JSR L_1F:06A1
-    JSR L_1F:072E
-    SEC
+STREAM_NE_0x00: ; 1F:0694, 0x03E694
+    JSR SETUP_PTR_FROM_PTR_TODO ; Do ptr.
+    LDY #$04 ; Stream index.
+    JSR MISC_FILE_MANIP_WITH_PTR_32_AS_MANIP ; Do.
+    JSR SUB_SWITCH_SET_0x88 ; Do ??
+    SEC ; Ret CS.
     RTS
-L_1F:06A1: ; 1F:06A1, 0x03E6A1
-    LDA ENGINE_FPTR_32[2]
+MISC_FILE_MANIP_WITH_PTR_32_AS_MANIP: ; 1F:06A1, 0x03E6A1
+    LDA ENGINE_FPTR_32[2] ; Move FPTR to MISC.
     STA MISC_USE_A
     LDA ENGINE_FPTR_32+1
     STA MISC_USE_B
-    SEC
-    LDA [MISC_USE_A],Y
-    SBC #$00
-    STA CURRENT_SAVE_MANIPULATION_PAGE+4
-    INY
-    LDA [MISC_USE_A],Y
-    SBC #$02
-    STA CURRENT_SAVE_MANIPULATION_PAGE+5
-    INY
-    SEC
-    LDA [MISC_USE_A],Y
-    SBC #$C0
-    STA CURRENT_SAVE_MANIPULATION_PAGE+6
-    INY
-    LDA [MISC_USE_A],Y
-    SBC #$01
-    STA CURRENT_SAVE_MANIPULATION_PAGE+7
+MISC_FILE_MANIP_UNK: ; 1F:06A9, 0x03E6A9
+    SEC ; Prep sub.
+    LDA [MISC_USE_A],Y ; Load from original 32
+    SBC #$00 ; Sub with.
+    STA CURRENT_SAVE_MANIPULATION_PAGE+4 ; Store to.
+    INY ; Stream++
+    LDA [MISC_USE_A],Y ; Load from ptr.
+    SBC #$02 ; Sub with.
+    STA CURRENT_SAVE_MANIPULATION_PAGE+5 ; Store to.
+    INY ; Stream++
+    SEC ; Prep sub.
+    LDA [MISC_USE_A],Y ; Load stream.
+    SBC #$C0 ; Sub with.
+    STA CURRENT_SAVE_MANIPULATION_PAGE+6 ; Store to.
+    INY ; Stream++
+    LDA [MISC_USE_A],Y ; Load stream.
+    SBC #$01 ; Sub with.
+    STA CURRENT_SAVE_MANIPULATION_PAGE+7 ; Store to.
     LDA #$40
-    STA FIRST_LAUNCHER_HOLD_FLAG?
-    RTS
+    STA FIRST_LAUNCHER_HOLD_FLAG? ; Set flag.
+    RTS ; Leave.
 MAP_RTN_C: ; 1F:06CF, 0x03E6CF
-    JSR MAP_RTN_B
-    BCC L_1F:06D8
+    JSR MAP_RTN_B ; Do map.
+    BCC RTS ; Ret CC, goto.
     LDA #$01
-    STA SWITCH_INIT_PORTION?
-L_1F:06D8: ; 1F:06D8, 0x03E6D8
-    RTS
+    STA SWITCH_INIT_PORTION? ; Set switch.
+RTS: ; 1F:06D8, 0x03E6D8
+    RTS ; Leave.
 MAP_RTN_AB: ; 1F:06D9, 0x03E6D9
-    JSR L_1F:060E
-    BCC L_1F:06DF
-    RTS
-L_1F:06DF: ; 1F:06DF, 0x03E6DF
-    JSR L_1F:07FC
+    JSR SUB_PTR_SETUP_CHECK_IDFK_GOSH ; Do sub.
+    BCC EXTENDED ; CC, extend.
+    RTS ; Leave.
+EXTENDED: ; 1F:06DF, 0x03E6DF
+    JSR FLAG_SET_MAYBE_FIX_PULL_UNK
     AND #$F0
     LSR A
     LSR A
@@ -1111,13 +1112,13 @@ L_1F:06DF: ; 1F:06DF, 0x03E6DF
     CMP #$08
     BCS L_1F:06FE
     JSR L_1F:07DC
-    JMP L_1F:073D
+    JMP STREAM_LOAD_STATUS_UNK
 MAP_RTN_Z: ; 1F:06F1, 0x03E6F1
-    JSR L_1F:060E
+    JSR SUB_PTR_SETUP_CHECK_IDFK_GOSH
     BCC L_1F:06F7
     RTS
 L_1F:06F7: ; 1F:06F7, 0x03E6F7
-    JSR L_1F:07FC
+    JSR FLAG_SET_MAYBE_FIX_PULL_UNK
     AND #$F0
     BNE MAP_RTN_W
 L_1F:06FE: ; 1F:06FE, 0x03E6FE
@@ -1127,82 +1128,82 @@ L_1F:06FE: ; 1F:06FE, 0x03E6FE
     INY
     LDA #$EC
     STA [ENGINE_FPTR_30[2]],Y
-    JSR L_1F:073D
+    JSR STREAM_LOAD_STATUS_UNK
     LDY #$09
     LDA #$78
     STA [ENGINE_FPTR_30[2]],Y
     LDA #$00
-    JSR L_1F:059B
-    JMP L_1F:072E
+    JSR EXIT_STREAM_MIX_UNK
+    JMP SUB_SWITCH_SET_0x88
 MAP_RTN_X: ; 1F:071A, 0x03E71A
-    JSR L_1F:060E
-    BCC MAP_RTN_W
-    RTS
+    JSR SUB_PTR_SETUP_CHECK_IDFK_GOSH
+    BCC MAP_RTN_W ; Ret CC, goto.
+    RTS ; Leave now.
 MAP_RTN_W: ; 1F:0720, 0x03E720
-    JSR L_1F:0733
-    JSR L_1F:073D
-    JSR L_1F:0746
+    JSR STREAM_CLEAR_DUBS
+    JSR STREAM_LOAD_STATUS_UNK
+    JSR STREAM_SET_FILE_DONE?
     LDA #$00
-    JSR L_1F:059B
-L_1F:072E: ; 1F:072E, 0x03E72E
+    JSR EXIT_STREAM_MIX_UNK
+SUB_SWITCH_SET_0x88: ; 1F:072E, 0x03E72E
     LDA #$88
-    STA ROUTINE_SWITCH_UNK
-    RTS
-L_1F:0733: ; 1F:0733, 0x03E733
-    LDA #$00
-    LDY #$0C
-    STA [ENGINE_FPTR_30[2]],Y
-    INY
-    STA [ENGINE_FPTR_30[2]],Y
-    RTS
-L_1F:073D: ; 1F:073D, 0x03E73D
-    LDY #$08
-    LDA [ENGINE_FPTR_30[2]],Y
-    AND #$3F
-    STA [ENGINE_FPTR_30[2]],Y
-    RTS
-L_1F:0746: ; 1F:0746, 0x03E746
-    LDY #$09
-    LDA #$38
-    STA [ENGINE_FPTR_30[2]],Y
-    RTS
-L_1F:074D: ; 1F:074D, 0x03E74D
-    LDY #$08
-    LDA [ENGINE_FPTR_30[2]],Y
-    ORA #$40
-    STA [ENGINE_FPTR_30[2]],Y
-    RTS
+    STA ROUTINE_SWITCH_UNK ; Set switch.
+    RTS ; Leave.
+STREAM_CLEAR_DUBS: ; 1F:0733, 0x03E733
+    LDA #$00 ; Clear val.
+    LDY #$0C ; Stream index.
+    STA [ENGINE_FPTR_30[2]],Y ; Clear stream.
+    INY ; Stream++
+    STA [ENGINE_FPTR_30[2]],Y ; Store to stream.
+    RTS ; Leave.
+STREAM_LOAD_STATUS_UNK: ; 1F:073D, 0x03E73D
+    LDY #$08 ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from file.
+    AND #$3F ; Keep 0011.1111
+    STA [ENGINE_FPTR_30[2]],Y ; Store to.
+    RTS ; Leave.
+STREAM_SET_FILE_DONE?: ; 1F:0746, 0x03E746
+    LDY #$09 ; Stream index.
+    LDA #$38 ; Val to store.
+    STA [ENGINE_FPTR_30[2]],Y ; Store.
+    RTS ; Leave.
+STREAM_SET_FILE_NOTDONEBUTIDK?: ; 1F:074D, 0x03E74D
+    LDY #$08 ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from file.
+    ORA #$40 ; Set bit.
+    STA [ENGINE_FPTR_30[2]],Y ; Store to.
+    RTS ; Leave.
 MAP_RTN_Y: ; 1F:0756, 0x03E756
-    JSR L_1F:0733
-    JSR L_1F:073D
-    JSR L_1F:0746
-    JSR STREAM_PTR_30_PTR_DATA_TO_32
-    JSR L_1F:0772
-    AND LUT_INDEX_TO_BITS_0x80-0x01,X
+    JSR STREAM_CLEAR_DUBS ; LOts of small file routines. Good place to label them all.
+    JSR STREAM_LOAD_STATUS_UNK
+    JSR STREAM_SET_FILE_DONE?
+    JSR SETUP_PTR_FROM_PTR_TODO
+    JSR GET_FPTR_DATA_UNK ; Get data.
+    AND LUT_INDEX_TO_BITS_0x80-0x01,X ; And with.
     BEQ L_1F:076C
     LDA #$04
 L_1F:076C: ; 1F:076C, 0x03E76C
-    JSR L_1F:059B
-    JMP L_1F:072E
-L_1F:0772: ; 1F:0772, 0x03E772
-    LDY #$06
-    LDA [ENGINE_FPTR_32[2]],Y
-    ASL A
-    LDY #$07
-    LDA [ENGINE_FPTR_32[2]],Y
-    AND #$07
-    TAX
-    LDA [ENGINE_FPTR_32[2]],Y
-    ROR A
+    JSR EXIT_STREAM_MIX_UNK
+    JMP SUB_SWITCH_SET_0x88
+GET_FPTR_DATA_UNK: ; 1F:0772, 0x03E772
+    LDY #$06 ; Stream.
+    LDA [ENGINE_FPTR_32[2]],Y ; Load from file.
+    ASL A ; << 1, *2. Bit from.
+    LDY #$07 ; Stream mod. INY better here.
+    LDA [ENGINE_FPTR_32[2]],Y ; Load from file.
+    AND #$07 ; Keep lower.
+    TAX ; To X index.
+    LDA [ENGINE_FPTR_32[2]],Y ; Load from file.
+    ROR A ; Rotate above shift into this for index.
+    LSR A ; >> 2
     LSR A
-    LSR A
-    TAY
-    LDA CURRENT_SAVE_MANIPULATION_PAGE+544,Y
-    RTS
+    TAY ; To Y index.
+    LDA CURRENT_SAVE_MANIPULATION_PAGE+544,Y ; Load from.
+    RTS ; Leave.
 MAP_RTN_AA: ; 1F:0788, 0x03E788
     LDY #$1A
     LDA [ENGINE_FPTR_30[2]],Y
-    BNE L_1F:079C
+    BNE SCRIPT_ALT_UNK ; != 0, goto.
     LDA #$01
     STA [ENGINE_FPTR_30[2]],Y
     LDY #$15
@@ -1210,92 +1211,92 @@ MAP_RTN_AA: ; 1F:0788, 0x03E788
     EOR #$04
     AND #$0F
     STA [ENGINE_FPTR_30[2]],Y
-L_1F:079C: ; 1F:079C, 0x03E79C
+SCRIPT_ALT_UNK: ; 1F:079C, 0x03E79C
     LDY #$15
     LDA [ENGINE_FPTR_30[2]],Y
     STA ROUTINE_SWITCH_UNK
-    JSR L_1F:05AF
+    JSR INDEX_AND_MODS_WITH_SHIFT_UNK
     JSR L_1F:01D4
     BCC L_1F:07B1
     LDA #$F8
     STA SCRIPT_FLAG_0x22
-    JMP L_1F:0552
+    JMP DATA_INDEX_SWITCH_MOVE_UNK_SHIFTED
 L_1F:07B1: ; 1F:07B1, 0x03E7B1
     LDA #$00
     STA SCRIPT_FLAG_0x22
-    JMP L_1F:0965
+    JMP STREAM_SET_0x80_FIRST_BYTE
 MAP_RTN_U: ; 1F:07B8, 0x03E7B8
-    JSR L_1F:060E
+    JSR SUB_PTR_SETUP_CHECK_IDFK_GOSH
     BCC MAP_RTN_Q
     RTS
 MAP_RTN_Q: ; 1F:07BE, 0x03E7BE
-    JSR L_1F:07FC
+    JSR FLAG_SET_MAYBE_FIX_PULL_UNK
     AND #$E0
     LSR A
     LSR A
     BCC L_1F:07D2
 MAP_RTN_T: ; 1F:07C7, 0x03E7C7
-    JSR L_1F:060E
+    JSR SUB_PTR_SETUP_CHECK_IDFK_GOSH
     BCC MAP_RTN_P
     RTS
 MAP_RTN_P: ; 1F:07CD, 0x03E7CD
-    JSR L_1F:07FC
+    JSR FLAG_SET_MAYBE_FIX_PULL_UNK
     AND #$F8
 L_1F:07D2: ; 1F:07D2, 0x03E7D2
     LSR A
     LSR A
     CMP #$08
-    BCS MAP_RTN_O
+    BCS MAP_RTN_O_SET_SWITCH_EXIT_JMP
     LDY #$15
     STA [ENGINE_FPTR_30[2]],Y
 L_1F:07DC: ; 1F:07DC, 0x03E7DC
     STA ROUTINE_SWITCH_UNK
-    JSR L_1F:05BD
-    JSR L_1F:0376
-    BCS MAP_RTN_O
+    JSR INDEX_AND_MODS_NO_SHIFT_UNK
+    JSR SCRIPT_UNK_R6_ANBD_FILE_UNK
+    BCS MAP_RTN_O_SET_SWITCH_EXIT_JMP
     JSR L_1F:01D4
-    BCC MAP_RTN_O
+    BCC MAP_RTN_O_SET_SWITCH_EXIT_JMP
     JSR SUB_STREAM_RESET_TO_??_AND_PTR/VAL_RTN
-    BNE MAP_RTN_O
+    BNE MAP_RTN_O_SET_SWITCH_EXIT_JMP
     JSR BANK/MOVE/RUN_RTN_SWITCH_UNK
-    BCC L_1F:07F9
-MAP_RTN_O: ; 1F:07F5, 0x03E7F5
+    BCC EXIT_JMP_DATA_INDEX_SWITCH_MOVE_UNK
+MAP_RTN_O_SET_SWITCH_EXIT_JMP: ; 1F:07F5, 0x03E7F5
     LDA #$88
-    STA ROUTINE_SWITCH_UNK
-L_1F:07F9: ; 1F:07F9, 0x03E7F9
-    JMP L_1F:0567
-L_1F:07FC: ; 1F:07FC, 0x03E7FC
-    LDA ENGINE_FLAG_25_SKIP_UNK
-    BNE L_1F:0803
-    JMP ADDS_IDFK
-L_1F:0803: ; 1F:0803, 0x03E803
+    STA ROUTINE_SWITCH_UNK ; Set switch.
+EXIT_JMP_DATA_INDEX_SWITCH_MOVE_UNK: ; 1F:07F9, 0x03E7F9
+    JMP DATA_INDEX_SWITCH_MOVE_UNK ; Goto.
+FLAG_SET_MAYBE_FIX_PULL_UNK: ; 1F:07FC, 0x03E7FC
+    LDA ENGINE_FLAG_25_SKIP_UNK ; Load ??
+    BNE VAL_EXTENDED ; Set, goto.
+    JMP ADDS_IDFK ; Do adds instead.
+VAL_EXTENDED: ; 1F:0803, 0x03E803
+    PLA ; Pull A.
     PLA
-    PLA
-    JMP MAP_RTN_O
+    JMP MAP_RTN_O_SET_SWITCH_EXIT_JMP ; Goto.
 MAP_RTN_S: ; 1F:0808, 0x03E808
-    JSR L_1F:060E
-    BCC MAP_RTN_O
-    RTS
+    JSR SUB_PTR_SETUP_CHECK_IDFK_GOSH ; Do.
+    BCC MAP_RTN_O_SET_SWITCH_EXIT_JMP ; Ret CC, goto.
+    RTS ; Leave.
 MAP_RTN_V: ; 1F:080E, 0x03E80E
-    JSR L_1F:060E
-    BCC MAP_RTN_R
-    RTS
+    JSR SUB_PTR_SETUP_CHECK_IDFK_GOSH ; Do.
+    BCC MAP_RTN_R ; Ret CC, goto.
+    RTS ; Leave.
 MAP_RTN_R: ; 1F:0814, 0x03E814
-    JSR L_1F:07FC
-    AND #$E0
+    JSR FLAG_SET_MAYBE_FIX_PULL_UNK ; Do.
+    AND #$E0 ; Keep 1110.0000
+    LSR A ; >> 4, /16.
     LSR A
     LSR A
     LSR A
-    LSR A
-    CMP #$08
-    BCS MAP_RTN_O
-    LDY #$15
-    STA [ENGINE_FPTR_30[2]],Y
-    JSR MAP_RTN_O
-    JMP L_1F:074D
+    CMP #$08 ; If _ #$08
+    BCS MAP_RTN_O_SET_SWITCH_EXIT_JMP ; >=, goto.
+    LDY #$15 ; Stream index.
+    STA [ENGINE_FPTR_30[2]],Y ; Store to stream.
+    JSR MAP_RTN_O_SET_SWITCH_EXIT_JMP ; Do.
+    JMP STREAM_SET_FILE_NOTDONEBUTIDK?
 L_1F:082B: ; 1F:082B, 0x03E82B
     CMP #$00
-    BNE MAP_RTN_O
+    BNE MAP_RTN_O_SET_SWITCH_EXIT_JMP
     STA SCRIPT_FLAG_0x22
     LDY #$1D
     LDA [ENGINE_FPTR_30[2]],Y
@@ -1303,7 +1304,7 @@ L_1F:082B: ; 1F:082B, 0x03E82B
     PHA
     JSR STREAM_UNK
     PLA
-    JMP SWITCH_MAP/SCREEN?
+    JMP SWITCH_SCRIPTS?
 MAP_RTN_F: ; 1F:083F, 0x03E83F
     LDY #$1A
     LDA [ENGINE_FPTR_30[2]],Y
@@ -1377,7 +1378,7 @@ L_1F:08B2: ; 1F:08B2, 0x03E8B2
     PHA
     AND #$07
     STA ROUTINE_SWITCH_UNK
-    JSR L_1F:05BD
+    JSR INDEX_AND_MODS_NO_SHIFT_UNK
     PLA
     TAX
     BPL L_1F:08C5
@@ -1391,34 +1392,34 @@ L_1F:08C5: ; 1F:08C5, 0x03E8C5
     ORA #$70
     ORA ROUTINE_SWITCH_UNK
     STA SCRIPT_FLAG_0x22
-    JMP L_1F:0567
+    JMP DATA_INDEX_SWITCH_MOVE_UNK
 MAP_RTN_AC: ; 1F:08D2, 0x03E8D2
-    JSR L_1F:060E
+    JSR SUB_PTR_SETUP_CHECK_IDFK_GOSH
     BCC L_1F:08D8
     RTS
 L_1F:08D8: ; 1F:08D8, 0x03E8D8
-    JSR MAP_RTN_O
+    JSR MAP_RTN_O_SET_SWITCH_EXIT_JMP
     JMP L_1F:08E1
 MAP_RTN_J: ; 1F:08DE, 0x03E8DE
     JSR MAP_RTN_I
 L_1F:08E1: ; 1F:08E1, 0x03E8E1
-    JSR L_1F:074D
+    JSR STREAM_SET_FILE_NOTDONEBUTIDK?
     LDA #$74
     BNE L_1F:0900
 MAP_RTN_AG: ; 1F:08E8, 0x03E8E8
-    JSR L_1F:060E
+    JSR SUB_PTR_SETUP_CHECK_IDFK_GOSH
     BCC L_1F:08EE
     RTS
 L_1F:08EE: ; 1F:08EE, 0x03E8EE
-    JSR MAP_RTN_O
+    JSR MAP_RTN_O_SET_SWITCH_EXIT_JMP
     LDA #$74
     BNE L_1F:0900
 MAP_RTN_AF: ; 1F:08F5, 0x03E8F5
-    JSR L_1F:060E
+    JSR SUB_PTR_SETUP_CHECK_IDFK_GOSH
     BCC L_1F:08FB
     RTS
 L_1F:08FB: ; 1F:08FB, 0x03E8FB
-    JSR MAP_RTN_O
+    JSR MAP_RTN_O_SET_SWITCH_EXIT_JMP
     LDA #$72
 L_1F:0900: ; 1F:0900, 0x03E900
     LDX #$01
@@ -1446,9 +1447,9 @@ MAP_RTN_K: ; 1F:0905, 0x03E905
     TXA
     STA ROUTINE_SWITCH_UNK
     BMI L_1F:092F
-    JSR L_1F:05BD
+    JSR INDEX_AND_MODS_NO_SHIFT_UNK
 L_1F:092F: ; 1F:092F, 0x03E92F
-    JSR L_1F:0567
+    JSR DATA_INDEX_SWITCH_MOVE_UNK
     JSR L_1F:0A24
     LDY #$08
     LDA [ENGINE_FPTR_30[2]],Y
@@ -1470,19 +1471,19 @@ L_1F:094C: ; 1F:094C, 0x03E94C
     STA NMI_FLAG_C
     STA NMI_FP_UNK[2]
     STA NMI_FP_UNK+1
-    JSR L_1F:0733
+    JSR STREAM_CLEAR_DUBS
 L_1F:095B: ; 1F:095B, 0x03E95B
     LDA #$00
     STA ROUTINE_SWITCH_UNK
     STA FLAG_UNK_23
     LDA #$10
-    BCS L_1F:0967
-L_1F:0965: ; 1F:0965, 0x03E965
-    LDA #$80
-L_1F:0967: ; 1F:0967, 0x03E967
-    LDY #$00
-    STA [ENGINE_FPTR_30[2]],Y
-    RTS
+    BCS STREAM_SET_FIRST_BYTE_A
+STREAM_SET_0x80_FIRST_BYTE: ; 1F:0965, 0x03E965
+    LDA #$80 ; Value to write seed.
+STREAM_SET_FIRST_BYTE_A: ; 1F:0967, 0x03E967
+    LDY #$00 ; Stream = 0x00
+    STA [ENGINE_FPTR_30[2]],Y ; Store to.
+    RTS ; Leave.
 MAP_RTN_G: ; 1F:096C, 0x03E96C
     LDA FLAG_UNK_23
     ASL A
@@ -1494,7 +1495,7 @@ MAP_RTN_G: ; 1F:096C, 0x03E96C
     STA R_**:$000C
 L_1F:097C: ; 1F:097C, 0x03E97C
     STA ROUTINE_SWITCH_UNK
-    JSR L_1F:05BD
+    JSR INDEX_AND_MODS_NO_SHIFT_UNK
     LDA ENGINE_FLAG_25_SKIP_UNK
     CMP #$28
     BCS L_1F:09AD
@@ -1519,23 +1520,23 @@ L_1F:09A9: ; 1F:09A9, 0x03E9A9
     LDA #$88
     STA ROUTINE_SWITCH_UNK
 L_1F:09AD: ; 1F:09AD, 0x03E9AD
-    JSR L_1F:0567
+    JSR DATA_INDEX_SWITCH_MOVE_UNK
     JSR L_1F:0A24
-L_1F:09B3: ; 1F:09B3, 0x03E9B3
-    LDA ROUTINE_SWITCH_UNK
+EXIT_MOVE_FPTR/SAVE_SWITCH?: ; 1F:09B3, 0x03E9B3
+    LDA ROUTINE_SWITCH_UNK ; Move switch.
     STA SCRIPT_UNK_DATA_SELECT_??
-    LDY #$09
-    LDA [ENGINE_FPTR_30[2]],Y
-    AND #$40
-    ORA ACTION_BUTTONS_RESULT
-    STA NMI_FLAG_C
-    LDY #$0C
-    LDA [ENGINE_FPTR_30[2]],Y
-    STA NMI_FP_UNK[2]
-    INY
-    LDA [ENGINE_FPTR_30[2]],Y
+    LDY #$09 ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from stream.
+    AND #$40 ; Keep bit.
+    ORA ACTION_BUTTONS_RESULT ; Or with.
+    STA NMI_FLAG_C ; Store to.
+    LDY #$0C ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from file.
+    STA NMI_FP_UNK[2] ; Store as PTR L.
+    INY ; Stream++
+    LDA [ENGINE_FPTR_30[2]],Y ; Move PTR H.
     STA NMI_FP_UNK+1
-    RTS
+    RTS ; Leave.
 L_1F:09CD: ; 1F:09CD, 0x03E9CD
     LDA SCRIPT_FLAG_0x22
     BEQ L_1F:09E1
@@ -1557,11 +1558,11 @@ L_1F:09E1: ; 1F:09E1, 0x03E9E1
     LDA R_**:$000D
     BPL L_1F:09F3
     AND #$0F
-    CMP L_1F:0BDD,X
+    CMP ACTION_ARRAY_UDLR?,X
     BEQ L_1F:09F7
     STA R_**:$000D
 L_1F:09F3: ; 1F:09F3, 0x03E9F3
-    LDA L_1F:0BDD,X
+    LDA ACTION_ARRAY_UDLR?,X
     RTS
 L_1F:09F7: ; 1F:09F7, 0x03E9F7
     LDA #$88
@@ -1595,7 +1596,7 @@ L_1F:0A22: ; 1F:0A22, 0x03EA22
 L_1F:0A23: ; 1F:0A23, 0x03EA23
     RTS
 L_1F:0A24: ; 1F:0A24, 0x03EA24
-    JSR STREAM_PTR_30_PTR_DATA_TO_32
+    JSR SETUP_PTR_FROM_PTR_TODO
     LDY #$01
     LDA [ENGINE_FPTR_32[2]],Y
     AND #$40
@@ -1657,17 +1658,17 @@ L_1F:0A7C: ; 1F:0A7C, 0x03EA7C
     STA ROUTINE_SWITCH_UNK
     LDY #$15
     STA [ENGINE_FPTR_30[2]],Y
-    JSR L_1F:05BD
-    JSR L_1F:0B0B
-    JSR L_1F:059B
-    JMP L_1F:09B3
+    JSR INDEX_AND_MODS_NO_SHIFT_UNK
+    JSR GET_STATE_UNK_LOWER
+    JSR EXIT_STREAM_MIX_UNK
+    JMP EXIT_MOVE_FPTR/SAVE_SWITCH?
 L_1F:0A9B: ; 1F:0A9B, 0x03EA9B
     CMP #$00
     BNE L_1F:0AA1
     STA FLAG_UNK_23
 L_1F:0AA1: ; 1F:0AA1, 0x03EAA1
     INY
-    JSR L_1F:06A1
+    JSR MISC_FILE_MANIP_WITH_PTR_32_AS_MANIP
     INY
     TYA
     LDY #$1F
@@ -1678,22 +1679,22 @@ L_1F:0AA1: ; 1F:0AA1, 0x03EAA1
     STA FLAG_UNK_23
     JSR SLOTS_AND_FPTRS_IDFK
     LDX #$00
-    JSR L_1E:0DAF
+    JSR ACTION_INDEX_STORE_AND_RETURN_VALUE_UNK
 L_1F:0ABB: ; 1F:0ABB, 0x03EABB
     LDA #$88
     STA ROUTINE_SWITCH_UNK
-    JSR L_1F:0B0B
-    JMP L_1F:09B3
+    JSR GET_STATE_UNK_LOWER
+    JMP EXIT_MOVE_FPTR/SAVE_SWITCH?
 MAP_RTN_M: ; 1F:0AC5, 0x03EAC5
     LDA ROUTINE_SWITCH_UNK
-    BMI L_1F:0B07
+    BMI SET_SWITCH_RTN_NO_MOVE?UNK
     LDY #$19
     LDA [ENGINE_FPTR_30[2]],Y
     TAX
     LDA ROUTINE_SWITCH_UNK
     STA [ENGINE_FPTR_30[2]],Y
     TXA
-    BMI L_1F:0B07
+    BMI SET_SWITCH_RTN_NO_MOVE?UNK
     STA ROUTINE_SWITCH_UNK
     LDY #$15
     EOR #$04
@@ -1711,44 +1712,44 @@ MAP_RTN_M: ; 1F:0AC5, 0x03EAC5
     ORA #$10
     BIT L_1F:0F29
     STA [ENGINE_FPTR_30[2]],Y
-    JSR L_1F:05BD
-    JSR L_1F:0B0B
+    JSR INDEX_AND_MODS_NO_SHIFT_UNK
+    JSR GET_STATE_UNK_LOWER
     CPX #$40
     BCC L_1F:0B04
     SBC #$04
 L_1F:0B04: ; 1F:0B04, 0x03EB04
-    JMP L_1F:059B
-L_1F:0B07: ; 1F:0B07, 0x03EB07
+    JMP EXIT_STREAM_MIX_UNK
+SET_SWITCH_RTN_NO_MOVE?UNK: ; 1F:0B07, 0x03EB07
     LDA #$88
     STA ROUTINE_SWITCH_UNK
-L_1F:0B0B: ; 1F:0B0B, 0x03EB0B
-    JSR 3E_TO_X_INDEX
-    LDY #$0C
-    LDA L_1F:0BF3,X
+GET_STATE_UNK_LOWER: ; 1F:0B0B, 0x03EB0B
+    JSR ROUTINE_SWITCH_TO_DATA_SLOT_INDEX_X ; Get index.
+    LDY #$0C ; Stream index.
+    LDA DATA_UNK_A,X ; Move to file ??
     STA [ENGINE_FPTR_30[2]],Y
-    INY
-    LDA L_1F:0BF4,X
+    INY ; File++
+    LDA DATA_UNK_B,X ; Move ?? to file.
     STA [ENGINE_FPTR_30[2]],Y
-    JSR L_1F:073D
-    JSR L_1F:0746
-    LDA ROUTINE_SWITCH_UNK
-    BMI L_1F:0B39
-    LDY #$15
-    LDA [ENGINE_FPTR_30[2]],Y
-    TAX
-    LDA L_1F:0C35,X
-    TAX
-    LDY #$08
-    AND #$40
-    ORA [ENGINE_FPTR_30[2]],Y
+    JSR STREAM_LOAD_STATUS_UNK ; Remove.
+    JSR STREAM_SET_FILE_DONE? ; Set ??
+    LDA ROUTINE_SWITCH_UNK ; Load.
+    BMI RTS ; Negative, goto.
+    LDY #$15 ; Stream index.
+    LDA [ENGINE_FPTR_30[2]],Y ; Load from file.
+    TAX ; To X index.
+    LDA TRANSLATE_ARR_UNK,X ; Load translate.
+    TAX ; To X index.
+    LDY #$08 ; File.
+    AND #$40 ; Keep 0100.0000
+    ORA [ENGINE_FPTR_30[2]],Y ; Combine into.
     STA [ENGINE_FPTR_30[2]],Y
-    TXA
-    AND #$1F
-L_1F:0B39: ; 1F:0B39, 0x03EB39
+    TXA ; X to A.
+    AND #$1F ; Keep index.
+RTS: ; 1F:0B39, 0x03EB39
     RTS
 MAP_RTN_H: ; 1F:0B3A, 0x03EB3A
     JSR L_1F:09CD
-    BMI L_1F:0B70
+    BMI SWITCH_SWITCH_SET
     LDY #$15
     STA [ENGINE_FPTR_30[2]],Y
     STA SCRIPT_UNK_DATA_SELECT_??
@@ -1775,32 +1776,32 @@ L_1F:0B5B: ; 1F:0B5B, 0x03EB5B
     LDX #$05
 L_1F:0B68: ; 1F:0B68, 0x03EB68
     STX ROUTINE_SWITCH_UNK
-    JSR L_1F:05BD
-    JMP L_1F:0B76
-L_1F:0B70: ; 1F:0B70, 0x03EB70
+    JSR INDEX_AND_MODS_NO_SHIFT_UNK
+    JMP SWITCH_SWITCH_IDK ; Goto.
+SWITCH_SWITCH_SET: ; 1F:0B70, 0x03EB70
     LDA #$88
-    STA SCRIPT_UNK_DATA_SELECT_??
+    STA SCRIPT_UNK_DATA_SELECT_?? ; Set ??
+    STA ROUTINE_SWITCH_UNK ; Set ??
+SWITCH_SWITCH_IDK: ; 1F:0B76, 0x03EB76
+    JSR DATA_INDEX_SWITCH_MOVE_UNK ; Do.
+    JSR STREAM_SET_FILE_NOTDONEBUTIDK? ; Do.
+    LDA SCRIPT_UNK_DATA_SELECT_?? ; Move ??
     STA ROUTINE_SWITCH_UNK
-L_1F:0B76: ; 1F:0B76, 0x03EB76
-    JSR L_1F:0567
-    JSR L_1F:074D
-    LDA SCRIPT_UNK_DATA_SELECT_??
-    STA ROUTINE_SWITCH_UNK
-    JSR 3E_TO_X_INDEX
-    LDA ACTION_BUTTONS_RESULT
+    JSR ROUTINE_SWITCH_TO_DATA_SLOT_INDEX_X ; Do rtn.
+    LDA ACTION_BUTTONS_RESULT ; Move ??
     STA NMI_FLAG_C
-    LDA L_1F:0BF3,X
+    LDA DATA_UNK_A,X ; Move data.
     STA NMI_FP_UNK[2]
-    LDA L_1F:0BF4,X
+    LDA DATA_UNK_B,X
     STA NMI_FP_UNK+1
-    RTS
+    RTS ; Leave.
 MAP_RTN_I: ; 1F:0B92, 0x03EB92
     JSR L_1F:09CD
     BMI L_1F:0BC0
     LDY #$15
     STA [ENGINE_FPTR_30[2]],Y
     STA ROUTINE_SWITCH_UNK
-    JSR L_1F:05BD
+    JSR INDEX_AND_MODS_NO_SHIFT_UNK
     JSR L_1F:09FA
     BCS L_1F:0BC0
     LDA SCRIPT_FLAG_0x22
@@ -1810,7 +1811,7 @@ MAP_RTN_I: ; 1F:0B92, 0x03EB92
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A
     LDA STREAM_DEEP_C
     STA STREAM_UNK_DEEP_A[2]
-    JSR L_1F:0506
+    JSR SUB_SEED_UNK_AND_UNK
     LDA SCRIPT_R6_ROUTINE_SELECT
     JSR BANK_HANDLER_R6_AND_BASE
     BIT OBJ_PROCESS_COUNT_LEFT?
@@ -1819,45 +1820,45 @@ L_1F:0BC0: ; 1F:0BC0, 0x03EBC0
     LDA #$88
     STA ROUTINE_SWITCH_UNK
 L_1F:0BC4: ; 1F:0BC4, 0x03EBC4
-    JSR L_1F:0567
-    JMP L_1F:09B3
+    JSR DATA_INDEX_SWITCH_MOVE_UNK
+    JMP EXIT_MOVE_FPTR/SAVE_SWITCH?
 MAP_RTN_N: ; 1F:0BCA, 0x03EBCA
     JSR L_1F:09CD
     STA ROUTINE_SWITCH_UNK
     BMI L_1F:0BD4
-    JSR L_1F:05BD
+    JSR INDEX_AND_MODS_NO_SHIFT_UNK
 L_1F:0BD4: ; 1F:0BD4, 0x03EBD4
-    JSR L_1F:0567
-    JSR L_1F:073D
-    JMP L_1F:09B3
-L_1F:0BDD: ; 1F:0BDD, 0x03EBDD
-    .db 88
-    .db 02
-    .db 06
-    .db 88
-    .db 04
-    .db 03
-    .db 05
-    .db 88
-    .db 00
-    .db 01
-    .db 07
-    .db 88
-    .db 88
-    .db 88
-    .db 88
-    .db 88
+    JSR DATA_INDEX_SWITCH_MOVE_UNK
+    JSR STREAM_LOAD_STATUS_UNK
+    JMP EXIT_MOVE_FPTR/SAVE_SWITCH?
+ACTION_ARRAY_UDLR?: ; 1F:0BDD, 0x03EBDD
+    .db 88 ; No action value.
+    .db 02 ; Right.
+    .db 06 ; Left.
+    .db 88 ; Left, right.
+    .db 04 ; Down.
+    .db 03 ; Down, right.
+    .db 05 ; Down, left.
+    .db 88 ; Down, right, left.
+    .db 00 ; Up.
+    .db 01 ; Up, right.
+    .db 07 ; Up, left.
+    .db 88 ; Up, right, left.
+    .db 88 ; Up, down.
+    .db 88 ; Up, down, right.
+    .db 88 ; Up, down, left.
+    .db 88 ; Up, down, left, right.
 LUT_MOD_ARRAY_UNK: ; [4], 1F:0BED, 0x03EBED
     .db 00
     .db 00
     .db C0
     .db FF
-L_1F:0BF1: ; 1F:0BF1, 0x03EBF1
+DATA_UNK_C: ; 1F:0BF1, 0x03EBF1
     .db 00
     .db 00
-L_1F:0BF3: ; 1F:0BF3, 0x03EBF3
+DATA_UNK_A: ; 1F:0BF3, 0x03EBF3
     .db 00
-L_1F:0BF4: ; 1F:0BF4, 0x03EBF4
+DATA_UNK_B: ; 1F:0BF4, 0x03EBF4
     .db FF
     .db 40
     .db 00
@@ -1923,7 +1924,7 @@ L_1F:0BF4: ; 1F:0BF4, 0x03EBF4
     .db 00
     .db 00
     .db 00
-L_1F:0C35: ; 1F:0C35, 0x03EC35
+TRANSLATE_ARR_UNK: ; 1F:0C35, 0x03EC35
     .db 54
     .db 14
     .db 1C
@@ -2033,7 +2034,7 @@ ANY_BUTTONS_PRESSED: ; 1F:0CC6, 0x03ECC6
     STA NMI_LATCH_FLAG ; Clear latch.
     STA R_**:$0070 ; Clear ??
     STA ENGINE_PACKINATOR_ARG_SEED_0xA0_PRE_COUNT ; Clear.
-    STA FLAG_UNK_48 ; Clear ??
+    STA SOUND_MAIN_SONG_ID ; Clear ??
     STA SCRIPT_UNK_TESTED[6] ; Clear ??
     STA RAM_CODE_UNK[3] ; Clear ??
     PLP ; Pull status, return.
@@ -2942,30 +2943,30 @@ A/B_NOT_PRESSED: ; 1F:12A2, 0x03F2A2
     AND #$C0 ; Test A/B
     BEQ A/B_NOT_PRESSED ; !=, goto.
     RTS ; Leave.
-RESTORE_FPTR_ARG_AS_CALL_HEADER_SEEDED_BETWEEN: ; 1F:12AE, 0x03F2AE
+SWITCH_TABLE_PAST_JSR_INDIRECT: ; 1F:12AE, 0x03F2AE
     ASL A ; << 1, *2.
     TAY ; Val to Y.
-    INY ; Offset 0x3
+    INY ; Offset 0x3, one for addr, two for skipping first slot?
     INY
     INY
-    PLA ; Restore FPTR.
+    PLA ; RTS Addr as ptr.
     STA MISC_USE_A
     PLA
     STA MISC_USE_B
-    LDA [MISC_USE_A],Y ; Load from file.
+    LDA [MISC_USE_A],Y ; Load from JSR file.
     STA MISC_USE_C ; Store to call.
     INY ; Stream++
     LDA [MISC_USE_A],Y ; Load from file.
     STA MISC_USE_D/DECIMAL_POS? ; Call H.
-    LDY #$01 ; Stream header for between routine.
-    SEC ; Prep sub.
+    LDY #$01 ; Reseed into first ptr.
+    SEC ; Prep sub for RTS fix to Addr-0x1
     LDA [MISC_USE_A],Y ; Load from header, RTS PTR L.
     SBC #$01 ; -= 0x1
     TAX ; Save to X.
     INY ; Stream++
     LDA [MISC_USE_A],Y ; Load from file, RTS PTR H.
     SBC #$00 ; Carry sub.
-    PHA ; Save to stack for RTS of other RTN.
+    PHA ; Save back to stack.
     TXA ; Save lower.
     PHA
     JMP [MISC_USE_C] ; Run main routine.
@@ -2988,101 +2989,101 @@ RESTORE_FPTR_AND_CALL_FROM_FILE: ; 1F:12D5, 0x03F2D5
     TXA
     PHA
     RTS ; Run it.
-SUB_UNK: ; 1F:12ED, 0x03F2ED
-    PHA
+SUB_DECIMAL_STATS_THINGY?: ; 1F:12ED, 0x03F2ED
+    PHA ; Save A,X,Y.
     TXA
     PHA
     TYA
     PHA
-    LDA MISC_USE_D/DECIMAL_POS?
+    LDA MISC_USE_D/DECIMAL_POS? ; Save.
     PHA
-    LDA MISC_USE_C
+    LDA MISC_USE_C ; Save.
     PHA
-    LDA SAVE_GAME_MOD_PAGE_PTR+1
+    LDA SAVE_GAME_MOD_PAGE_PTR+1 ; Save.
     PHA
-    LDA SAVE_GAME_MOD_PAGE_PTR[2]
+    LDA SAVE_GAME_MOD_PAGE_PTR[2] ; Save.
     PHA
-    LDA ARR_BITS_TO_UNK+1
+    LDA ARR_BITS_TO_UNK+1 ; Save.
     PHA
-    LDA ARR_BITS_TO_UNK[8]
+    LDA ARR_BITS_TO_UNK[8] ; Save.
     PHA
-    LDA MISC_USE_B
-    AND #$FC
+    LDA MISC_USE_B ; Load ??
+    AND #$FC ; Keep 1111.1100
+    PHA ; Save.
+    LDX #$06 ; Seed iterations.
+LOOP_ROTATE: ; 1F:130B, 0x03F30B
+    ASL MISC_USE_A ; << 1
+    ROL MISC_USE_B ; Roll into.
+    DEX ; Count--
+    BNE LOOP_ROTATE ; != 0, loop.
+    STX MISC_USE_C ; Clear.
+    TXA ; Clear A.
     PHA
-    LDX #$06
-L_1F:130B: ; 1F:130B, 0x03F30B
-    ASL MISC_USE_A
-    ROL MISC_USE_B
-    DEX
-    BNE L_1F:130B
-    STX MISC_USE_C
-    TXA
-    PHA
-    LDA MISC_USE_B
+    LDA MISC_USE_B ; Save shifty.
     PHA
     LDA MISC_USE_A
     PHA
     LDA #$64
+    STA SAVE_GAME_MOD_PAGE_PTR[2] ; Seed PTR L.
+    JSR ENGINE_NUMS_UNK_MODULO? ; Do numbers.
+    JSR ADDS_IDFK ; Do adds.
+    LSR A ; A >> 1
+    PHP ; Save status.
+    TAX ; To X index.
+    LDA ROM_TABLE_UNK,X ; Move ??
     STA SAVE_GAME_MOD_PAGE_PTR[2]
-    JSR ENGINE_NUMS_UNK_MODULO?
-    JSR ADDS_IDFK
-    LSR A
-    PHP
-    TAX
-    LDA ROM_TABLE_UNK,X
-    STA SAVE_GAME_MOD_PAGE_PTR[2]
-    JSR LIB_DECIMAL?_UNK
-    PLP
-    BCS L_1F:1346
-    PLA
-    ADC MISC_USE_A
-    STA MISC_USE_A
-    PLA
-    ADC MISC_USE_B
-    STA MISC_USE_B
-    PLA
-    ADC MISC_USE_C
-    STA MISC_USE_C
-    JMP L_1F:1355
-L_1F:1346: ; 1F:1346, 0x03F346
-    PLA
-    SBC MISC_USE_A
-    STA MISC_USE_A
-    PLA
-    SBC MISC_USE_B
-    STA MISC_USE_B
-    PLA
-    SBC MISC_USE_C
-    STA MISC_USE_C
-L_1F:1355: ; 1F:1355, 0x03F355
-    LDX #$06
-L_1F:1357: ; 1F:1357, 0x03F357
-    LSR MISC_USE_C
-    ROR MISC_USE_B
-    ROR MISC_USE_A
-    DEX
-    BNE L_1F:1357
-    PLA
-    ORA MISC_USE_B
-    STA MISC_USE_B
-    PLA
+    JSR LIB_DECIMAL?_UNK ; Do 
+    PLP ; Pull status.
+    BCS DO_SUBS_ROUTINE ; CS, goto.
+    PLA ; Pull value.
+    ADC MISC_USE_A ; Add with.
+    STA MISC_USE_A ; Store result.
+    PLA ; Pull value.
+    ADC MISC_USE_B ; Add with.
+    STA MISC_USE_B ; Store result.
+    PLA ; Pull value.
+    ADC MISC_USE_C ; Add with.
+    STA MISC_USE_C ; Store result.
+    JMP SHIFTY_BACK_UNK ; Goto.
+DO_SUBS_ROUTINE: ; 1F:1346, 0x03F346
+    PLA ; Pull value.
+    SBC MISC_USE_A ; Sub with.
+    STA MISC_USE_A ; Store to.
+    PLA ; Pull value.
+    SBC MISC_USE_B ; Sub with.
+    STA MISC_USE_B ; Store to.
+    PLA ; Pull value.
+    SBC MISC_USE_C ; Sub with.
+    STA MISC_USE_C ; Store to.
+SHIFTY_BACK_UNK: ; 1F:1355, 0x03F355
+    LDX #$06 ; Iterations.
+LOOP_SHIFT: ; 1F:1357, 0x03F357
+    LSR MISC_USE_C ; Shift.
+    ROR MISC_USE_B ; Rotate into.
+    ROR MISC_USE_A ; 2x
+    DEX ; Count--
+    BNE LOOP_SHIFT ; != 0, do more.
+    PLA ; Pull stack.
+    ORA MISC_USE_B ; Combine with.
+    STA MISC_USE_B ; Store to.
+    PLA ; Stack to.
     STA ARR_BITS_TO_UNK[8]
-    PLA
+    PLA ; 2x
     STA ARR_BITS_TO_UNK+1
-    PLA
+    PLA ; 3x
     STA SAVE_GAME_MOD_PAGE_PTR[2]
-    PLA
+    PLA ; 4x
     STA SAVE_GAME_MOD_PAGE_PTR+1
-    PLA
+    PLA ; 5x
     STA MISC_USE_C
-    PLA
+    PLA ; 6x
     STA MISC_USE_D/DECIMAL_POS?
-    PLA
+    PLA ; Restore Y.
     TAY
     PLA
-    TAX
-    PLA
-    RTS
+    TAX ; Restore X.
+    PLA ; Restore A.
+    RTS ; Leave.
 ROM_TABLE_UNK: ; 1F:137D, 0x03F37D
     .db 00
     .db 00
@@ -3221,7 +3222,7 @@ MISC_RESTORE_REPLACE_AND_RESTORE_UNK: ; 1F:13FD, 0x03F3FD
     STX MISC_USE_A ; X to.
     LDA #$00
     STA MISC_USE_B ; Clear ??
-    JSR SUB_UNK ; Do ??
+    JSR SUB_DECIMAL_STATS_THINGY? ; Do ??
     LDA MISC_USE_B ; Load ??
     BEQ VAL_EQ_0x00 ; == 0, goto.
     LDA #$FF
@@ -3285,7 +3286,7 @@ LOOP_OBJECTS: ; 1F:1467, 0x03F467
     BNE LOOP_OBJECTS ; != 0, loop.
     RTS ; Leave.
 LIB_VAL_TO_DECIMAL_AND_FILE?: ; 1F:1479, 0x03F479
-    LDA FLAG_UNK_48 ; Val ??
+    LDA SOUND_MAIN_SONG_ID ; Val ??
     STA MISC_USE_A ; Move.
     LDA #$00
     STA MISC_USE_B ; Clear bits upper.
@@ -3556,7 +3557,7 @@ Y_LOOP: ; 1F:1622, 0x03F622
     BNE Y_LOOP ; !=, goto.
     LDA #$00
     STA ALT_STUFF_INDEX? ; Clear ??
-L_1F:1630: ; 1F:1630, 0x03F630
+VAL_NE_0x60: ; 1F:1630, 0x03F630
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
     LDY ALT_STUFF_INDEX? ; Load index.
     LDA STREAM_INDEXES_ARR_UNK[24],Y
@@ -3570,124 +3571,132 @@ L_1F:1630: ; 1F:1630, 0x03F630
     AND #$80 ; Keep neg.
     BNE NEGATIVE_SET ; Set, goto.
     LDX #$01 ; Seed alt
-    JSR L_1F:1673 ; Do ??
+    JSR ROUTINE_OBJ_HANDLE_UNK_A ; Do ??
     BCC NEGATIVE_SET ; Set, goto.
     LDX #$00 ; Load ??
 NEGATIVE_SET: ; 1F:1655, 0x03F655
     TXA ; Val to A.
-    JSR L_1F:16AA
-    CLC
-    LDA ARR_BITS_TO_UNK[8]
-    ADC #$08
-    STA ARR_BITS_TO_UNK[8]
+    JSR SETTLE_AND_TABLE_IN_A ; Do ??
+    CLC ; Prep add.
+    LDA ARR_BITS_TO_UNK[8] ; Load ??
+    ADC #$08 ; Add with.
+    STA ARR_BITS_TO_UNK[8] ; Store result.
 DATA_INDEXED_0x00: ; 1F:1660, 0x03F660
-    CLC
-    LDA ARR_BITS_TO_UNK+1
-    ADC #$10
-    STA ARR_BITS_TO_UNK+1
-    CLC
-    LDA ALT_STUFF_INDEX?
-    ADC #$20
-    STA ALT_STUFF_INDEX?
-    CMP #$60
-    BNE L_1F:1630
-    RTS
-L_1F:1673: ; 1F:1673, 0x03F673
+    CLC ; Prep add.
+    LDA ARR_BITS_TO_UNK+1 ; Load ??
+    ADC #$10 ; Add with.
+    STA ARR_BITS_TO_UNK+1 ; Store result.
+    CLC ; Prep add.
+    LDA ALT_STUFF_INDEX? ; Load ??
+    ADC #$20 ; Add with.
+    STA ALT_STUFF_INDEX? ; Store to.
+    CMP #$60 ; If _ #$60
+    BNE VAL_NE_0x60 ; !=, goto, loop.
+    RTS ; Leave.
+ROUTINE_OBJ_HANDLE_UNK_A: ; 1F:1673, 0x03F673
     TYA ; Save Y
     PHA
-    LDA STREAM_PTRS_ARR_UNK[48],Y
+    LDA STREAM_PTRS_ARR_UNK[48],Y ; Move from Y index to MISC.
     STA MISC_USE_A
     LDA STREAM_PTRS_ARR_UNK+1,Y
     STA MISC_USE_B
-    LDA STREAM_INDEXES_ARR_UNK+3,Y
+    LDA STREAM_INDEXES_ARR_UNK+3,Y ; Move to mod ptr?
     STA SAVE_GAME_MOD_PAGE_PTR[2]
     LDA STREAM_INDEXES_ARR_UNK+4,Y
     STA SAVE_GAME_MOD_PAGE_PTR+1
-    LDY #$03
-    LDA [MISC_USE_A],Y
+    LDY #$03 ; Stream index.
+    LDA [MISC_USE_A],Y ; Load from stream.
     STA MISC_USE_C
-    INY
-    LDA [MISC_USE_A],Y
-    AND #$03
-    STA MISC_USE_D/DECIMAL_POS?
-    LSR MISC_USE_D/DECIMAL_POS?
+    INY ; Stream++
+    LDA [MISC_USE_A],Y ; Load from stream.
+    AND #$03 ; Keep lower bits.
+    STA MISC_USE_D/DECIMAL_POS? ; Stopre to ??
+    LSR MISC_USE_D/DECIMAL_POS? ; Shift it into.
     ROR MISC_USE_C
-    LSR MISC_USE_D/DECIMAL_POS?
+    LSR MISC_USE_D/DECIMAL_POS? ; 2x
     ROR MISC_USE_C
-    PLA
+    PLA ; Restore Y.
     TAY
-    SEC
-    LDA SAVE_GAME_MOD_PAGE_PTR[2]
-    SBC MISC_USE_C
-    LDA SAVE_GAME_MOD_PAGE_PTR+1
-    SBC MISC_USE_D/DECIMAL_POS?
-    RTS
-L_1F:16AA: ; 1F:16AA, 0x03F6AA
+    SEC ; Prep sub.
+    LDA SAVE_GAME_MOD_PAGE_PTR[2] ; Load ??
+    SBC MISC_USE_C ; Sub with created.
+    LDA SAVE_GAME_MOD_PAGE_PTR+1 ; Load other.
+    SBC MISC_USE_D/DECIMAL_POS? ; Sub with. other.
+    RTS ; Leave.
+SETTLE_AND_TABLE_IN_A: ; 1F:16AA, 0x03F6AA
     PHA ; Save A.
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
     PLA ; Restore.
-    JSR RESTORE_FPTR_ARG_AS_CALL_HEADER_SEEDED_BETWEEN ; Do ??
-    TSX
-    INC SND_UNK_BF,X
-    INC R_**:$00C8,X
-    INC MAPPER_BANK_VALS[8],X
-    INC R_**:$00A9,X
-    ORA [FPTR_UNK_84_MENU?+1,X]
-    SBC MISC_USE_A
-    LDA #$00
+    JSR SWITCH_TABLE_PAST_JSR_INDIRECT ; Do routine passed in A.
+    LOW(IN-CODE_PTR_TABLE_A) ; Set flag ??
+    HIGH(IN-CODE_PTR_TABLE_A)
+    LOW(IN-CODE_PTR_TABLE_B) ; Seeded obj store ??
+    HIGH(IN-CODE_PTR_TABLE_B)
+    LOW(IN-CODE_PTR_TABLE_C) ; Obj status for all.
+    HIGH(IN-CODE_PTR_TABLE_C)
+    LOW(IN-CODE_PTR_TABLE_D) ; State and ptr restore.
+    HIGH(IN-CODE_PTR_TABLE_D)
+IN-CODE_PTR_TABLE_A: ; 1F:16BA, 0x03F6BA
+    LDA #$01
+    STA NMI_FLAG_B ; Set flag ??
+    RTS
+IN-CODE_PTR_TABLE_B: ; 1F:16BF, 0x03F6BF
+    LDA #$00 ; Seed ??
     LDX #$0C
     LDY #$97
-    JMP OBJECT_STORE_UNK
-    LDX ARR_BITS_TO_UNK[8]
-    LDA OBJ_STATUS?,X ; Obj to stack.
+    JMP OBJECT_STORE_UNK ; Store to ??
+IN-CODE_PTR_TABLE_C: ; 1F:16C8, 0x03F6C8
+    LDX ARR_BITS_TO_UNK[8] ; Index from.
+    LDA OBJ?_BYTE_0x0_STATUS?,X ; Obj? Save.
     PHA
-    LDA #$03 ; Seed ??
-    LDX #$0C
+    LDA #$03 ; To obj status.
+    LDX #$0C ; Ptr.
     LDY #$97
     JSR OBJECT_STORE_UNK ; Do.
-    PLA ; Pull A.
-    CMP #$03 ; If _ #$03
+    PLA ; Pull old obj.
+    CMP #$03 ; If was _ #$03
     BEQ RTS ; ==, leave.
     LDX #$04 ; Alt index.
 INDEX_NONZERO: ; 1F:16DE, 0x03F6DE
     TXA ; Obj save on stack.
     PHA
-    LDA #$00 ; Obj set ??
-    JSR OBJ_SET_AND_ENGINE_UNK
-    LDA #$03 ; Obj set ??
-    JSR OBJ_SET_AND_ENGINE_UNK
-    PLA
+    LDA #$00 ; Obj set state.
+    JSR OBJ_SET_AND_SETTLE_RETURN ; Mod and settle.
+    LDA #$03 ; Obj set state.
+    JSR OBJ_SET_AND_SETTLE_RETURN ; Mod and settle.
+    PLA ; Pull value.
     TAX ; Restore X object.
     DEX ; Obj--
     BNE INDEX_NONZERO ; != 0, loop.
 RTS: ; 1F:16EF, 0x03F6EF
-    RTS
-    LDA #$03 ; Seed ??
+    RTS ; Leave.
+IN-CODE_PTR_TABLE_D: ; 1F:16F0, 0x03F6F0
+    LDA #$03 ; Seed state.
     LDX #$10
-    LDY #$97
+    LDY #$97 ; Seed ptr.
     JMP OBJECT_STORE_UNK
 OBJECT_STORE_UNK: ; 1F:16F9, 0x03F6F9
     STX MISC_USE_A ; X and Y to. Will go to obj.
     STY MISC_USE_B
     LDX ARR_BITS_TO_UNK[8] ; Load index.
-    STA OBJ_STATUS?,X ; A to obj.
-    LDA #$08
-    STA R_**:$0301,X ; To obj[1]
-    LDA #$70
-    STA R_**:$0302,X ; To obj[2]
-    LDA ARR_BITS_TO_UNK+1 ; Other to obj[3]
-    STA R_**:$0303,X
-    LDA #$00
-    STA R_**:$0304,X ; Clear obj[4/5]
-    STA R_**:$0305,X
-    LDA MISC_USE_A ; Move val to ??
-    STA OBJ_UNK_A,X
+    STA OBJ?_BYTE_0x0_STATUS?,X ; To A passed.
+    LDA #$08 ; Obj ??
+    STA OBJ?_BYTE_0x1_UNK,X
+    LDA #$70 ; Obj ??
+    STA OBJ?_BYTE_0x2_UNK,X
+    LDA ARR_BITS_TO_UNK+1 ; Move ?? to obj.
+    STA OBJ?_BYTE_0x3_UNK,X
+    LDA #$00 ; Clear ??
+    STA OBJ?_BYTE_0x4_UNK,X ; Clear OBJs.
+    STA OBJ?_BYTE_0x5_BYTE,X
+    LDA MISC_USE_A ; Move passed PTR to.
+    STA OBJ?_PTR?[2],X
     LDA MISC_USE_B
-    STA OBJ_UNK_A_PAIR,X
+    STA OBJ?_PTR?+1,X
     RTS ; Leave.
-OBJ_SET_AND_ENGINE_UNK: ; 1F:1724, 0x03F724
-    LDX ARR_BITS_TO_UNK[8] ; Load obj index?
-    STA OBJ_STATUS?,X
+OBJ_SET_AND_SETTLE_RETURN: ; 1F:1724, 0x03F724
+    LDX ARR_BITS_TO_UNK[8] ; Load index.
+    STA OBJ?_BYTE_0x0_STATUS?,X ; Store passed as status.
     LDA #$01
     STA NMI_FLAG_B ; Set flag.
     LDX #$08
@@ -4236,21 +4245,21 @@ ADD_CARRY: ; 1F:1AF5, 0x03FAF5
     LDX #$10 ; Index ??
 ITERATION_START: ; 1F:1B0B, 0x03FB0B
     LDY CC_INDEX_UNK ; Index from.
-    LDA OBJ_STATUS?,Y ; Load from.
+    LDA OBJ?_BYTE_0x0_STATUS?,Y ; Load from.
     AND #$3F ; Keep lower.
     BNE OBJECT_BITS_SET ; Set, goto.
     JMP OBJECT_ITERATE ; Goto.
 OBJECT_BITS_SET: ; 1F:1B17, 0x03FB17
     STA CTRL_BIT_0x0 ; Store val.
     STX OBJ_INDEX_TEMP? ; Store obj index.
-    LDA R_**:$0301,Y ; Load pair.
+    LDA OBJ?_BYTE_0x1_UNK,Y ; Load pair.
     AND #$C0 ; Keep bits.
     STA CTRL_BIT_0x1 ; Store to.
     TXA ; Index to A.
     LSR A ; >> 2, /4.
     LSR A
     ORA CTRL_BIT_0x1 ; Set with others.
-    STA R_**:$0301,Y ; Store to pair.
+    STA OBJ?_BYTE_0x1_UNK,Y ; Store to pair.
     SEC ; Prep sub.
     LDA #$00 ; Invert seed.
     SBC R_**:$00CE ; Invert with.
@@ -4262,9 +4271,9 @@ OBJECT_BITS_SET: ; 1F:1B17, 0x03FB17
     LDX BMI_FLAG_SET_DIFF_MODDED_UNK ; Load val.
     BIT CTRL_BIT_0x1 ; Test 0x40
     BVC BIT_0x40_SET ; Set, goto.
-    LDA R_**:$0304,Y ; Move obj to ZP.
+    LDA OBJ?_BYTE_0x4_UNK,Y ; Move obj to ZP.
     STA OBJ_FPTR_TODO[2]
-    LDA R_**:$0305,Y ; 2x
+    LDA OBJ?_BYTE_0x5_BYTE,Y ; 2x
     STA OBJ_FPTR_TODO+1
     LDY #$00 ; Index reset.
 COUNT_POSITIVE: ; 1F:1B4A, 0x03FB4A
@@ -4284,18 +4293,18 @@ COUNT_POSITIVE: ; 1F:1B4A, 0x03FB4A
     TYA ; Stream to A.
     ADC OBJ_FPTR_TODO[2] ; Add with fptr.
     LDY CC_INDEX_UNK ; Index ??
-    STA R_**:$0304,Y ; Store val to index.
+    STA OBJ?_BYTE_0x4_UNK,Y ; Store val to index.
     LDA #$00 ; Seed ??
     ADC OBJ_FPTR_TODO+1 ; Carry add but dumb?
-    STA R_**:$0305,Y ; Store result.
+    STA OBJ?_BYTE_0x5_BYTE,Y ; Store result.
     JMP JMP_ENTRY_UNK ; Goto.
 BIT_0x40_SET: ; 1F:1B70, 0x03FB70
     CLC ; Prep add.
-    LDA R_**:$0304,Y ; Load from obj.
+    LDA OBJ?_BYTE_0x4_UNK,Y ; Load from obj.
     ADC R_**:$00C8 ; Add with.
     STA R_**:$00C8 ; Store to.
     CLC ; Prep add.
-    LDA R_**:$0305,Y ; Load.
+    LDA OBJ?_BYTE_0x5_BYTE,Y ; Load.
     ADC R_**:$00CA ; Add with.
     STA R_**:$00CA ; Store result.
     DEX ; Index--
@@ -4305,48 +4314,48 @@ JMP_ENTRY_UNK: ; 1F:1B83, 0x03FB83
     CLC ; Prep add.
     LDA R_**:$00C8 ; Load val.
     BMI VAL_NEGATIVE ; Negative, goto.
-    ADC R_**:$0302,Y ; Add with.
+    ADC OBJ?_BYTE_0x2_UNK,Y ; Add with.
     STA R_**:$00C8 ; Store to.
-    STA R_**:$0302,Y ; Store to obj.
+    STA OBJ?_BYTE_0x2_UNK,Y ; Store to obj.
     BCC ADD_CC ; CC, goto.
     BCS OBJ_UNK_INVERTED ; CS, goto.
 VAL_NEGATIVE: ; 1F:1B96, 0x03FB96
-    ADC R_**:$0302,Y ; Add with.
+    ADC OBJ?_BYTE_0x2_UNK,Y ; Add with.
     STA R_**:$00C8 ; Store to ??
-    STA R_**:$0302,Y ; Store to obj.
+    STA OBJ?_BYTE_0x2_UNK,Y ; Store to obj.
     BCS ADD_CC ; CS, goto.
 OBJ_UNK_INVERTED: ; 1F:1BA0, 0x03FBA0
-    LDA OBJ_STATUS?,Y ; Load obj.
+    LDA OBJ?_BYTE_0x0_STATUS?,Y ; Load obj.
     EOR #$80 ; Invert ??
-    STA OBJ_STATUS?,Y ; Store inverted.
+    STA OBJ?_BYTE_0x0_STATUS?,Y ; Store inverted.
 ADD_CC: ; 1F:1BA8, 0x03FBA8
     CLC ; Prep add.
     LDA R_**:$00CA ; Load ??
     BMI VAL_NEGATIVE ; Negative, goto.
-    ADC R_**:$0303,Y ; Add with.
+    ADC OBJ?_BYTE_0x3_UNK,Y ; Add with.
     STA R_**:$00CA ; Store to.
-    STA R_**:$0303,Y ; Store to obj.
+    STA OBJ?_BYTE_0x3_UNK,Y ; Store to obj.
     BCC ADD_CC ; CC, goto.
     BCS ADD_CS ; CS, goto.
 VAL_NEGATIVE: ; 1F:1BB9, 0x03FBB9
-    ADC R_**:$0303,Y ; Add with.
+    ADC OBJ?_BYTE_0x3_UNK,Y ; Add with.
     STA R_**:$00CA ; Store to.
-    STA R_**:$0303,Y ; Store to obj.
+    STA OBJ?_BYTE_0x3_UNK,Y ; Store to obj.
     BCS ADD_CC ; CS, goto.
 ADD_CS: ; 1F:1BC3, 0x03FBC3
-    LDA R_**:$0301,Y ; Move negative bit.
+    LDA OBJ?_BYTE_0x1_UNK,Y ; Move negative bit.
     EOR #$80
-    STA R_**:$0301,Y
+    STA OBJ?_BYTE_0x1_UNK,Y
 ADD_CC: ; 1F:1BCB, 0x03FBCB
-    LDA OBJ_STATUS?,Y ; Load from object.
+    LDA OBJ?_BYTE_0x0_STATUS?,Y ; Load from object.
     AND #$80 ; Keep top bit.
     STA R_**:$00C9 ; Store to.
-    LDA R_**:$0301,Y ; Move obj negative.
+    LDA OBJ?_BYTE_0x1_UNK,Y ; Move obj negative.
     AND #$80 ; Keep top bit.
     STA R_**:$00CB ; Store top set.
-    LDA OBJ_UNK_A,Y ; Move from obj to ZP.
+    LDA OBJ?_PTR?[2],Y ; Move from obj to ZP.
     STA R_**:$00C6
-    LDA OBJ_UNK_A_PAIR,Y ; Move.
+    LDA OBJ?_PTR?+1,Y ; Move.
     STA R_**:$00C7
     LDY #$00 ; Stream index.
     LDA [R_**:$00C6],Y ; Move stream pointer.
@@ -4543,10 +4552,10 @@ CLEAR_0x700_PAGE: ; 1F:1D1C, 0x03FD1C
     BNE CLEAR_0x700_PAGE ; != 0, goto.
     JSR ENGINE_SWAP_TO_SOUND_ENGINE_HELPER ; Set engine.
     JMP JMP_SOUND_ENGINE_SELF_INIT ; Goto.
-STORE_IF_MISMATCH_OTHERWISE_SOUND?: ; 1F:1D28, 0x03FD28
+SOUND_ASSIGN_NEW_MAIN_SONG: ; 1F:1D28, 0x03FD28
     CMP SOUND_VAL_CMP_UNK ; If _ var
-    BEQ JUST_WAIT
-    STA VAL_CMP_DIFFERS_STORED_UNK ; Store if mismatch. TODO: Why.
+    BEQ JUST_WAIT ; ==, skip.
+    STA VAL_CMP_DIFFERS_STORED_UNK ; Store if mismatch, new song. 0xFF = None?
 JUST_WAIT: ; 1F:1D30, 0x03FD30
     JMP ENGINE_NMI_0x01_SET/WAIT ; Wait, abuse RTS.
 ENGINE_SETTLE_ALL_UPDATES?: ; 1F:1D33, 0x03FD33
@@ -4588,7 +4597,7 @@ SETTLE_SPRITES_OFFSCREEN/CLEAR_RAM: ; 1F:1D5E, 0x03FD5E
     LDX #$00 ; Seed index start.
 SLOT_NONZERO: ; 1F:1D66, 0x03FD66
     LDA #$00 ; Clear.
-    STA OBJ_STATUS?,X ; Clear indexed.
+    STA OBJ?_BYTE_0x0_STATUS?,X ; Clear indexed.
     LDA #$F0 ; Off screen on Y coord.
     STA SPRITE_PAGE[256],X ; Set sprite index, too.
     INX ; Slot++
@@ -4643,12 +4652,12 @@ ENGINE_0x300_OBJECTS_UNK?: ; 1F:1DC0, 0x03FDC0
     CLC ; Prep add.
 CARRY_NO_OVERFLOW: ; 1F:1DD0, 0x03FDD0
     TAX ; Val to index.
-    LDA R_**:$0301,X ; Load ??
+    LDA OBJ?_BYTE_0x1_UNK,X ; Load ??
     AND #$BF ; Keep 1011.1111
-    STA R_**:$0301,X ; Store to.
+    STA OBJ?_BYTE_0x1_UNK,X ; Store to.
     LDA #$00
-    STA R_**:$0304,X ; Clear ??
-    STA R_**:$0305,X
+    STA OBJ?_BYTE_0x4_UNK,X ; Clear ??
+    STA OBJ?_BYTE_0x5_BYTE,X
     TXA ; Index to A.
     ADC #$08 ; += 0x8, next obj?
     BCC CARRY_NO_OVERFLOW ; No overflow, goto.
