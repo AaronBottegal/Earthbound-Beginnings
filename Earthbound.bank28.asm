@@ -566,7 +566,7 @@ SOUND_FLAGS/STREAMS_CLEAR?: ; 1C:02A8, 0x0382A8
     STA SND_DISABLE_WRITE_ARR_UNK ; Clear ??
     STA SND_UNK_7C9
     STA SND_UNK_7CA
-    STA SOUND_VAL_CMP_UNK ; Clear ??
+    STA SOUND_VAL_SONG_CURRENT_ID ; Clear ??
     STA SND_SQUARES_UPDATING_COUNT ; Clear ??
     TAY ; Reset index.
 VAL_NE_0x6: ; 1C:02BA, 0x0382BA
@@ -1061,7 +1061,7 @@ VAL_EQ_0x24: ; 1C:0648, 0x038648
     LDA #$00
     STA SOUND_UNK_78B ; Clear ??
     LDA #$25 ; Game engine tie-in? Set engine var.
-    STA VAL_CMP_DIFFERS_STORED_UNK ; Set it.
+    STA SOUND_VAL_SONG_INIT_ID ; Set it.
 EXIT_SET_SQ1_AND_FLAGS: ; 1C:0657, 0x038657
     JMP SET_SQ1(SILENT?)_AND_FLAGYS ; Goto.
 VAL_EQ_0x8: ; 1C:065A, 0x03865A
@@ -1468,12 +1468,12 @@ VAL_NE_0x2: ; 1C:08FE, 0x0388FE
 VAL_EQ_0x01: ; 1C:0903, 0x038903
     JSR SOUND_RETARGET_DATA? ; Do ??
     LDA #$01
-    STA SOUND_VAL_CMP_UNK ; Set, engine?
+    STA SOUND_VAL_SONG_CURRENT_ID ; Set, engine?
     JMP STORE_PATH ; Goto ??
 EXIT_HALT_SOUND: ; 1C:090E, 0x03890E
     JMP SOUND_HALT? ; No sound, BY FORCE.
 SOUND_SUBRTN_F: ; 1C:0911, 0x038911
-    LDA VAL_CMP_DIFFERS_STORED_UNK ; Load ??
+    LDA SOUND_VAL_SONG_INIT_ID ; Load ??
     TAY ; To Y index.
     CMP #$3F ; If _ #$3F
     BCS EXIT_HALT_SOUND ; >=, goto.
@@ -1481,7 +1481,7 @@ SOUND_SUBRTN_F: ; 1C:0911, 0x038911
     BEQ VAL_EQ_0x01 ; ==, goto.
     TYA ; Y back to A. Another entry/loop here?
     BEQ Y_TRANSFER_EQ_0x00 ; == 0, goto.
-    STA SOUND_VAL_CMP_UNK ; Store val. TODO: Same here or loops/other?
+    STA SOUND_VAL_SONG_CURRENT_ID ; Store val. TODO: Same here or loops/other?
     CMP #$19 ; If _ #$19
     BEQ VAL_GTE_0x19 ; ==, goto.
     CMP #$19 ; If _ #$19

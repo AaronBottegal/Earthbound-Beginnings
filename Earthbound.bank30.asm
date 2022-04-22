@@ -510,6 +510,7 @@
     .db FF
     .db FF
     .db FF
+BANK_0_PTR_A: ; 1E:0200, 0x03C200
     LDA #$0F
     STA R_**:$0100 ; Set ??
     LDA #$03 ; Set config for R3.
@@ -521,13 +522,13 @@ DELAY_LOOP_Y_A: ; 1E:0210, 0x03C210
     DEY ; --
     BNE DELAY_LOOP_Y_A ; != 0, loop.
     BIT R_**:$0000 ; Test ??, for delay only?
-    JMP DELAY_Y_0x4 ; Goto.
+    JMP EXIT_0x4_EXTRA ; Goto.
 LIB_WRITE_LATCH: ; 1E:0218, 0x03C218
     STA MMC3_IRQ_LATCH ; A to latch.
     LDA #$02 ; Load R2.
     ORA ENGINE_MAPPER_CONFIG_STATUS_NO_BANK ; Set mapper config.
     TAX ; To X, R2.
-DELAY_Y_0x4: ; 1E:0220, 0x03C220
+EXIT_0x4_EXTRA: ; 1E:0220, 0x03C220
     LDY #$04 ; Seed delay.
 DELAY_LOOP_Y_B: ; 1E:0222, 0x03C222
     DEY ; Y--
@@ -1999,7 +2000,7 @@ MAIN_LOOP_REENTRY_LARGEST: ; 1E:0B5D, 0x03CB5D
     LDA CURRENT_SAVE_MANIPULATION_PAGE+6 ; Load.
     AND #$0F ; Keep bottom.
     EOR #$84 ; Invet to set.
-    STA R_**:$000D ; Store to.
+    STA SCRIPT_ACTION_IDFK ; Store to.
 MAIN_LOOP_REENTRY_SECOND_LARGEST: ; 1E:0B70, 0x03CB70
     JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_RAM ; Settle, no sprites.
     JSR ENGINE_SETTLE_UPDATES_TODO ; Settle, scroll, ??
@@ -2034,7 +2035,7 @@ MAIN_FLAG_21_CLEAR: ; 1E:0BAD, 0x03CBAD
     LDA #$00 ; Clear val.
     LDY CONTROL_ACCUMULATED?[2] ; Load buttons.
     STA CONTROL_ACCUMULATED?[2] ; Clear accumulated.
-    LDA SCRIPT_FLAG_0x22 ; Load ??
+    LDA SCRIPT_FLAG_0x22_AUTO_MOVE ; Load ??
     ORA FLAG_UNK_23 ; Set with others.
     ORA MAIN_FLAG_UNK
     ORA FIRST_LAUNCHER_HOLD_FLAG?
@@ -2066,7 +2067,7 @@ STATES_COMBINED_ANY_SET_HANDLER: ; 1E:0BEB, 0x03CBEB
     CMP #$A2 ; If _ #$A2
     BEQ MAIN_ALT_CHECKS_END_OF_GAME ; ==, goto.
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
-    LDA SOUND_VAL_CMP_UNK ; Load ??
+    LDA SOUND_VAL_SONG_CURRENT_ID ; Load ??
     PHA ; Save it.
     JSR LIB_BATTLE_ENDED? ; Do ??
     PLA ; Pull A.
@@ -2189,7 +2190,7 @@ SHAKE_CONTINUE: ; 1E:0CC6, 0x03CCC6
     STA ENGINE_PPU_MASK_COPY ; Store back.
     JSR WAIT_ANY_BUTTONS_PRESSED_RET_PRESSED ; Wait.
     JMP EXIT_SCRIPT_CLEAR_UNK ; Goto.
-    LDA SOUND_VAL_CMP_UNK ; Save value.
+    LDA SOUND_VAL_SONG_CURRENT_ID ; Save value.
     PHA
     LDA #$FF
     STA R_**:$000F ; Set ??
@@ -2210,10 +2211,10 @@ VAL_LT_0x2D: ; 1E:0CF0, 0x03CCF0
     BMI ACTION_NEGATIVE ; Invalid, goto.
     ORA #$40 ; Set ??
     TAX ; To X index.
-    EOR SCRIPT_FLAG_0x22 ; Invert with.
+    EOR SCRIPT_FLAG_0x22_AUTO_MOVE ; Invert with.
     CMP #$04 ; If _ #$04
     BEQ ACTION_NEGATIVE ; ==, goto.
-    STX SCRIPT_FLAG_0x22 ; Store to script val?
+    STX SCRIPT_FLAG_0x22_AUTO_MOVE ; Store to script val?
 ACTION_NEGATIVE: ; 1E:0D0C, 0x03CD0C
     LDX ENGINE_FLAG_25_SKIP_UNK ; Load ?
     INX ; ++
@@ -2270,7 +2271,7 @@ X_INDEX_POSITIVE: ; 1E:0D70, 0x03CD70
     BPL X_INDEX_POSITIVE ; Positive, goto.
 EXIT_SCRIPT_CLEAR_UNK: ; 1E:0D79, 0x03CD79
     LDX #$00
-    STX SCRIPT_FLAG_0x22 ; Clear.
+    STX SCRIPT_FLAG_0x22_AUTO_MOVE ; Clear.
     STX CONTROL_ACCUMULATED?[2] ; Clear ctrl.
     STX R_**:$000F ; Clear ??
     JSR ACTION_INDEX_STORE_AND_RETURN_VALUE_UNK ; Action.
@@ -2290,7 +2291,7 @@ SUB_WRITE_SAVE_PAGE_UNK: ; 1E:0D9D, 0x03CD9D
     AND #$0F ; Keep lower.
     STA R_**:$6799 ; Store to.
     ORA #$40 ; Set ??
-    STA SCRIPT_FLAG_0x22 ; Store to ??
+    STA SCRIPT_FLAG_0x22_AUTO_MOVE ; Store to ??
     JMP ENGINE_WRAM_STATE_WRITE_DISABLED ; Disable and exit.
 ACTION_INDEX_STORE_AND_RETURN_VALUE_UNK: ; 1E:0DAF, 0x03CDAF
     STX ENGINE_FLAG_25_SKIP_UNK ; Store X to.
@@ -2345,7 +2346,7 @@ DATA_TABLE_ACTION_RESULTS?: ; 1E:0DB7, 0x03CDB7
     .db 0F
 ENGINE_COMPARES/MISMATCH_RTN_UNK: ; 1E:0DE4, 0x03CDE4
     PHA ; Save passed.
-    LDA SOUND_VAL_CMP_UNK ; Load.
+    LDA SOUND_VAL_SONG_CURRENT_ID ; Load.
     TAX ; To index.
     PLA ; Pull passed.
     JSR SOUND_ASSIGN_NEW_MAIN_SONG ; Do ??
@@ -2354,7 +2355,7 @@ ENGINE_COMPARES/MISMATCH_RTN_UNK: ; 1E:0DE4, 0x03CDE4
 VAL_NONZERO: ; 1E:0DF1, 0x03CDF1
     BIT CONTROL_ACCUMULATED?[2] ; Test buttons.
     BVS BUTTON_B_PRESSED ; If set, goto.
-    LDA SOUND_VAL_CMP_UNK ; LOad.
+    LDA SOUND_VAL_SONG_CURRENT_ID ; LOad.
     BNE VAL_NONZERO ; If nonzero, loop wait.
 BUTTON_B_PRESSED: ; 1E:0DFA, 0x03CDFA
     LDA #$00
@@ -2700,21 +2701,21 @@ SCRIPT_PTR_MOD_AND_??_THEN_CHAIN_??: ; 1E:105E, 0x03D05E
     ASL A
     TAX ; To X index.
     CLC ; Prep add.
-    LDA LUT_MOD_ARRAY_UNK[4],X ; Load data.
+    LDA LUT_MOD_ARRAY_MOVEMENT?[4],X ; Load data.
     ADC SCRIPT_PAIR_PTR_B?[2] ; Add with.
     STA SCRIPT_PAIR_PTR_B?[2] ; Store to.
-    LDA LUT_MOD_ARRAY_UNK+1,X ; Load other.
+    LDA LUT_MOD_ARRAY_MOVEMENT?+1,X ; Load other.
     ADC SCRIPT_PAIR_PTR_B?+1 ; Add with.
     STA SCRIPT_PAIR_PTR_B?+1 ; Store to.
     CLC ; Do this pair, too.
-    LDA LUT_MOD_ARRAY_UNK+2,X
+    LDA LUT_MOD_ARRAY_MOVEMENT?+2,X
     ADC SCRIPT_PAIR_PTR?[2]
     STA SCRIPT_PAIR_PTR?[2]
-    LDA LUT_MOD_ARRAY_UNK+3,X
+    LDA LUT_MOD_ARRAY_MOVEMENT?+3,X
     ADC SCRIPT_PAIR_PTR?+1
     STA SCRIPT_PAIR_PTR?+1
     CLC ; Prep add.
-    LDA LUT_MOD_ARRAY_UNK+2,X ; Add data.
+    LDA LUT_MOD_ARRAY_MOVEMENT?+2,X ; Add data.
     BEQ CREATE_VAL/INDEX_UNK ; == 0, goto.
     BMI VAL_NEGATIVE ; Negative, goto.
     LDA R_**:$001D ; Load ??
@@ -3728,9 +3729,9 @@ ALT_REENTRY: ; 1E:1704, 0x03D704
 VAL_EQ_0x00_CLOSE: ; 1E:170E, 0x03D70E
     LDA #$00
     STA FIRST_LAUNCHER_HOLD_FLAG? ; Clear flag.
-    LDA SCRIPT_FLAG_0x22 ; Load.
+    LDA SCRIPT_FLAG_0x22_AUTO_MOVE ; Load.
     AND #$CF ; Keep 1100.1111
-    STA SCRIPT_FLAG_0x22 ; Store back.
+    STA SCRIPT_FLAG_0x22_AUTO_MOVE ; Store back.
     JMP ENGINE_WRAM_STATE_WRITE_DISABLED ; Goto, disable WRAM and leave.
 NONZERO_ALT: ; 1E:171B, 0x03D71B
     JSR MOVE_TO_STREAM_UNK ; Do ??
@@ -3950,20 +3951,20 @@ MOD_STREAM_LUT_UNK: ; 1E:1884, 0x03D884
     TAX ; To X index.
     LDY #$04 ; Val ??
     CLC ; Prep add.
-    LDA LUT_MOD_ARRAY_UNK[4],X ; Load mod.
+    LDA LUT_MOD_ARRAY_MOVEMENT?[4],X ; Load mod.
     ADC [ENGINE_FPTR_30[2]],Y ; Mod val at stream.
     STA SCRIPT_LOADED_SHIFTED_UNK[1] ; Store to.
     INY ; Stream++
-    LDA LUT_MOD_ARRAY_UNK+1,X ; Load mod.
+    LDA LUT_MOD_ARRAY_MOVEMENT?+1,X ; Load mod.
     ADC [ENGINE_FPTR_30[2]],Y ; Mod with carry.
     STA SCRIPT_USE_UNK_A ; Store to.
     LDY #$06 ; Stream mod.
     CLC ; Prep add.
-    LDA LUT_MOD_ARRAY_UNK+2,X ; Load mod.
+    LDA LUT_MOD_ARRAY_MOVEMENT?+2,X ; Load mod.
     ADC [ENGINE_FPTR_30[2]],Y ; Mod val at stream.
     STA SCRIPT_USE_UNK_B ; Store to.
     INY ; Stream++
-    LDA LUT_MOD_ARRAY_UNK+3,X ; Load ??
+    LDA LUT_MOD_ARRAY_MOVEMENT?+3,X ; Load ??
     ADC [ENGINE_FPTR_30[2]],Y ; Mod with carry.
     STA SCRIPT_USE_UNK_C ; Store to.
     JSR SETUP_DEEP_STREAM_UNK ; Setup ??
@@ -4053,7 +4054,7 @@ COUNT_POSITIVE: ; 1E:1950, 0x03D950
     ORA #$20 ; Set bits.
     STA FIRST_LAUNCHER_HOLD_FLAG? ; Set ??
     EOR #$60 ; Invert 0110.0000
-    STA SCRIPT_FLAG_0x22 ; Set ??
+    STA SCRIPT_FLAG_0x22_AUTO_MOVE ; Set ??
     SEC ; Ret CS.
     JMP ENGINE_WRAM_STATE_WRITE_DISABLED ; Disable and leave.
 Y_INDEXES_UNK: ; 1E:196B, 0x03D96B
@@ -4618,7 +4619,7 @@ DONE_FORWARD: ; 1E:1D2B, 0x03DD2B
     BNE EXIT_NO_WRITES ; != 0, goto.
     LDA SCRIPT_PAIR_PTR_B?[2] ; Load ??
     AND #$C0 ; Keep upper.
-    ORA SOUND_VAL_CMP_UNK ; Set ??
+    ORA SOUND_VAL_SONG_CURRENT_ID ; Set ??
     LDX SCRIPT_PAIR_PTR_B?+1 ; X from.
     STA CURRENT_SAVE_MANIPULATION_PAGE+4 ; Store ??
     STX CURRENT_SAVE_MANIPULATION_PAGE+5

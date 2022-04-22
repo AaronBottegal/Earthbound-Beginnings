@@ -248,12 +248,14 @@ VAL_NEGATIVE: ; 13:0192, 0x026192
     LDA FPTR_UNK_84_MENU_SELECTION?[2] ; Load ??
     ASL A ; << 1, *2.
     TAX ; To index.
-    LDA $A1A5,X ; Move routine.
+    LDA RTN_TABLE_H,X ; Move routine.
     PHA
-    LDA $A1A4,X
+    LDA RTN_TABLE_L,X
     PHA
     RTS ; Execute it.
+RTN_TABLE_L: ; 13:01A4, 0x0261A4
     LOW(RTS) ; 0x00
+RTN_TABLE_H: ; 13:01A5, 0x0261A5
     HIGH(RTS) ; Many routines.
     LOW(13:020E) ; 0x00
     HIGH(13:020E)
@@ -397,7 +399,7 @@ RTN_0x1: ; 13:0262, 0x026262
     .db 00
     LDA #$FF
     JSR ENGINE_POS_TO_UPDATE_UNK
-    JSR $A92D
+    JSR 13:092D
     LDA FPTR_UNK_84_MENU_SELECTION?[2]
     ASL A
     TAX
@@ -523,103 +525,105 @@ RTN_0x1: ; 13:0262, 0x026262
     LDA [MISC_USE_A],Y
     ASL A
     TAX
-    LDA $A3CC,X
+    LDA RTN_TABLE_H,X ; Move RTN to stack.
     PHA
-    LDA $A3CB,X
+    LDA RTN_TABLE_L,X
     PHA
-    RTS
-    .db 42
-    .db A4
-    .db 50
-    .db A4
-    .db 42
-    .db A4
-    .db 42
-    .db A4
-    .db 42
-    .db A4
-    .db 99
-    .db A4
-    .db CE
-    .db A4
-    .db 50
-    .db A4
-    .db 64
-    .db A4
-    .db 42
-    .db A4
-    .db EA
-    .db A4
-    .db EF
-    .db A4
-    .db F4
-    .db A4
-    .db F9
-    .db A4
-    .db FE
-    .db A4
-    .db 03
-    .db A5
-    .db 0B
-    .db A5
-    .db 4C
-    .db A7
-    .db 55
-    .db A7
-    .db 5E
-    .db A7
-    .db 99
-    .db A7
-    .db A6
-    .db A7
-    .db B3
-    .db A7
-    .db BA
-    .db A7
-    .db C1
-    .db A7
-    .db C8
-    .db A7
-    .db CF
-    .db A7
-    .db 10
-    .db A8
-    .db 42
-    .db A4
-    .db 42
-    .db A4
-    .db D6
-    .db A7
-    .db 77
-    .db A4
-    .db 06
-    .db A8
-    .db 0B
-    .db A8
-    .db 24
-    .db A8
-    .db 15
-    .db A8
-    .db 3D
-    .db A4
-    .db 26
-    .db A4
-    .db 11
-    .db A6
-    .db DA
-    .db A4
-    .db DF
-    .db A4
-    .db E4
-    .db A4
-    .db 3E
-    .db A7
-    .db 3D
-    .db A4
-    .db 37
-    .db A7
-    .db 45
-    .db A7
+    RTS ; Execute it.
+RTN_TABLE_L: ; 13:03CB, 0x0263CB
+    LOW(13:0442) ; All off by 1!
+RTN_TABLE_H: ; 13:03CC, 0x0263CC
+    HIGH(13:0442)
+    LOW(13:0450)
+    HIGH(13:0450)
+    LOW(13:0442)
+    HIGH(13:0442)
+    LOW(13:0442)
+    HIGH(13:0442)
+    LOW(13:0442)
+    HIGH(13:0442)
+    LOW(13:0499)
+    HIGH(13:0499)
+    LOW(13:04CE)
+    HIGH(13:04CE)
+    LOW(13:0450)
+    HIGH(13:0450)
+    LOW(13:0464)
+    HIGH(13:0464)
+    LOW(13:0442)
+    HIGH(13:0442)
+    LOW(13:04EA)
+    HIGH(13:04EA)
+    LOW(13:04EF)
+    HIGH(13:04EF)
+    LOW(13:04F4)
+    HIGH(13:04F4)
+    LOW(13:04F9)
+    HIGH(13:04F9)
+    LOW(13:04FE)
+    HIGH(13:04FE)
+    LOW(13:0503)
+    HIGH(13:0503)
+    LOW(13:050B)
+    HIGH(13:050B)
+    LOW(13:074C)
+    HIGH(13:074C)
+    LOW(13:0755)
+    HIGH(13:0755)
+    LOW(13:075E)
+    HIGH(13:075E)
+    LOW(13:0799)
+    HIGH(13:0799)
+    LOW(13:07A6)
+    HIGH(13:07A6)
+    LOW(13:07B3)
+    HIGH(13:07B3)
+    LOW(13:07BA)
+    HIGH(13:07BA)
+    LOW(13:07C1)
+    HIGH(13:07C1)
+    LOW(13:07C8)
+    HIGH(13:07C8)
+    LOW(13:07CF)
+    HIGH(13:07CF)
+    LOW(13:0810)
+    HIGH(13:0810)
+    LOW(13:0442)
+    HIGH(13:0442)
+    LOW(13:0442)
+    HIGH(13:0442)
+    LOW(13:07D6)
+    HIGH(13:07D6)
+    LOW(13:0477)
+    HIGH(13:0477)
+    LOW(13:0806)
+    HIGH(13:0806)
+    LOW(13:080B)
+    HIGH(13:080B)
+    LOW(13:0824)
+    HIGH(13:0824)
+    LOW(13:0815)
+    HIGH(13:0815)
+    LOW(13:043D)
+    HIGH(13:043D)
+    LOW(13:0426)
+    HIGH(13:0426)
+    LOW(13:0611)
+    HIGH(13:0611)
+    LOW(13:04DA)
+    HIGH(13:04DA)
+    LOW(13:04DF)
+    HIGH(13:04DF)
+    LOW(13:04E4)
+    HIGH(13:04E4)
+    LOW(13:073E)
+    HIGH(13:073E)
+    LOW(13:043D)
+    HIGH(13:043D)
+    LOW(13:0737)
+    HIGH(13:0737)
+    LOW(13:0745)
+    HIGH(13:0745)
     JSR $A9B1
     JSR 1F:020F
     ASL A
@@ -1915,7 +1919,7 @@ RETURN_EXTRA_LAYER?: ; 13:0CB7, 0x026CB7
     LDX #$03
     JSR ENGINE_SET_MAPPER_BANK_X_VAL_A
     JMP ENGINE_PALETTE_UPLOAD_WITH_PACKET_HELPER
-    AND [SCRIPT_FLAG_0x22,X]
+    AND [SCRIPT_FLAG_0x22_AUTO_MOVE,X]
     ???
     BIT ENGINE_FLAG_25_SKIP_UNK
     BIT FLAG_UNK_23
@@ -3031,7 +3035,7 @@ L_13:14F0: ; 13:14F0, 0x0274F0
     LDA #$20
     STA FIRST_LAUNCHER_HOLD_FLAG?
     LDA #$00
-    STA SCRIPT_FLAG_0x22
+    STA SCRIPT_FLAG_0x22_AUTO_MOVE
     INY
     JMP ENGINE_WRAM_STATE_WRITE_DISABLED
     LDA CURRENT_SAVE_MANIPULATION_PAGE+21

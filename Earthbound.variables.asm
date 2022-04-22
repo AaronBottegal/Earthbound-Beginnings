@@ -60,7 +60,7 @@ ENGINE_SOUND_ENGINE_BANK_VAL?:                .rs 1 ; 0x0007
 NMI_GFX_COUNTER:                              .rs 1 ; 0x0008
 WORLD_POS?_CARRY_ADDS_UNK:                    .rs 3 ; 0x0009 to 0x000B
 R_**:$000C:                                   .rs 1 ; 0x000C
-R_**:$000D:                                   .rs 1 ; 0x000D
+SCRIPT_ACTION_IDFK:                           .rs 1 ; 0x000D
 SWITCH_INIT_PORTION?:                         .rs 1 ; 0x000E
 R_**:$000F:                                   .rs 1 ; 0x000F
 SCRIPT_R6_UNK:                                .rs 1 ; 0x0010
@@ -79,7 +79,7 @@ R_**:$001E:                                   .rs 1 ; 0x001E
 ACTION_BUTTONS_RESULT:                        .rs 1 ; 0x001F
 FIRST_LAUNCHER_HOLD_FLAG?:                    .rs 1 ; 0x0020
 MAIN_FLAG_UNK:                                .rs 1 ; 0x0021
-SCRIPT_FLAG_0x22:                             .rs 1 ; 0x0022
+SCRIPT_FLAG_0x22_AUTO_MOVE:                   .rs 1 ; 0x0022
 FLAG_UNK_23:                                  .rs 1 ; 0x0023
 CLEAR_AFTER_HELL_ALOT_LOL:                    .rs 1 ; 0x0024
 ENGINE_FLAG_25_SKIP_UNK:                      .rs 1 ; 0x0025
@@ -256,7 +256,7 @@ E3_TARGET_UNK:                                .rs 1 ; 0x00E3
 SPRITE_INDEX_SWAP:                            .rs 1 ; 0x00E4
 NMI_FLAG_B:                                   .rs 1 ; 0x00E5
 NMI_PPU_CMD_PACKETS_INDEX:                    .rs 1 ; 0x00E6
-NMI_FLAG_C:                                   .rs 1 ; 0x00E7
+NMI_FLAG_ACTION?:                             .rs 1 ; 0x00E7
 NMI_FP_UNK:                                   .rs 2 ; 0x00E8 to 0x00E9
 ENGINE_NMI_CONFIG_FLAGS_DIS:0x80:             .rs 1 ; 0x00EA
 ENGINE_IRQ_LATCH_CURRENT?:                    .rs 1 ; 0x00EB
@@ -341,7 +341,7 @@ SOUND_UNK_786:                                .rs 1 ; 0x0786
           .rsset 0x078A
 SND_SQUARES_UPDATING_COUNT:                   .rs 1 ; 0x078A
 SOUND_UNK_78B:                                .rs 1 ; 0x078B
-SOUND_VAL_CMP_UNK:                            .rs 1 ; 0x078C
+SOUND_VAL_SONG_CURRENT_ID:                    .rs 1 ; 0x078C
 
 
           .rsset 0x0790
@@ -449,7 +449,7 @@ R_**:$07F1:                                   .rs 1 ; 0x07F1
           .rsset 0x07F3
 R_**:$07F3:                                   .rs 1 ; 0x07F3
 R_**:$07F4:                                   .rs 1 ; 0x07F4
-VAL_CMP_DIFFERS_STORED_UNK:                   .rs 1 ; 0x07F5
+SOUND_VAL_SONG_INIT_ID:                       .rs 1 ; 0x07F5
 
 
           .rsset 0x07F7

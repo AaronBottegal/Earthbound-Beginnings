@@ -7,9 +7,9 @@
     STA MMC3_MIRRORING ; Set V mirroring.
     LDA #$00
     STA NMI_LATCH_FLAG ; Clear flag.
-    LDA NMI_FLAG_C
+    LDA NMI_FLAG_ACTION?
     AND #$BF ; Keep 1011.1111 only.
-    STA NMI_FLAG_C
+    STA NMI_FLAG_ACTION?
     LDA #$00
     STA NMI_FP_UNK[2] ; Clear ??
     STA NMI_FP_UNK+1
