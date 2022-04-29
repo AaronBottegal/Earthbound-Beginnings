@@ -1986,7 +1986,7 @@ HELPER_FADE_AND_SET_LATCHED_IDK: ; 1F:0C65, 0x03EC65
     LDA #$01
     STA MMC3_MIRRORING ; Set mirroring horizontal.
     LDA #$80
-    STA SCRIPT_UNK_TESTED[6] ; Set ??
+    STA **:$07EF ; Set ??
     LDA #$7C
     STA GFX_BANKS[4] ; Set ??
     STA GFX_BANKS+1
@@ -2036,7 +2036,7 @@ ANY_BUTTONS_PRESSED: ; 1F:0CC6, 0x03ECC6
     STA R_**:$0070 ; Clear ??
     STA ENGINE_PACKINATOR_ARG_SEED_0xA0_PRE_COUNT ; Clear.
     STA SOUND_MAIN_SONG_ID ; Clear ??
-    STA SCRIPT_UNK_TESTED[6] ; Clear ??
+    STA **:$07EF ; Clear ??
     STA RAM_CODE_UNK[3] ; Clear ??
     PLP ; Pull status, return.
     JMP ENGINE_NMI_0x01_SET/WAIT ; Wait and abuse RTS.
@@ -2485,7 +2485,7 @@ CONTROLS_PRESSED: ; 1F:0FE1, 0x03EFE1
     BEQ AND_RESULT_0x00 ; == 0, goto.
     STA MENU_HELPER_STATUS? ; Store nonzero.
     LDA #$05
-    STA R_**:$07F1 ; Set ??
+    STA SOUND_EXTRA_UNK ; Set ??
 EXIT_OFF_SCREEN: ; 1F:0FF5, 0x03EFF5
     LDA #$F0
     STA SPRITE_PAGE[256] ; Set Y pos offscreen.
@@ -2535,7 +2535,7 @@ LOOP_IDK: ; 1F:1010, 0x03F010
     LDA ARR_BITS_TO_UNK+2 ; Move ??
     STA FPTR_UNK_84_MENU_SELECTION?[2]
     LDA #$0D ; Seed ??
-    STA R_**:$07F1
+    STA SOUND_EXTRA_UNK
 RELOOP: ; 1F:1052, 0x03F052
     JMP TABLE_NEGATIVE ; Goto.
 VAL_GTE_STREAM: ; 1F:1055, 0x03F055
@@ -2545,7 +2545,7 @@ VAL_GTE_STREAM: ; 1F:1055, 0x03F055
     BEQ RELOOP ; == 0, goto.
     STA MENU_HELPER_STATUS? ; Store bits.
     LDA #$0D
-    STA R_**:$07F1 ; Seed ??
+    STA SOUND_EXTRA_UNK ; Seed ??
     JMP EXIT_OFF_SCREEN
 VAL_EQ_0x00: ; 1F:1067, 0x03F067
     LDX ARR_BITS_TO_UNK+3 ; X from.
@@ -3255,7 +3255,7 @@ SWITCH_NONZERO?: ; 1F:143E, 0x03F43E
     CMP #$01 ; If _ #$01
     BNE SWITCH_NE_0x1 ; != 0, goto.
     LDA SAVE_GAME_MOD_PAGE_PTR+1 ; Move ??
-    STA R_**:$07F1
+    STA SOUND_EXTRA_UNK
     JMP ENTRY_PAST ; Past.
 SWITCH_NE_0x1: ; 1F:144A, 0x03F44A
     CMP #$02 ; If _ #$02
@@ -3278,7 +3278,7 @@ LOOP_OBJECTS: ; 1F:1467, 0x03F467
     TXA ; Save X to stack.
     PHA
     LDA #$05
-    STA R_**:$07F1 ; Set ??
+    STA SOUND_EXTRA_UNK ; Set ??
     LDX #$02 ; Wait.
     JSR ENGINE_WAIT_X_SETTLES
     PLA ; Pull obj.

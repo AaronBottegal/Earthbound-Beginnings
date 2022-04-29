@@ -1374,14 +1374,14 @@ LOOP_COUNT: ; 1E:075F, 0x03C75F
     STA NMI_PPU_CMD_PACKETS_BUF+4 ; Store to. TODO: Byte?
     CMP #$A0 ; If _ #$A0
     BEQ PACKET_END ; ==, goto.
-    LDA SCRIPT_UNK_TESTED[6] ; Load.
+    LDA **:$07EF ; Load.
     BMI PACKET_END ; Negative, goto.
     EOR #$01 ; Invert.
-    STA SCRIPT_UNK_TESTED[6] ; Store to.
+    STA **:$07EF ; Store to.
     LSR A ; >> 1, /2.
     BCC PACKET_END ; CC, goto.
     LDA #$0E
-    STA R_**:$07F1 ; Set ??
+    STA SOUND_EXTRA_UNK ; Set ??
 PACKET_END: ; 1E:077B, 0x03C77B
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_BUF+5
@@ -1389,7 +1389,7 @@ PACKET_END: ; 1E:077B, 0x03C77B
     LDA #$80
     STA NMI_FLAG_B ; Set ??
     JSR ENGINE_SETTLE_ALL_UPDATES? ; Settle.
-    BIT SCRIPT_UNK_TESTED[6] ; Test.
+    BIT **:$07EF ; Test.
     BVC BIT_0x40_CLEAR ; 0x40 set.
     TXA ; X to A.
     PHA ; Save X.
@@ -1984,11 +1984,11 @@ FORWARD_PACKET_CREATION_FP_BY_A: ; 1E:0B38, 0x03CB38
 SYSTEM_SETUP_COMPLETED: ; 1E:0B44, 0x03CB44
     JSR ENGINE_WRAM_STATE_WRITE_DISABLED ; No writes.
     LDA #$C0
-    STA SCRIPT_UNK_TESTED[6] ; Set ??
+    STA **:$07EF ; Set ??
     JSR ENGINE_HELPER_R6_0x14 ; Set R6.
     JSR EARTHBOUND_GAME_INTRO_AND_FILE_SELECTION ; Game select/startup menus. RETURNS WHEN COMPLETED.
     LDA #$00
-    STA SCRIPT_UNK_TESTED[6] ; Clear ??
+    STA **:$07EF ; Clear ??
 MAIN_LOOP_FIRST_LAUNCHER_LOOP: ; 1E:0B57, 0x03CB57
     JSR ENGINE_HELPER_R7_0x13
     JSR ROUTINE_LAUNCHER_0xE ; Launch ??
@@ -4324,7 +4324,7 @@ EXIT_DISABLE_WRAM: ; 1E:1B30, 0x03DB30
 CALL_INTO_0x17_IDFK: ; 1E:1B33, 0x03DB33
     JSR ENGINE_HELPER_R7_0x17 ; To bank.
     LDA #$06
-    STA R_**:$07F1 ; Set ??
+    STA SOUND_EXTRA_UNK ; Set ??
     LDA #$8C ; Val ??
     JMP LIB_EXIT_IDFK ; Goto ??
 LIB_IDFK_DECIMALY_AND_IDK: ; 1E:1B40, 0x03DB40
@@ -4544,7 +4544,7 @@ X_STORE_LOOP?: ; 1E:1C97, 0x03DC97
     ORA LUT_INDEX_TO_BITS_0x80-0x01,X ; Set val.
     STA [R6_BANKED_ADDR_MOVED[2]],Y ; Store it back.
     LDA #$09
-    STA R_**:$07F1 ; Set ??
+    STA SOUND_EXTRA_UNK ; Set ??
     LDA #$83 ; Val ??
     JSR LIB_EXIT_IDFK ; Goto. TODO: Might not be 0x17 bank.
 VAL_GTE_STREAM: ; 1E:1CC6, 0x03DCC6

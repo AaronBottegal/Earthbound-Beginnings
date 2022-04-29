@@ -1,5 +1,5 @@
     JMP JMP_SOUND_SEQUENCE_A
-    JMP JMP_SOUND_SEQUENCE_B
+    JMP JMP_SOUND_SEQUENCE_B_INIT_FULL_DMC?
     JMP JMP_SOUND_SEQUENCE_C
 ENTRY_SQ1_WRITE_PTR_YX_SEEDED: ; 1B:0009, 0x036009
     LDA #$00 ; SQ1
@@ -8,10 +8,10 @@ ENTRY_TRI_WRITE_PTR_YX_SEEDED: ; 1B:000D, 0x03600D
     LDA #$08 ; Triangle.
     BNE CHANNEL_SEEDED
 ENTRY_NOISE_WRITE_PTR_YX_SEEDED: ; 1B:0011, 0x036011
-    LDA #$0C
+    LDA #$0C ; Noise.
     BNE CHANNEL_SEEDED
 ENTRY_SQ2_WRITE_PTR_YX_SEEDED: ; 1B:0015, 0x036015
-    LDA #$04
+    LDA #$04 ; SQ2.
 CHANNEL_SEEDED: ; 1B:0017, 0x036017
     STA SOUND_PTR_REGISTER/DATA[2] ; Store to register ptr.
     LDA #$40
@@ -27,246 +27,246 @@ VAL_NE_0x4: ; 1B:0023, 0x036023
     CMP #$04 ; If _ #$04
     BNE VAL_NE_0x4 ; !=, goto.
     RTS ; Leave.
-L_1B:002E: ; 1B:002E, 0x03602E
+SUB_PRD/L_DATA_STUFFS_TODO: ; 1B:002E, 0x03602E
     LDA SND_UNK_NSE_PRD/TRI_L_DATA? ; Load.
-    AND #$02
-    STA SND_UNK_7FF
-    LDA SND_UNK_BC
-    AND #$02
-    EOR SND_UNK_7FF
+    AND #$02 ; Keep bit.
+    STA SND_UNK_7FF ; Store to.
+    LDA SND_UNK_BC ; Load ??
+    AND #$02 ; Keep bit.
+    EOR SND_UNK_7FF ; Invert with.
     CLC
-    BEQ L_1B:0040
-    SEC
-L_1B:0040: ; 1B:0040, 0x036040
-    ROR SND_UNK_NSE_PRD/TRI_L_DATA?
-    ROR SND_UNK_BC
-    RTS
-L_1B:0045: ; 1B:0045, 0x036045
-    LDX SND_INDEX_WORKING_ON?
-    INC SND_TIMER_A[5],X
-    LDA SND_TIMER_A[5],X
-    CMP SND_TIMER_A_TARGET[6],X
-    BNE L_1B:0057
+    BEQ ROTATE_CLEAR ; == 0, goto.
+    SEC ; Rotate carry in.
+ROTATE_CLEAR: ; 1B:0040, 0x036040
+    ROR SND_UNK_NSE_PRD/TRI_L_DATA? ; Rotate into.
+    ROR SND_UNK_BC ; Rotate into.
+    RTS ; Leave.
+SOUND_INDEX_FORWARD_TO_TARGET: ; 1B:0045, 0x036045
+    LDX SND_INDEX_WORKING_ON? ; Load index.
+    INC SND_TIMER_A[5],X ; ++
+    LDA SND_TIMER_A[5],X ; Load.
+    CMP SND_TIMER_A_TARGET[6],X ; If _ target
+    BNE RTS ; !=, leave.
     LDA #$00
-    STA SND_TIMER_A[5],X
-L_1B:0057: ; 1B:0057, 0x036057
-    RTS
-L_1B:0058: ; 1B:0058, 0x036058
+    STA SND_TIMER_A[5],X ; Clear timer.
+RTS: ; 1B:0057, 0x036057
+    RTS ; Leave.
+SOUND_DATA_ZEROS_UNK: ; 1B:0058, 0x036058
     BRK
     BRK
 JMP_SOUND_SEQUENCE_C: ; 1B:005A, 0x03605A
     LDA #$0F
-    STA APU_STATUS
-    LDA #$55
-    STA SND_UNK_NSE_PRD/TRI_L_DATA?
+    STA APU_STATUS ; Enable channels.
+    LDA #$55 ; 0101.0101
+    STA SND_UNK_NSE_PRD/TRI_L_DATA? ; Sert ??
     LDA #$00
     STA SOUND_UNK_786 ; Clear ??
     STA SOUND_UNK_78B
-    TAY
-L_1B:006C: ; 1B:006C, 0x03606C
-    LDA L_1B:0058,Y
-    STA ARR_UNK[20],Y
-    INY
-    TYA
-    CMP #$14
-    BNE L_1B:006C
-    JSR JMP_SOUND_SEQUENCE_B
-    RTS
+    TAY ; Clear index.
+VAL_NE_0x14: ; 1B:006C, 0x03606C
+    LDA SOUND_DATA_ZEROS_UNK,Y ; Move zeros.
+    STA ARR_UNK[20],Y ; Store to ??
+    INY ; Data++
+    TYA ; Y to A.
+    CMP #$14 ; If _ #$14
+    BNE VAL_NE_0x14 ; !=, loop.
+    JSR JMP_SOUND_SEQUENCE_B_INIT_FULL_DMC? ; Do sequence ??
+    RTS ; Leave.
     BRK
     BRK
-L_1B:007E: ; 1B:007E, 0x03607E
-    LDA SOUND_VAL_SONG_INIT_ID
-    CMP #$25
-    BNE L_1B:0090
-    JSR JMP_SOUND_SEQUENCE_B
-    STA SOUND_VAL_SONG_INIT_ID
-    LDA #$11
-    STA R_**:$07F1
-L_1B:0090: ; 1B:0090, 0x036090
-    RTS
+SONG_INIT_ID_CHECK_AND_INIT_STUFFS: ; 1B:007E, 0x03607E
+    LDA SOUND_VAL_SONG_INIT_ID ; Load ??
+    CMP #$25 ; If _ #$25
+    BNE RTS ; !=, leave.
+    JSR JMP_SOUND_SEQUENCE_B_INIT_FULL_DMC? ; Do.
+    STA SOUND_VAL_SONG_INIT_ID ; Store result.
+    LDA #$11 ; Set ??
+    STA SOUND_EXTRA_UNK
+RTS: ; 1B:0090, 0x036090
+    RTS ; Leave.
 JMP_SOUND_SEQUENCE_A: ; 1B:0091, 0x036091
     LDA #$C0
-    STA APU_FSEQUENCE
-    JSR L_1B:002E
-    JSR L_1B:007E
-    JSR L_1B:01A3
+    STA APU_FSEQUENCE ; Set sequence.
+    JSR SUB_PRD/L_DATA_STUFFS_TODO ; Do.
+    JSR SONG_INIT_ID_CHECK_AND_INIT_STUFFS ; Do.
+    JSR SONG_ID_AND_TODO ; Do ID and ??
+    LDA #$00 ; Seed clear.
+    LDX #$06 ; Index.
+VAL_NONZERO: ; 1B:00A3, 0x0360A3
+    STA **:$07EF,X ; Store to requests addr - 1
+    DEX ; Index--
+    BNE VAL_NONZERO ; != 0, do more.
+    RTS ; Leave.
+JMP_SOUND_SEQUENCE_B_INIT_FULL_DMC?: ; 1B:00AA, 0x0360AA
+    JSR INIT_A_BIT_WITH_CTRL ; Init.
+HELPER_INIT_CTRLS_AND_TRI_AND_DMC: ; 1B:00AD, 0x0360AD
+    JSR INIT_CTRLS_AND_TRI ; Init.
     LDA #$00
-    LDX #$06
-L_1B:00A3: ; 1B:00A3, 0x0360A3
-    STA SCRIPT_UNK_TESTED[6],X
-    DEX
-    BNE L_1B:00A3
-    RTS
-JMP_SOUND_SEQUENCE_B: ; 1B:00AA, 0x0360AA
-    JSR L_1B:00B9
-L_1B:00AD: ; 1B:00AD, 0x0360AD
-    JSR L_1B:00D7
+    STA APU_DMC_LOAD ; Clear DMC.
+    STA SND_UNK_79C ; Clear ??
+    RTS ; Leave.
+INIT_A_BIT_WITH_CTRL: ; 1B:00B9, 0x0360B9
     LDA #$00
-    STA APU_DMC_LOAD
-    STA SND_UNK_79C
-    RTS
-L_1B:00B9: ; 1B:00B9, 0x0360B9
-    LDA #$00
-    STA SND_DISABLE_WRITE_ARR_UNK
+    STA SND_DISABLE_WRITE_ARR_UNK ; Clear/init?
     STA SND_UNK_7C9
     STA SND_UNK_7CA
     STA SOUND_VAL_SONG_CURRENT_ID
     STA SND_SQUARES_UPDATING_COUNT
-    TAY
-L_1B:00CB: ; 1B:00CB, 0x0360CB
+    TAY ; Clear index.
+VAL_NE_0x6: ; 1B:00CB, 0x0360CB
+    LDA #$00 ; Load clear.
+    STA SOUND_UNK_REQUEST?[7],Y ; Store to index.
+    INY ; Data++
+    TYA ; Index to A.
+    CMP #$06 ; If _ #$06
+    BNE VAL_NE_0x6 ; !=, goto.
+    RTS ; Leave.
+INIT_CTRLS_AND_TRI: ; 1B:00D7, 0x0360D7
     LDA #$00
-    STA SOUND_UNK_REQUEST?[7],Y
-    INY
-    TYA
-    CMP #$06
-    BNE L_1B:00CB
-    RTS
-L_1B:00D7: ; 1B:00D7, 0x0360D7
-    LDA #$00
-    STA APU_DMC_LOAD
+    STA APU_DMC_LOAD ; Clear ??
     LDA #$10
-    STA APU_SQ1_CTRL
+    STA APU_SQ1_CTRL ; Set constant volume.
     STA APU_SQ2_CTRL
     STA APU_NSE_CTRL
     LDA #$00
-    STA APU_TRI_CTRL
+    STA APU_TRI_CTRL ; Clear tri ctrl.
     RTS
-    LDX SND_INDEX_WORKING_ON?
-    STA SND_TIMER_A_TARGET[6],X
-    TXA
-    STA SND_ARR_INDEX_UNK,X
-    TYA
-    BEQ L_1B:011B
-    TXA
-    BEQ L_1B:0118
-    CMP #$01
-    BEQ L_1B:0109
-    CMP #$02
-    BEQ L_1B:010E
-    CMP #$03
-    BEQ L_1B:0113
-    RTS
-L_1B:0109: ; 1B:0109, 0x036109
-    JSR ENTRY_SQ1_WRITE_PTR_YX_SEEDED
-    BEQ L_1B:011B
-L_1B:010E: ; 1B:010E, 0x03610E
+    LDX SND_INDEX_WORKING_ON? ; Load index.
+    STA SND_TIMER_A_TARGET[6],X ; Store val to target.
+    TXA ; Index to A.
+    STA SND_ARR_INDEX_UNK,X ; Store index to self?
+    TYA ; Y to A.
+    BEQ NO_MORE_UPDATES_A ; == 0, goto.
+    TXA ; Index to A.
+    BEQ ENTRY_WRITE_NOISE_PAST ; == 0, goto.
+    CMP #$01 ; If _ #$01
+    BEQ ENTRY_WRITE_SQ1_PAST ; ==, goto.
+    CMP #$02 ; If _ #$02
+    BEQ ENTRY_WRITE_SQ2_PAST ; ==, goto.
+    CMP #$03 ; If _ #$03
+    BEQ ENTRY_WRITE_TRI_PAST ; ==, goto.
+    RTS ; Leave.
+ENTRY_WRITE_SQ1_PAST: ; 1B:0109, 0x036109
+    JSR ENTRY_SQ1_WRITE_PTR_YX_SEEDED ; Write.
+    BEQ NO_MORE_UPDATES_A ; == 0, goto.
+ENTRY_WRITE_SQ2_PAST: ; 1B:010E, 0x03610E
     JSR ENTRY_SQ2_WRITE_PTR_YX_SEEDED
-    BEQ L_1B:011B
-L_1B:0113: ; 1B:0113, 0x036113
+    BEQ NO_MORE_UPDATES_A
+ENTRY_WRITE_TRI_PAST: ; 1B:0113, 0x036113
     JSR ENTRY_TRI_WRITE_PTR_YX_SEEDED
-    BEQ L_1B:011B
-L_1B:0118: ; 1B:0118, 0x036118
+    BEQ NO_MORE_UPDATES_A
+ENTRY_WRITE_NOISE_PAST: ; 1B:0118, 0x036118
     JSR ENTRY_NOISE_WRITE_PTR_YX_SEEDED
-L_1B:011B: ; 1B:011B, 0x03611B
-    LDA SND_UNK_BF
+NO_MORE_UPDATES_A: ; 1B:011B, 0x03611B
+    LDA SND_UNK_BF ; Move ??
     STA SOUND_UNK_REQUEST?[7],X
-    LDA #$00
+    LDA #$00 ; Clear ??
     STA SND_TIMER_A[5],X
-L_1B:0125: ; 1B:0125, 0x036125
-    STA SND_ARR_UNK_7DF,X
+WRITE_ARRAYS_UNK: ; 1B:0125, 0x036125
+    STA SND_ARR_UNK_7DF,X ; Clear ??
     STA SND_ARR_UNK_7E3,X
     STA SND_ARR_UNK_7E7,X
     STA SND_SQUARES_UPDATING_COUNT
-    RTS
-    JSR L_1B:0045
-    BNE L_1B:0141
+    RTS ; Leave.
+    JSR SOUND_INDEX_FORWARD_TO_TARGET ; Do forward.
+    BNE RTS ; != 0, goto.
     LDA #$00
-    STA SOUND_UNK_REQUEST?[7]
+    STA SOUND_UNK_REQUEST?[7] ; Clear ??
     LDA #$10
-    STA APU_NSE_CTRL
-L_1B:0141: ; 1B:0141, 0x036141
-    RTS
-    STA SND_TIMER_A_TARGET+4
-    JSR ENTRY_SQ2_WRITE_PTR_YX_SEEDED
-    LDA SND_UNK_BF
+    STA APU_NSE_CTRL ; Set noise ctrl.
+RTS: ; 1B:0141, 0x036141
+    RTS ; Leave.
+    STA SND_TIMER_A_TARGET+4 ; A to.
+    JSR ENTRY_SQ2_WRITE_PTR_YX_SEEDED ; Do seeded.
+    LDA SND_UNK_BF ; Move ??
     STA SOUND_UNK_REQUEST?+4
-    LDX #$01
+    LDX #$01 ; Set disable.
     STX SND_DISABLE_WRITE_ARR_UNK
-    INX
-    STX SND_UNK_7C9
+    INX ; += 1
+    STX SND_UNK_7C9 ; Set ??
     LDA #$00
-    STA SND_TIMER_A+4
-    STA SOUND_UNK_REQUEST?+1
-    LDX #$01
-    JMP L_1B:0125
-    JSR L_1B:0181
-    JSR L_1B:0192
-    INC SND_SQUARES_UPDATING_COUNT
+    STA SND_TIMER_A+4 ; Clear timer.
+    STA SOUND_UNK_REQUEST?+1 ; And ??
+    LDX #$01 ; Seed ??
+    JMP WRITE_ARRAYS_UNK ; Arrays write.
+    JSR SUB_HELP_SQ1_CTRL_AND_VARS_WITH_INC ; With inc.
+    JSR SET_SQUARE_2_CTRL_AND_VAR_CLEAR_UNK ; Do SQ2.
+    INC SND_SQUARES_UPDATING_COUNT ; ++
     LDA #$00
-    STA SOUND_UNK_REQUEST?+4
-    LDX #$01
-    LDA #$7F
-    STA APU_SQ1_CTRL,X
+    STA SOUND_UNK_REQUEST?+4 ; Clear request.
+    LDX #$01 ; Array index.
+    LDA #$7F ; Load CTRL.
+    STA APU_SQ1_CTRL,X ; Set register sweep SQ1+SQ2
     STA APU_SQ2_CTRL,X
-    RTS
-    JSR L_1B:0045
-    BNE L_1B:0191
-L_1B:0181: ; 1B:0181, 0x036181
+    RTS ; Leave.
+    JSR SOUND_INDEX_FORWARD_TO_TARGET ; Forward.
+    BNE RTS ; Nonezero, leave.
+SUB_HELP_SQ1_CTRL_AND_VARS_WITH_INC: ; 1B:0181, 0x036181
     LDA #$10
-    STA APU_SQ1_CTRL
+    STA APU_SQ1_CTRL ; Set CTRL.
     LDA #$00
-    STA SND_DISABLE_WRITE_ARR_UNK
-    STA SOUND_UNK_REQUEST?+1
-    INC SND_SQUARES_UPDATING_COUNT
-L_1B:0191: ; 1B:0191, 0x036191
-    RTS
-L_1B:0192: ; 1B:0192, 0x036192
+    STA SND_DISABLE_WRITE_ARR_UNK ; Clear ??
+    STA SOUND_UNK_REQUEST?+1 ; Clear ??
+    INC SND_SQUARES_UPDATING_COUNT ; ++
+RTS: ; 1B:0191, 0x036191
+    RTS ; Leave.
+SET_SQUARE_2_CTRL_AND_VAR_CLEAR_UNK: ; 1B:0192, 0x036192
     LDA #$10
-    STA APU_SQ2_CTRL
+    STA APU_SQ2_CTRL ; Set SQ2 CTRL.
     LDA #$00
-    STA SND_UNK_7C9
-    STA SOUND_UNK_REQUEST?+2
+    STA SND_UNK_7C9 ; Clear ??
+    STA SOUND_UNK_REQUEST?+2 ; Clear ??
     RTS
-L_1B:01A0: ; 1B:01A0, 0x0361A0
-    JMP JMP_SOUND_SEQUENCE_B
-L_1B:01A3: ; 1B:01A3, 0x0361A3
-    LDA SOUND_VAL_SONG_INIT_ID
-    TAY
-    CMP #$3F
-    BCS L_1B:01A0
-    TYA
-    BEQ L_1B:01EA
-    STA SOUND_VAL_SONG_CURRENT_ID
-    CMP #$19
-    BEQ L_1B:01B9
-    CMP #$19
-    BCC L_1B:01C4
-L_1B:01B9: ; 1B:01B9, 0x0361B9
-    STA SND_UNK_BF
-    SEC
-    SBC #$19
-    STA SND_REBASED_UNK
-    JMP L_1B:01DC
-L_1B:01C4: ; 1B:01C4, 0x0361C4
-    CMP #$06
-    BNE L_1B:01D4
-    LDA COUNT_LOOPS?_UNK
-    CMP #$01
-    BEQ L_1B:01D3
-    LDA #$07
-    BNE L_1B:01D4
-L_1B:01D3: ; 1B:01D3, 0x0361D3
-    TYA
-L_1B:01D4: ; 1B:01D4, 0x0361D4
-    STA SND_UNK_BF
-    STA SND_REBASED_UNK
-    DEC SND_REBASED_UNK
-L_1B:01DC: ; 1B:01DC, 0x0361DC
+VAL_GTE_0x3F: ; 1B:01A0, 0x0361A0
+    JMP JMP_SOUND_SEQUENCE_B_INIT_FULL_DMC?
+SONG_ID_AND_TODO: ; 1B:01A3, 0x0361A3
+    LDA SOUND_VAL_SONG_INIT_ID ; Load.
+    TAY ; To Y.
+    CMP #$3F ; If _ #$3F
+    BCS VAL_GTE_0x3F ; >=, goto.
+    TYA ; Back to A.
+    BEQ VAL_EQ_0x00 ; == 0, goto.
+    STA SOUND_VAL_SONG_CURRENT_ID ; Store to, ID?
+    CMP #$19 ; If _ #$19
+    BEQ VAL_EQ_0x19 ; ==, goto.
+    CMP #$19 ; If _ #$19
+    BCC VAL_LT_0x19 ; <, goto.
+VAL_EQ_0x19: ; 1B:01B9, 0x0361B9
+    STA SND_UNK_BF ; Store val ??
+    SEC ; Prep sub.
+    SBC #$19 ; Sub with, rebase.
+    STA SND_REBASED_UNK ; Store to rebased.
+    JMP ENTRY_REBASED ; Goto ??
+VAL_LT_0x19: ; 1B:01C4, 0x0361C4
+    CMP #$06 ; If _ #$06
+    BNE VAL_NE_0x6 ; !=, goto.
+    LDA COUNT_LOOPS?_UNK ; Load ??
+    CMP #$01 ; If _ #$01
+    BEQ Y_TO_A_AND_STORE ; ==, goto.
+    LDA #$07 ; Load ??
+    BNE VAL_NE_0x6 ; !=, goto.
+Y_TO_A_AND_STORE: ; 1B:01D3, 0x0361D3
+    TYA ; Y to A.
+VAL_NE_0x6: ; 1B:01D4, 0x0361D4
+    STA SND_UNK_BF ; Store val to.
+    STA SND_REBASED_UNK ; Store ??
+    DEC SND_REBASED_UNK ; --
+ENTRY_REBASED: ; 1B:01DC, 0x0361DC
     LDA #$7F
-    STA CHANNELS_SWEEP_COPY
-    STA SOUND_UNK_7C1
-    JSR L_1B:0341
-L_1B:01E7: ; 1B:01E7, 0x0361E7
-    JMP L_1B:04D0
-L_1B:01EA: ; 1B:01EA, 0x0361EA
-    LDA SOUND_UNK_REQUEST?+5
-    BNE L_1B:01E7
-    RTS
-L_1B:01F0: ; 1B:01F0, 0x0361F0
+    STA CHANNELS_SWEEP_COPY ; Set sweep copy.
+    STA SOUND_UNK_7C1_SWEEP_SQ2? ; Set ??
+    JSR REINIT_STUFFS_AND_MOVE_STUFF_TODO ; Do.
+VAL_NONZERO: ; 1B:01E7, 0x0361E7
+    JMP TO_NAME_IDK ; Goto.
+VAL_EQ_0x00: ; 1B:01EA, 0x0361EA
+    LDA SOUND_UNK_REQUEST?+5 ; Load ??
+    BNE VAL_NONZERO ; != 0, goto.
+    RTS ; Leave if zero.
+NOISE_CTRL_DATA: ; 1B:01F0, 0x0361F0
     .db 00
-L_1B:01F1: ; 1B:01F1, 0x0361F1
+NOISE_LOOP_DATA: ; 1B:01F1, 0x0361F1
     .db 10
-L_1B:01F2: ; 1B:01F2, 0x0361F2
+NOISE_LENGTH_DATA: ; 1B:01F2, 0x0361F2
     .db 01
     .db 18
     .db 00
@@ -315,116 +315,116 @@ L_1B:01F2: ; 1B:01F2, 0x0361F2
     .db 01
     .db 38
 L_1B:0221: ; 1B:0221, 0x036221
-    LDA SOUND_UNK_REQUEST?+5
-    CMP #$01
-    BEQ L_1B:024A
-    TXA
-    CMP #$03
-    BEQ L_1B:024A
-    LDA SOUND_ARR_UNK_79A,X
-    AND #$E0
-    BEQ L_1B:024A
-    STA SOUND_PTR_REGISTER/DATA[2]
-    LDA SOUND_ARR_7C3,X
-    CMP #$02
-    BEQ L_1B:0247
-    LDY SOUND_BE_WRITE_INDEXER_UNK
-    LDA CHANNELS_LTIMER_COPY,Y
-    STA SOUND_PTR_REGISTER/DATA+1
-    JSR L_1B:0288
-L_1B:0247: ; 1B:0247, 0x036247
-    INC SND_ARR_UNK_7D1,X
-L_1B:024A: ; 1B:024A, 0x03624A
-    RTS
-L_1B:024B: ; 1B:024B, 0x03624B
-    LDA SND_DATA_8100_PTR[2]
-    CMP #$31
-    BNE L_1B:0253
-    LDA #$27
-L_1B:0253: ; 1B:0253, 0x036253
-    TAY
-    LDA L_1B:02DA,Y
-    PHA
-    LDA SOUND_ARR_7C3,X
-    CMP #$46
-    BNE L_1B:0264
-    PLA
-    LDA #$00
-    BEQ L_1B:02C2
-L_1B:0264: ; 1B:0264, 0x036264
-    PLA
-    JMP L_1B:02C2
-L_1B:0268: ; 1B:0268, 0x036268
-    LDA SND_DATA_8100_PTR[2]
-    TAY
-    CMP #$10
-    BCS L_1B:0275
-    LDA L_1B:0311,Y
-    JMP L_1B:02C8
-L_1B:0275: ; 1B:0275, 0x036275
-    LDA #$F6
-    BNE L_1B:02C8
-L_1B:0279: ; 1B:0279, 0x036279
-    LDA SOUND_ARR_7C3,X
-    CMP #$4C
-    BCC L_1B:0284
-    LDA #$FE
-    BNE L_1B:02C8
-L_1B:0284: ; 1B:0284, 0x036284
-    LDA #$FE
-    BNE L_1B:02C8
-L_1B:0288: ; 1B:0288, 0x036288
-    LDA SND_ARR_UNK_7D1,X
-    STA SND_DATA_8100_PTR[2]
-    LDA SOUND_PTR_REGISTER/DATA[2]
-    CMP #$20
-    BEQ L_1B:02A7
-    CMP #$A0
-    BEQ L_1B:02B6
-    CMP #$60
-    BEQ L_1B:0279
-    CMP #$40
-    BEQ L_1B:0268
-    CMP #$80
-    BEQ L_1B:024B
-    CMP #$C0
-    BEQ L_1B:024B
-L_1B:02A7: ; 1B:02A7, 0x0362A7
-    LDA SND_DATA_8100_PTR[2]
-    CMP #$0A
-    BNE L_1B:02AF
-    LDA #$00
-L_1B:02AF: ; 1B:02AF, 0x0362AF
-    TAY
-    LDA L_1B:0307,Y
-    JMP L_1B:02C2
-L_1B:02B6: ; 1B:02B6, 0x0362B6
-    LDA SND_DATA_8100_PTR[2]
-    CMP #$2B
-    BNE L_1B:02BE
-    LDA #$21
-L_1B:02BE: ; 1B:02BE, 0x0362BE
-    TAY
-    LDA L_1B:02E6,Y
-L_1B:02C2: ; 1B:02C2, 0x0362C2
-    PHA
-    TYA
-    STA SND_ARR_UNK_7D1,X
-    PLA
-L_1B:02C8: ; 1B:02C8, 0x0362C8
-    PHA
-    LDA SND_DISABLE_WRITE_ARR_UNK,X
-    BNE L_1B:02D8
-    PLA
-    CLC
-    ADC SOUND_PTR_REGISTER/DATA+1
-    LDY SOUND_BE_WRITE_INDEXER_UNK
-    STA APU_SQ1_LTIMER,Y
-    RTS
-L_1B:02D8: ; 1B:02D8, 0x0362D8
-    PLA
-    RTS
-L_1B:02DA: ; 1B:02DA, 0x0362DA
+    LDA SOUND_UNK_REQUEST?+5 ; Load song.
+    CMP #$01 ; If _ #$01
+    BEQ RTS ; ==, goto.
+    TXA ; X to A.
+    CMP #$03 ; If _ #$03
+    BEQ RTS ; ==, leave.
+    LDA SOUND_ARR_UNK_79A,X ; Load arr.
+    AND #$E0 ; Keep 1110.0000
+    BEQ RTS ; == 0, leave.
+    STA SOUND_PTR_REGISTER/DATA[2] ; Store to.
+    LDA SOUND_ARR_7C3,X ; Load ??
+    CMP #$02 ; If _ #$02
+    BEQ VAL_EQ_0x2 ; ==, goto.
+    LDY SOUND_BE_WRITE_INDEXER_UNK ; Load other index.
+    LDA CHANNELS_LTIMER_COPY,Y ; Load timer LO.
+    STA SOUND_PTR_REGISTER/DATA+1 ; Store to.
+    JSR TIMER_L_DATA_CHECK_UNK ; Do sub.
+VAL_EQ_0x2: ; 1B:0247, 0x036247
+    INC SND_ARR_UNK_7D1,X ; ++
+RTS: ; 1B:024A, 0x03624A
+    RTS ; Leave.
+VAL_EQ_0x80/0xC0: ; 1B:024B, 0x03624B
+    LDA SND_DATA_8100_PTR[2] ; Load ??
+    CMP #$31 ; If _ #$31
+    BNE VAL_NE_0x31 ; !=, goto.
+    LDA #$27 ; Seed on ??
+VAL_NE_0x31: ; 1B:0253, 0x036253
+    TAY ; To Y index.
+    LDA DATA_ARR_UNK,Y ; Load ??
+    PHA ; Save it.
+    LDA SOUND_ARR_7C3,X ; Load ??
+    CMP #$46 ; If _ #$46
+    BNE VAL_NE_0x46 ; !=, goto.
+    PLA ; Pull saved.
+    LDA #$00 ; Load ??
+    BEQ Y_TO_ARR_UNK ; Always taken, goto.
+VAL_NE_0x46: ; 1B:0264, 0x036264
+    PLA ; Pull value.
+    JMP Y_TO_ARR_UNK ; Go store it.
+VAL_EQ_0x40: ; 1B:0268, 0x036268
+    LDA SND_DATA_8100_PTR[2] ; Load ??
+    TAY ; To Y index.
+    CMP #$10 ; If _ #$10
+    BCS VAL_GTE_0x10 ; >=, goto.
+    LDA TIMER_L_VALS?,Y ; Load mod.
+    JMP TEST_WRITE_TIMER_L? ; Write.
+VAL_GTE_0x10: ; 1B:0275, 0x036275
+    LDA #$F6 ; Load ??
+    BNE TEST_WRITE_TIMER_L? ; Write it.
+VAL_EQ_0x60: ; 1B:0279, 0x036279
+    LDA SOUND_ARR_7C3,X ; Load ??
+    CMP #$4C ; If _ #$4C
+    BCC VAL_LT_0x4C ; <, goto.
+    LDA #$FE ; Seed timer L.
+    BNE TEST_WRITE_TIMER_L? ; Always taken, goto.
+VAL_LT_0x4C: ; 1B:0284, 0x036284
+    LDA #$FE ; Seed timer L.
+    BNE TEST_WRITE_TIMER_L? ; Always taken, goto.
+TIMER_L_DATA_CHECK_UNK: ; 1B:0288, 0x036288
+    LDA SND_ARR_UNK_7D1,X ; Move ??
+    STA SND_DATA_8100_PTR[2] ; Store to.
+    LDA SOUND_PTR_REGISTER/DATA[2] ; Load ??
+    CMP #$20 ; If _ #$20
+    BEQ VAL_EQ_0x20 ; ==, goto.
+    CMP #$A0 ; If _ #$A0
+    BEQ VAL_EQ_0xA0 ; ==, goto.
+    CMP #$60 ; If _ #$60
+    BEQ VAL_EQ_0x60 ; ==, goto.
+    CMP #$40 ; If _ #$40
+    BEQ VAL_EQ_0x40 ; ==, goto.
+    CMP #$80 ; If _ #$80
+    BEQ VAL_EQ_0x80/0xC0 ; ==, goto.
+    CMP #$C0 ; If _ #$C0
+    BEQ VAL_EQ_0x80/0xC0 ; ==, goto.
+VAL_EQ_0x20: ; 1B:02A7, 0x0362A7
+    LDA SND_DATA_8100_PTR[2] ; Load.
+    CMP #$0A ; If _ #$0A
+    BNE VAL_NE_0xA ; !=, goto.
+    LDA #$00 ; Seed clear.
+VAL_NE_0xA: ; 1B:02AF, 0x0362AF
+    TAY ; Clear index.
+    LDA SOUND_DATA_UNK,Y ; Load ??
+    JMP Y_TO_ARR_UNK ; Goto.
+VAL_EQ_0xA0: ; 1B:02B6, 0x0362B6
+    LDA SND_DATA_8100_PTR[2] ; Load.
+    CMP #$2B ; If _ #$2B
+    BNE VAL_NE_0x2B
+    LDA #$21 ; Seed data.
+VAL_NE_0x2B: ; 1B:02BE, 0x0362BE
+    TAY ; To Y index.
+    LDA SOUND_DATA_UNK_B,Y
+Y_TO_ARR_UNK: ; 1B:02C2, 0x0362C2
+    PHA ; Save A.
+    TYA ; Y to A.
+    STA SND_ARR_UNK_7D1,X ; Save Y.
+    PLA ; Pull saved.
+TEST_WRITE_TIMER_L?: ; 1B:02C8, 0x0362C8
+    PHA ; Save passed.
+    LDA SND_DISABLE_WRITE_ARR_UNK,X ; Load ??
+    BNE EXIT_PULL ; !=, disabled, exit.
+    PLA ; Pull passed.
+    CLC ; Prep add.
+    ADC SOUND_PTR_REGISTER/DATA+1 ; Add with.
+    LDY SOUND_BE_WRITE_INDEXER_UNK ; Load index.
+    STA APU_SQ1_LTIMER,Y ; Store to timer L.
+    RTS ; Leave.
+EXIT_PULL: ; 1B:02D8, 0x0362D8
+    PLA ; Pull saved.
+    RTS ; Leave.
+DATA_ARR_UNK: ; 1B:02DA, 0x0362DA
     .db 09
     .db 08
     .db 07
@@ -437,7 +437,7 @@ L_1B:02DA: ; 1B:02DA, 0x0362DA
     .db 01
     .db 01
     .db 00
-L_1B:02E6: ; 1B:02E6, 0x0362E6
+SOUND_DATA_UNK_B: ; 1B:02E6, 0x0362E6
     .db 00
     .db 00
     .db 00
@@ -471,7 +471,7 @@ L_1B:02E6: ; 1B:02E6, 0x0362E6
     .db FF
     .db FF
     .db 00
-L_1B:0307: ; 1B:0307, 0x036307
+SOUND_DATA_UNK: ; 1B:0307, 0x036307
     .db 00
     .db 01
     .db 01
@@ -482,7 +482,7 @@ L_1B:0307: ; 1B:0307, 0x036307
     .db FF
     .db FE
     .db FF
-L_1B:0311: ; 1B:0311, 0x036311
+TIMER_L_VALS?: ; 1B:0311, 0x036311
     .db 00
     .db FF
     .db FE
@@ -499,529 +499,529 @@ L_1B:0311: ; 1B:0311, 0x036311
     .db F7
     .db F6
     .db F5
-L_1B:0321: ; 1B:0321, 0x036321
-    LDA SND_REBASED_UNK
-    TAY
-    LDA L_1B:09A7,Y
-    TAY
-    LDX #$00
-L_1B:032B: ; 1B:032B, 0x03632B
-    LDA L_1B:09C3,Y
+SUB_TODO_A: ; 1B:0321, 0x036321
+    LDA SND_REBASED_UNK ; Load rebased.
+    TAY ; To Y.
+    LDA REBASE_DATA_UNK_A,Y ; Load zero.
+    TAY ; To Y index.
+    LDX #$00 ; Load alt index.
+INDEX_NE_0xA: ; 1B:032B, 0x03632B
+    LDA DATA_MOVE_UNK_A,Y ; Move ??
     STA SND_ARR_UNK_LARGER?[10],X
-    INY
-    INX
-    TXA
-    CMP #$0A
-    BNE L_1B:032B
-    RTS
-L_1B:0339: ; 1B:0339, 0x036339
+    INY ; Data++
+    INX ; Data++
+    TXA ; X to A.
+    CMP #$0A ; If _ #$0A
+    BNE INDEX_NE_0xA ; !=, goto.
+    RTS ; Leave.
+VAL_EQ_0xFF: ; 1B:0339, 0x036339
     LDA #$FF
-    STA SND_ARR_DATA_PTR[4],X
-    JMP L_1B:03BA
-L_1B:0341: ; 1B:0341, 0x036341
-    JSR L_1B:00AD
-    LDA SND_UNK_BF
+    STA SND_ARR_DATA_PTR[4],X ; Move ??
+    JMP WRITE_A_TO_PAIR_LOOP_UNK ; Goto.
+REINIT_STUFFS_AND_MOVE_STUFF_TODO: ; 1B:0341, 0x036341
+    JSR HELPER_INIT_CTRLS_AND_TRI_AND_DMC ; Init.
+    LDA SND_UNK_BF ; Move ??
     STA SOUND_UNK_REQUEST?+5
-    CMP #$33
-    BEQ L_1B:035B
-    CMP #$19
-    BEQ L_1B:0355
-    CMP #$19
-    BCC L_1B:036F
-L_1B:0355: ; 1B:0355, 0x036355
-    JSR L_1B:0321
-    JMP L_1B:0386
-L_1B:035B: ; 1B:035B, 0x03635B
-    LDX #$00
+    CMP #$33 ; If _ #$33
+    BEQ SEED_INDEX_CLEARS ; ==, goto.
+    CMP #$19 ; If _ #$19
+    BEQ VAL_EQ_0x19 ; ==, goto.
+    CMP #$19 ; If _ #$19
+    BCC VAL_LT_0x19 ; <, goto.
+VAL_EQ_0x19: ; 1B:0355, 0x036355
+    JSR SUB_TODO_A ; Do ??
+    JMP REENTRY_FLAG_SET_UNK ; Reentry.
+SEED_INDEX_CLEARS: ; 1B:035B, 0x03635B
+    LDX #$00 ; Seed index clears.
     LDY #$00
-L_1B:035F: ; 1B:035F, 0x03635F
-    LDA L_1B:09CD,Y
+VAL_NE_INDEX: ; 1B:035F, 0x03635F
+    LDA DATA_ARR_UNK,Y ; Move ??
+    STA SND_ARR_UNK_LARGER?[10],X ; Store to.
+    INY ; Data++
+    INX ; Index++
+    TXA ; X to A.
+    CMP #$0A ; If _ #$0A
+    BNE VAL_NE_INDEX ; !=, goto.
+    JMP REENTRY_FLAG_SET_UNK ; Reender.
+VAL_LT_0x19: ; 1B:036F, 0x03636F
+    LDA SND_REBASED_UNK ; Load based.
+    TAY ; To Y.
+    LDA ROM_DATA_UNK,Y ; Load data.
+    TAY ; To Y.
+    LDX #$00 ; Reset index.
+MOVE_DATA_LOOP: ; 1B:0379, 0x036379
+    LDA DATA_MOVE_UNK_A,Y ; Move data.
     STA SND_ARR_UNK_LARGER?[10],X
-    INY
-    INX
-    TXA
-    CMP #$0A
-    BNE L_1B:035F
-    JMP L_1B:0386
-L_1B:036F: ; 1B:036F, 0x03636F
-    LDA SND_REBASED_UNK
-    TAY
-    LDA L_1B:098F,Y
-    TAY
-    LDX #$00
-L_1B:0379: ; 1B:0379, 0x036379
-    LDA L_1B:09C3,Y
-    STA SND_ARR_UNK_LARGER?[10],X
-    INY
-    INX
-    TXA
-    CMP #$0A
-    BNE L_1B:0379
-L_1B:0386: ; 1B:0386, 0x036386
+    INY ; Data++
+    INX ; Index++
+    TXA ; X to A.
+    CMP #$0A ; If _ #$0A
+    BNE MOVE_DATA_LOOP ; !=, loop.
+REENTRY_FLAG_SET_UNK: ; 1B:0386, 0x036386
     LDA #$01
-    STA SND_FLAGS_ARR_CHANNELS_RELATED?[4]
+    STA SND_FLAGS_ARR_CHANNELS_RELATED?[4] ; Store flags.
     STA SND_FLAGS_ARR_CHANNELS_RELATED?+1
     STA SND_FLAGS_ARR_CHANNELS_RELATED?+2
     STA SND_FLAGS_ARR_CHANNELS_RELATED?+3
     LDA #$00
-    STA R_**:$00BA
-    LDY #$08
-L_1B:039A: ; 1B:039A, 0x03639A
-    STA 7A7_ARR_UNK,Y
-    DEY
-    BNE L_1B:039A
-    TAX
-L_1B:03A1: ; 1B:03A1, 0x0363A1
-    LDA SOUND_CHANNEL_DATA_PTRS_L,X
+    STA R_**:$00BA ; Clear ??
+    LDY #$08 ; Data index.
+LOOP_INDEX_CLEAR: ; 1B:039A, 0x03639A
+    STA 7A7_ARR_UNK,Y ; Clear.
+    DEY ; Index--
+    BNE LOOP_INDEX_CLEAR ; !=, goto.
+    TAX ; To X index.
+VAL_NE_0x8: ; 1B:03A1, 0x0363A1
+    LDA SOUND_CHANNEL_DATA_PTRS_L,X ; Move L.
     STA SND_ENGINE_PRIMARY_USE_PTR_A[2]
-    LDA SOUND_CHANNEL_DATA_PTRS_H,X
-    CMP #$FF
-    BEQ L_1B:0339
-    STA SND_ENGINE_PRIMARY_USE_PTR_A+1
-    LDY FPTR_STREAM_INDEX
-    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y
-    STA SND_ARR_DATA_PTR[4],X
-    INY
-    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y
-L_1B:03BA: ; 1B:03BA, 0x0363BA
-    STA SND_ARR_DATA_PTR+1,X
+    LDA SOUND_CHANNEL_DATA_PTRS_H,X ; Load H.
+    CMP #$FF ; If _ #$FF
+    BEQ VAL_EQ_0xFF ; ==, goto, skip.
+    STA SND_ENGINE_PRIMARY_USE_PTR_A+1 ; Store H.
+    LDY FPTR_STREAM_INDEX ; Load stream index.
+    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y ; Load from file.
+    STA SND_ARR_DATA_PTR[4],X ; Store to ??
+    INY ; Stream++
+    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y ; Load from file.
+WRITE_A_TO_PAIR_LOOP_UNK: ; 1B:03BA, 0x0363BA
+    STA SND_ARR_DATA_PTR+1,X ; A to arr, pair.
+    INX ; Index += 2
     INX
-    INX
-    TXA
-    CMP #$08
-    BNE L_1B:03A1
-    RTS
-L_1B:03C5: ; 1B:03C5, 0x0363C5
-    LDA SND_SQUARES_UPDATING_COUNT
-    BEQ L_1B:03F5
-    CMP #$01
-    BEQ L_1B:03DF
+    TXA ; Index to A.
+    CMP #$08 ; If _ #$08
+    BNE VAL_NE_0x8 ; !=, goto.
+    RTS ; Leave.
+SQUARE_SWEEP_AND_TIMER_MOVE: ; 1B:03C5, 0x0363C5
+    LDA SND_SQUARES_UPDATING_COUNT ; Load.
+    BEQ RTS ; == 0, leave.
+    CMP #$01 ; If _ #$01
+    BEQ UPDATING_0x1 ; ==, goto.
     LDA #$7F
-    STA APU_SQ2_SWEEP
-    LDA SQ2_TIMER_COPY
+    STA APU_SQ2_SWEEP ; Disable sweep max settings.
+    LDA SQ2_TIMER_COPY ; Move timer.
     STA APU_SQ2_LTIMER
-    LDA SQ2_LENGTH_COPY
+    LDA SQ2_LENGTH_COPY ; Move length.
     STA APU_SQ2_LENGTH
-L_1B:03DF: ; 1B:03DF, 0x0363DF
-    LDA #$7F
+UPDATING_0x1: ; 1B:03DF, 0x0363DF
+    LDA #$7F ; Same for this.
     STA APU_SQ1_SWEEP
     LDA CHANNELS_LTIMER_COPY
     STA APU_SQ1_LTIMER
     LDA CHANNELS_LENGTH_COPY
     STA APU_SQ1_LENGTH
     LDA #$00
-    STA SND_SQUARES_UPDATING_COUNT
-L_1B:03F5: ; 1B:03F5, 0x0363F5
-    RTS
+    STA SND_SQUARES_UPDATING_COUNT ; Reset count.
+RTS: ; 1B:03F5, 0x0363F5
+    RTS ; Leave.
 L_1B:03F6: ; 1B:03F6, 0x0363F6
-    TXA
-    CMP #$02
-    BCS L_1B:03F5
-    LDA SOUND_ARR_UNK_79A,X
-    AND #$1F
-    BEQ L_1B:045B
-    STA SOUND_PTR_REGISTER/DATA+1
-    LDA SOUND_ARR_7C3,X
-    CMP #$02
-    BEQ L_1B:0465
-    LDY #$00
-L_1B:040D: ; 1B:040D, 0x03640D
-    DEC SOUND_PTR_REGISTER/DATA+1
-    BEQ L_1B:0415
+    TXA ; X to A.
+    CMP #$02 ; If _ #$02
+    BCS RTS ; >=, goto.
+    LDA SOUND_ARR_UNK_79A,X ; Load at index.
+    AND #$1F ; Keep lower.
+    BEQ RTS ; == 0, goto.
+    STA SOUND_PTR_REGISTER/DATA+1 ; Store nonzero.
+    LDA SOUND_ARR_7C3,X ; Load ??
+    CMP #$02 ; If _ #$02
+    BEQ VAL_EQ_0x2 ; ==, goto.
+    LDY #$00 ; Clear.
+DATA_DEC: ; 1B:040D, 0x03640D
+    DEC SOUND_PTR_REGISTER/DATA+1 ; --
+    BEQ DEC_0x00 ; == 0, goto.
+    INY ; Stream++
     INY
-    INY
-    BNE L_1B:040D
-L_1B:0415: ; 1B:0415, 0x036415
-    LDA L_1B:06DA,Y
+    BNE DATA_DEC ; != 0, goto.
+DEC_0x00: ; 1B:0415, 0x036415
+    LDA SND_ARR_PTR_L,Y ; Move ptr.
     STA SND_DATA_8100_PTR[2]
-    LDA L_1B:06DB,Y
+    LDA SND_ARR_PTR_H,Y
     STA SND_DATA_8100_PTR+1
-    LDA SND_ARR_UNK_7CD,X
-    LSR A
-    TAY
-    LDA [SND_DATA_8100_PTR[2]],Y
-    STA SND_NIBBLY_TEMP
-    CMP #$FF
-    BEQ L_1B:045C
-    CMP #$F0
-    BEQ L_1B:0461
-    LDA SND_ARR_UNK_7CD,X
-    AND #$01
-    BNE L_1B:043F
+    LDA SND_ARR_DATA_INDEX_UNK,X ; Load.
+    LSR A ; >> 1, /2.
+    TAY ; To Y index.
+    LDA [SND_DATA_8100_PTR[2]],Y ; Load from stream.
+    STA SND_NIBBLY_TEMP ; Store to.
+    CMP #$FF ; If _ #$FF
+    BEQ VAL_EQ_0xFF ; ==, goto.
+    CMP #$F0 ; If _ #$F0
+    BEQ VAL_EQ_0xF0 ; ==, goto.
+    LDA SND_ARR_DATA_INDEX_UNK,X ; Load.
+    AND #$01 ; Keep lower.
+    BNE VAL_NE_0x1 ; !=, goto.
+    LSR SND_NIBBLY_TEMP ; Nibble down.
     LSR SND_NIBBLY_TEMP
     LSR SND_NIBBLY_TEMP
     LSR SND_NIBBLY_TEMP
-    LSR SND_NIBBLY_TEMP
-L_1B:043F: ; 1B:043F, 0x03643F
-    LDA SND_NIBBLY_TEMP
-    AND #$0F
-    STA SOUND_PTR_REGISTER/DATA[2]
-    LDA SOUND_ARR_UNK_79D_UPPER_NIBBLE_UNK,X
-    AND #$F0
-    ORA SOUND_PTR_REGISTER/DATA[2]
-    TAY
-L_1B:044D: ; 1B:044D, 0x03644D
-    INC SND_ARR_UNK_7CD,X
-L_1B:0450: ; 1B:0450, 0x036450
-    LDA SND_DISABLE_WRITE_ARR_UNK,X
-    BNE L_1B:045B
-    TYA
-    LDY SOUND_BE_WRITE_INDEXER_UNK
-    STA APU_SQ1_CTRL,Y
-L_1B:045B: ; 1B:045B, 0x03645B
-    RTS
-L_1B:045C: ; 1B:045C, 0x03645C
-    LDY SOUND_ARR_UNK_79D_UPPER_NIBBLE_UNK,X
-    BNE L_1B:0450
-L_1B:0461: ; 1B:0461, 0x036461
-    LDY #$10
-    BNE L_1B:0450
-L_1B:0465: ; 1B:0465, 0x036465
-    LDY #$10
-    BNE L_1B:044D
-L_1B:0469: ; 1B:0469, 0x036469
-    INY
-    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y
-    STA SOUND_CHANNEL_DATA_PTRS_L,X
-    INY
-    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y
-    STA SOUND_CHANNEL_DATA_PTRS_H,X
-    LDA SOUND_CHANNEL_DATA_PTRS_L,X
+VAL_NE_0x1: ; 1B:043F, 0x03643F
+    LDA SND_NIBBLY_TEMP ; Load nibble for command/data.
+    AND #$0F ; Keep lower.
+    STA SOUND_PTR_REGISTER/DATA[2] ; Store to ptr/register.
+    LDA SOUND_ARR_UNK_79D_UPPER_NIBBLE_UNK,X ; Load.
+    AND #$F0 ; Keep upper.
+    ORA SOUND_PTR_REGISTER/DATA[2] ; Combine with.
+    TAY ; To Y index.
+VAL_SEEDED_ALT_WITH_INC: ; 1B:044D, 0x03644D
+    INC SND_ARR_DATA_INDEX_UNK,X ; ++
+DATA_WRITE_SEEDED: ; 1B:0450, 0x036450
+    LDA SND_DISABLE_WRITE_ARR_UNK,X ; Load.
+    BNE RTS ; != 0, goto.
+    TYA ; Y to A.
+    LDY SOUND_BE_WRITE_INDEXER_UNK ; Load index to write.
+    STA APU_SQ1_CTRL,Y ; Write to sound channel loaded.
+RTS: ; 1B:045B, 0x03645B
+    RTS ; Leave.
+VAL_EQ_0xFF: ; 1B:045C, 0x03645C
+    LDY SOUND_ARR_UNK_79D_UPPER_NIBBLE_UNK,X ; Load index.
+    BNE DATA_WRITE_SEEDED ; != 0, goto.
+VAL_EQ_0xF0: ; 1B:0461, 0x036461
+    LDY #$10 ; Seed ??
+    BNE DATA_WRITE_SEEDED
+VAL_EQ_0x2: ; 1B:0465, 0x036465
+    LDY #$10 ; Seed ??
+    BNE VAL_SEEDED_ALT_WITH_INC ; != 0, goto.
+FILE_CONSUME_NEXT: ; 1B:0469, 0x036469
+    INY ; Index++
+    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y ; Load from file.
+    STA SOUND_CHANNEL_DATA_PTRS_L,X ; Store to.
+    INY ; Stream++
+    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y ; Load from file.
+    STA SOUND_CHANNEL_DATA_PTRS_H,X ; Store to, PTR H.
+    LDA SOUND_CHANNEL_DATA_PTRS_L,X ; Move loaded to primary.
     STA SND_ENGINE_PRIMARY_USE_PTR_A[2]
     LDA SOUND_CHANNEL_DATA_PTRS_H,X
     STA SND_ENGINE_PRIMARY_USE_PTR_A+1
-    TXA
-    LSR A
-    TAX
-    LDA #$00
-    TAY
-    STA FPTR_STREAM_INDEX,X
-    JMP L_1B:04A8
-L_1B:048B: ; 1B:048B, 0x03648B
-    JSR JMP_SOUND_SEQUENCE_B
-L_1B:048E: ; 1B:048E, 0x03648E
-    RTS
-L_1B:048F: ; 1B:048F, 0x03648F
-    TXA
-    ASL A
-    TAX
-    LDA SOUND_CHANNEL_DATA_PTRS_L,X
+    TXA ; X to A.
+    LSR A ; >> 1, /2.
+    TAX ; To X index.
+    LDA #$00 ; Seed ??
+    TAY ; Clear Y.
+    STA FPTR_STREAM_INDEX,X ; Load from index.
+    JMP ENTRY_SEEDED ; Goto.
+EXIT_INIT_UNK: ; 1B:048B, 0x03648B
+    JSR JMP_SOUND_SEQUENCE_B_INIT_FULL_DMC? ; Init.
+RTS: ; 1B:048E, 0x03648E
+    RTS ; Leave.
+REENTER_UNK: ; 1B:048F, 0x03648F
+    TXA ; X to A.
+    ASL A ; << 1, *2.
+    TAX ; To X index.
+    LDA SOUND_CHANNEL_DATA_PTRS_L,X ; Move ptr to use.
     STA SND_ENGINE_PRIMARY_USE_PTR_A[2]
     LDA SOUND_CHANNEL_DATA_PTRS_H,X
     STA SND_ENGINE_PRIMARY_USE_PTR_A+1
-    TXA
-    LSR A
-    TAX
-    INC FPTR_STREAM_INDEX,X
-    INC FPTR_STREAM_INDEX,X
-    LDY FPTR_STREAM_INDEX,X
-L_1B:04A8: ; 1B:04A8, 0x0364A8
-    TXA
-    ASL A
-    TAX
-    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y
-    STA SND_ARR_DATA_PTR[4],X
-    INY
-    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y
-    STA SND_ARR_DATA_PTR+1,X
-    CMP #$00
-    BEQ L_1B:048B
-    CMP #$FF
-    BEQ L_1B:0469
-    TXA
-    LSR A
-    TAX
-    LDA #$00
+    TXA ; X to A.
+    LSR A ; >> 1, /2.
+    TAX ; To X again.
+    INC FPTR_STREAM_INDEX,X ; ++ ??
+    INC FPTR_STREAM_INDEX,X ; += 2 total.
+    LDY FPTR_STREAM_INDEX,X ; Load stream index.
+ENTRY_SEEDED: ; 1B:04A8, 0x0364A8
+    TXA ; X to A.
+    ASL A ; << 1, *2.
+    TAX ; To X index.
+    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y ; Load from file.
+    STA SND_ARR_DATA_PTR[4],X ; Store to arr.
+    INY ; Stream++
+    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y ; Load from file.
+    STA SND_ARR_DATA_PTR+1,X ; Store to arr.
+    CMP #$00 ; If _ #$00
+    BEQ EXIT_INIT_UNK ; ==, goto.
+    CMP #$FF ; If _ #$FF
+    BEQ FILE_CONSUME_NEXT ; ==, goto.
+    TXA ; X to A.
+    LSR A ; >> 1, /2.
+    TAX ; To X index.
+    LDA #$00 ; Clear ??
     STA SND_ARR_B6_FPTR_INDEXES,X
-    LDA #$01
+    LDA #$01 ; Set flag ?? done?
     STA SND_FLAGS_ARR_CHANNELS_RELATED?[4],X
-    BNE L_1B:04EA
-L_1B:04CD: ; 1B:04CD, 0x0364CD
-    JMP L_1B:048F
-L_1B:04D0: ; 1B:04D0, 0x0364D0
-    JSR L_1B:03C5
-    LDA #$00
-    TAX
-    STA SOUND_BE_WRITE_INDEXER_UNK
-    BEQ L_1B:04EA
-L_1B:04DA: ; 1B:04DA, 0x0364DA
-    TXA
-    LSR A
-    TAX
-L_1B:04DD: ; 1B:04DD, 0x0364DD
-    INX
-    TXA
-    CMP #$04
-    BEQ L_1B:048E
-    LDA SOUND_BE_WRITE_INDEXER_UNK
-    CLC
-    ADC #$04
-    STA SOUND_BE_WRITE_INDEXER_UNK
-L_1B:04EA: ; 1B:04EA, 0x0364EA
-    TXA
-    ASL A
-    TAX
-    LDA SND_ARR_DATA_PTR[4],X
+    BNE CLEAR_COMPLETE ; != 0, goto. Always taken.
+EXIT_JMP: ; 1B:04CD, 0x0364CD
+    JMP REENTER_UNK ; Goto.
+TO_NAME_IDK: ; 1B:04D0, 0x0364D0
+    JSR SQUARE_SWEEP_AND_TIMER_MOVE ; Do.
+    LDA #$00 ; Clear A/X.
+    TAX ; To X too.
+    STA SOUND_BE_WRITE_INDEXER_UNK ; Clear.
+    BEQ CLEAR_COMPLETE ; == 0, goto.
+VAL_EQ_0xFF: ; 1B:04DA, 0x0364DA
+    TXA ; X to A.
+    LSR A ; >> 1, /2.
+    TAX ; To X index.
+REENTRY_LONG: ; 1B:04DD, 0x0364DD
+    INX ; X++
+    TXA ; X to A.
+    CMP #$04 ; If _ #$04
+    BEQ RTS ; == 0, SQ1, goto.
+    LDA SOUND_BE_WRITE_INDEXER_UNK ; Load.
+    CLC ; Prep add.
+    ADC #$04 ; Add with.
+    STA SOUND_BE_WRITE_INDEXER_UNK ; Store to, index using.
+CLEAR_COMPLETE: ; 1B:04EA, 0x0364EA
+    TXA ; X to A.
+    ASL A ; << 1, *2.
+    TAX ; To X index.
+    LDA SND_ARR_DATA_PTR[4],X ; Move ptr.
     STA SND_ENGINE_PRIMARY_USE_PTR_A[2]
-    LDA SND_ARR_DATA_PTR+1,X
+    LDA SND_ARR_DATA_PTR+1,X ; Move pair.
     STA SND_ENGINE_PRIMARY_USE_PTR_A+1
-    LDA SND_ARR_DATA_PTR+1,X
-    CMP #$FF
-    BEQ L_1B:04DA
-    TXA
-    LSR A
-    TAX
-    DEC SND_FLAGS_ARR_CHANNELS_RELATED?[4],X
-    BNE L_1B:054F
+    LDA SND_ARR_DATA_PTR+1,X ; Load index.
+    CMP #$FF ; If _ #$FF
+    BEQ VAL_EQ_0xFF ; ==, goto.
+    TXA ; X to A.
+    LSR A ; >> 2
+    TAX ; To X index.
+    DEC SND_FLAGS_ARR_CHANNELS_RELATED?[4],X ; --
+    BNE FLAG_NONZERO ; != 0, ,skip still.
     LDA #$00
-    STA SND_ARR_UNK_7CD,X
+    STA SND_ARR_DATA_INDEX_UNK,X ; Clear ?? when 0x00
     STA SND_ARR_UNK_7D1,X
-L_1B:050E: ; 1B:050E, 0x03650E
-    JSR L_1B:06D1
-    BEQ L_1B:04CD
-    CMP #$9F
-    BEQ L_1B:055E
-    CMP #$9E
-    BEQ L_1B:0576
-    CMP #$9C
-    BEQ L_1B:057F
-    TAY
-    CMP #$FF
-    BEQ L_1B:052D
-    AND #$C0
-    CMP #$C0
-    BEQ L_1B:053D
-    JMP L_1B:0588
-L_1B:052D: ; 1B:052D, 0x03652D
-    LDA SND_TIMER_ARR_UNK,X
-    BEQ L_1B:054C
-    DEC SND_TIMER_ARR_UNK,X
-    LDA SND_ARR_UNK_7B0,X
+REENTRY_LOOP: ; 1B:050E, 0x03650E
+    JSR STREAM_CONSUME_UNK ; Do sub.
+    BEQ EXIT_JMP
+    CMP #$9F ; If _ #$9F
+    BEQ VAL_EQ_0x9F ; ==, goto.
+    CMP #$9E ; If _ #$9E
+    BEQ STREAM_UPDATE_UNK ; ==, goto.
+    CMP #$9C ; If _ #$9C
+    BEQ VAL_EQ_0x9C ; ==, goto.
+    TAY ; To Y index.
+    CMP #$FF ; If _ #$FF
+    BEQ VAL_EQ_0xFF ; ==, goto.
+    AND #$C0 ; Keep upper.
+    CMP #$C0 ; If _ #$C0
+    BEQ VAL_EQ_0xC0 ; ==, goto.
+    JMP VAL_NOT_FLAGGY? ; Goto.
+VAL_EQ_0xFF: ; 1B:052D, 0x03652D
+    LDA SND_TIMER_ARR_UNK,X ; Load.
+    BEQ EXIT_GOTO ; == 0, goto.
+    DEC SND_TIMER_ARR_UNK,X ; --
+    LDA SND_ARR_UNK_7B0,X ; Move ??
     STA SND_ARR_B6_FPTR_INDEXES,X
-    BNE L_1B:054C
-L_1B:053D: ; 1B:053D, 0x03653D
-    TYA
-    AND #$3F
-    STA SND_TIMER_ARR_UNK,X
-    DEC SND_TIMER_ARR_UNK,X
-    LDA SND_ARR_B6_FPTR_INDEXES,X
+    BNE EXIT_GOTO ; != 0, goto.
+VAL_EQ_0xC0: ; 1B:053D, 0x03653D
+    TYA ; Y to A.
+    AND #$3F ; Keep lower.
+    STA SND_TIMER_ARR_UNK,X ; Store 0011.1111
+    DEC SND_TIMER_ARR_UNK,X ; --
+    LDA SND_ARR_B6_FPTR_INDEXES,X ; Move ??
     STA SND_ARR_UNK_7B0,X
-L_1B:054C: ; 1B:054C, 0x03654C
-    JMP L_1B:050E
-L_1B:054F: ; 1B:054F, 0x03654F
-    JSR L_1B:03F6
-    JSR L_1B:0221
-    JMP L_1B:04DD
-L_1B:0558: ; 1B:0558, 0x036558
-    JMP L_1B:066C
-L_1B:055B: ; 1B:055B, 0x03655B
-    JMP L_1B:0642
-L_1B:055E: ; 1B:055E, 0x03655E
-    JSR L_1B:06D1
-    STA SOUND_ARR_UNK_79A,X
-    JSR L_1B:06D1
-    STA SOUND_ARR_UNK_79D_UPPER_NIBBLE_UNK,X
-    JMP L_1B:050E
-    JSR L_1B:06D1
-    JSR L_1B:06D1
-    JMP L_1B:050E
-L_1B:0576: ; 1B:0576, 0x036576
-    JSR L_1B:06D1
-    STA SOUND_DELTA_UNK_791
-    JMP L_1B:050E
-L_1B:057F: ; 1B:057F, 0x03657F
-    JSR L_1B:06D1
-    STA SND_ARR_UNK_LARGER?[10]
-    JMP L_1B:050E
-L_1B:0588: ; 1B:0588, 0x036588
-    TYA
-    AND #$B0
-    CMP #$B0
-    BNE L_1B:05A7
-    TYA
-    AND #$0F
-    CLC
-    ADC SOUND_DELTA_UNK_791
-    TAY
-    LDA L_1B:091A,Y
+EXIT_GOTO: ; 1B:054C, 0x03654C
+    JMP REENTRY_LOOP ; Goto.
+FLAG_NONZERO: ; 1B:054F, 0x03654F
+    JSR L_1B:03F6 ; Do subs.
+    JSR L_1B:0221 ; Do.
+    JMP REENTRY_LONG ; Goto.
+EXIT_DMCEE_THINGS: ; 1B:0558, 0x036558
+    JMP DO_DMC_STUFFS ; Goto.
+EXIT_GOTO_B: ; 1B:055B, 0x03655B
+    JMP SET_UNK_HELPER ; Goto.
+VAL_EQ_0x9F: ; 1B:055E, 0x03655E
+    JSR STREAM_CONSUME_UNK ; Set stream.
+    STA SOUND_ARR_UNK_79A,X ; Store result.
+    JSR STREAM_CONSUME_UNK ; Set stream.
+    STA SOUND_ARR_UNK_79D_UPPER_NIBBLE_UNK,X ; Store to.
+    JMP REENTRY_LOOP ; Goto.
+    JSR STREAM_CONSUME_UNK ; Do.
+    JSR STREAM_CONSUME_UNK ; Do.
+    JMP REENTRY_LOOP ; Goto.
+STREAM_UPDATE_UNK: ; 1B:0576, 0x036576
+    JSR STREAM_CONSUME_UNK ; Do.
+    STA SOUND_DELTA_UNK_791 ; Store to.
+    JMP REENTRY_LOOP ; Goto.
+VAL_EQ_0x9C: ; 1B:057F, 0x03657F
+    JSR STREAM_CONSUME_UNK ; Stream.
+    STA SND_ARR_UNK_LARGER?[10] ; Store.
+    JMP REENTRY_LOOP ; Goto.
+VAL_NOT_FLAGGY?: ; 1B:0588, 0x036588
+    TYA ; Y to A.
+    AND #$B0 ; Keep 0111.0000
+    CMP #$B0 ; If _ 0111.0000
+    BNE VAL_NE ; !=, goto.
+    TYA ; Y to A.
+    AND #$0F ; Keep lower.
+    CLC ; Prep add.
+    ADC SOUND_DELTA_UNK_791 ; Add with.
+    TAY ; A to Y.
+    LDA SOUND_DATA_ARR_UNK,Y ; Move from Y to X.
     STA SOUND_ARR_UNK_7B8,X
-    TAY
-    TXA
-    CMP #$02
-    BEQ L_1B:055B
-L_1B:05A3: ; 1B:05A3, 0x0365A3
-    JSR L_1B:06D1
-    TAY
-L_1B:05A7: ; 1B:05A7, 0x0365A7
-    TYA
-    STA SOUND_ARR_7C3,X
-    TXA
-    CMP #$03
-    BEQ L_1B:0558
-    PHA
-    LDX SOUND_BE_WRITE_INDEXER_UNK
-    LDA L_1B:0891,Y
-    BEQ L_1B:05DC
-    LDA SND_ARR_UNK_LARGER?[10]
-    BPL L_1B:05C8
-    AND #$7F
-    STA SND_DATA_8100_PTR+1
-    TYA
-    CLC
-    SBC SND_DATA_8100_PTR+1
-    JMP L_1B:05CD
-L_1B:05C8: ; 1B:05C8, 0x0365C8
-    TYA
-    CLC
-    ADC SND_ARR_UNK_LARGER?[10]
-L_1B:05CD: ; 1B:05CD, 0x0365CD
-    TAY
-    LDA L_1B:0891,Y
+    TAY ; A to Y.
+    TXA ; X to A.
+    CMP #$02 ; If _ #$02
+    BEQ EXIT_GOTO_B ; ==, goto.
+ENTER_UNK: ; 1B:05A3, 0x0365A3
+    JSR STREAM_CONSUME_UNK ; Do ??
+    TAY ; A to Y.
+VAL_NE: ; 1B:05A7, 0x0365A7
+    TYA ; Y to A.
+    STA SOUND_ARR_7C3,X ; Store ??
+    TXA ; X to A.
+    CMP #$03 ; If _ #$03
+    BEQ EXIT_DMCEE_THINGS ; ==, goto.
+    PHA ; Save A.
+    LDX SOUND_BE_WRITE_INDEXER_UNK ; Load ??
+    LDA DATA_TIMER_L/UNK,Y ; Load ??
+    BEQ VAL_EQ_0x00 ; ==, goto.
+    LDA SND_ARR_UNK_LARGER?[10] ; Load ??
+    BPL VAL_POSITIVE ; Positive, goto.
+    AND #$7F ; Keep lower.
+    STA SND_DATA_8100_PTR+1 ; Store to.
+    TYA ; Y to A.
+    CLC ; Prep add.
+    SBC SND_DATA_8100_PTR+1 ; Sub with extra.
+    JMP ENTRY_SET ; Goto.
+VAL_POSITIVE: ; 1B:05C8, 0x0365C8
+    TYA ; Y to A.
+    CLC ; Prep add.
+    ADC SND_ARR_UNK_LARGER?[10] ; Add with.
+ENTRY_SET: ; 1B:05CD, 0x0365CD
+    TAY ; A to Y.
+    LDA DATA_TIMER_L/UNK,Y ; Move data.
     STA CHANNELS_LTIMER_COPY,X
-    LDA L_1B:0890,Y
-    ORA #$08
-    STA CHANNELS_LENGTH_COPY,X
-L_1B:05DC: ; 1B:05DC, 0x0365DC
-    TAY
-    PLA
-    TAX
-    TYA
-    BNE L_1B:05F1
+    LDA LENGTH_DATA?,Y ; Move.
+    ORA #$08 ; Set ??
+    STA CHANNELS_LENGTH_COPY,X ; Store to.
+VAL_EQ_0x00: ; 1B:05DC, 0x0365DC
+    TAY ; A to Y.
+    PLA ; Save A.
+    TAX ; To X too.
+    TYA ; Y to A.
+    BNE VALUE_NE ; !=, goto.
     LDA #$00
-    STA SOUND_PTR_REGISTER/DATA[2]
-    TXA
-    CMP #$02
-    BEQ L_1B:05F6
+    STA SOUND_PTR_REGISTER/DATA[2] ; Clear ??
+    TXA ; X to A.
+    CMP #$02 ; If _ #$02
+    BEQ VAL_EQ_0x2 ; ==, goto.
     LDA #$10
+    STA SOUND_PTR_REGISTER/DATA[2] ; Set ??
+    BNE VAL_EQ_0x2 ; !=, goto.
+VALUE_NE: ; 1B:05F1, 0x0365F1
+    LDA SOUND_ARR_UNK_79D_UPPER_NIBBLE_UNK,X ; Move ??
     STA SOUND_PTR_REGISTER/DATA[2]
-    BNE L_1B:05F6
-L_1B:05F1: ; 1B:05F1, 0x0365F1
-    LDA SOUND_ARR_UNK_79D_UPPER_NIBBLE_UNK,X
-    STA SOUND_PTR_REGISTER/DATA[2]
-L_1B:05F6: ; 1B:05F6, 0x0365F6
-    TXA
-    DEC SND_DISABLE_WRITE_ARR_UNK,X
-    CMP SND_DISABLE_WRITE_ARR_UNK,X
-    BEQ L_1B:063C
-    INC SND_DISABLE_WRITE_ARR_UNK,X
-    LDY SOUND_BE_WRITE_INDEXER_UNK
-    TXA
-    CMP #$02
-    BEQ L_1B:061C
-    LDA SOUND_ARR_UNK_79A,X
-    AND #$1F
-    BEQ L_1B:061C
-    LDA SOUND_PTR_REGISTER/DATA[2]
-    CMP #$10
-    BEQ L_1B:061E
-    AND #$F0
-    ORA #$00
-    BNE L_1B:061E
-L_1B:061C: ; 1B:061C, 0x03661C
-    LDA SOUND_PTR_REGISTER/DATA[2]
-L_1B:061E: ; 1B:061E, 0x03661E
+VAL_EQ_0x2: ; 1B:05F6, 0x0365F6
+    TXA ; X to A.
+    DEC SND_DISABLE_WRITE_ARR_UNK,X ; --
+    CMP SND_DISABLE_WRITE_ARR_UNK,X ; If _ arr
+    BEQ DO_DISABLE? ; ==, goto.
+    INC SND_DISABLE_WRITE_ARR_UNK,X ; ++
+    LDY SOUND_BE_WRITE_INDEXER_UNK ; Load.
+    TXA ; X to A.
+    CMP #$02 ; If _ #$02
+    BEQ VAL_EQ_0x2 ; ==, goto.
+    LDA SOUND_ARR_UNK_79A,X ; Load ??
+    AND #$1F ; Keep lower.
+    BEQ VAL_EQ_0x2 ; == 0, goto.
+    LDA SOUND_PTR_REGISTER/DATA[2] ; Load ??
+    CMP #$10 ; If _ #$10
+    BEQ VAL_EQ_0x10 ; == 0, goto.
+    AND #$F0 ; Keep upper.
+    ORA #$00 ; Set nothing.
+    BNE VAL_EQ_0x10 ; != 0, goto. Wtf is this code.
+VAL_EQ_0x2: ; 1B:061C, 0x03661C
+    LDA SOUND_PTR_REGISTER/DATA[2] ; Move A to channel.
+VAL_EQ_0x10: ; 1B:061E, 0x03661E
     STA APU_SQ1_CTRL,Y
-    LDA CHANNELS_SWEEP_COPY,X
+    LDA CHANNELS_SWEEP_COPY,X ; Move B.
     STA APU_SQ1_SWEEP,Y
-    LDA CHANNELS_LTIMER_COPY,Y
+    LDA CHANNELS_LTIMER_COPY,Y ; Move C.
     STA APU_SQ1_LTIMER,Y
-    LDA CHANNELS_LENGTH_COPY,Y
+    LDA CHANNELS_LENGTH_COPY,Y ; Move D.
     STA APU_SQ1_LENGTH,Y
-L_1B:0633: ; 1B:0633, 0x036633
-    LDA SOUND_ARR_UNK_7B8,X
+DO_MOVE_RELATED: ; 1B:0633, 0x036633
+    LDA SOUND_ARR_UNK_7B8,X ; Move to another.
     STA SND_FLAGS_ARR_CHANNELS_RELATED?[4],X
-    JMP L_1B:04DD
-L_1B:063C: ; 1B:063C, 0x03663C
-    INC SND_DISABLE_WRITE_ARR_UNK,X
-    JMP L_1B:0633
-L_1B:0642: ; 1B:0642, 0x036642
-    LDA SND_UNK_79C
-    AND #$1F
-    BNE L_1B:0666
-    LDA SND_UNK_79C
-    AND #$C0
-    BNE L_1B:0653
-L_1B:0650: ; 1B:0650, 0x036650
-    TYA
-    BNE L_1B:065B
-L_1B:0653: ; 1B:0653, 0x036653
-    CMP #$C0
-    BEQ L_1B:0650
-    LDA #$FF
-    BNE L_1B:0666
-L_1B:065B: ; 1B:065B, 0x03665B
-    CLC
-    ADC #$FF
+    JMP REENTRY_LONG ; Goto.
+DO_DISABLE?: ; 1B:063C, 0x03663C
+    INC SND_DISABLE_WRITE_ARR_UNK,X ; Set disable.
+    JMP DO_MOVE_RELATED ; Goto.
+SET_UNK_HELPER: ; 1B:0642, 0x036642
+    LDA SND_UNK_79C ; Load ??
+    AND #$1F ; Keep lower.
+    BNE OUTPUT_UPDATE_UNK ; != 0, goto.
+    LDA SND_UNK_79C ; Load ??
+    AND #$C0 ; Keep upper.
+    BNE UPPER_NONZERO ; != 0, goto.
+UPPER_EQ_0xC0: ; 1B:0650, 0x036650
+    TYA ; Y to A.
+    BNE Y_NONZERO ; != 0, goto.
+UPPER_NONZERO: ; 1B:0653, 0x036653
+    CMP #$C0 ; If _ #$C0
+    BEQ UPPER_EQ_0xC0 ; ==, goto.
+    LDA #$FF ; Seed ??
+    BNE OUTPUT_UPDATE_UNK ; Always taken.
+Y_NONZERO: ; 1B:065B, 0x03665B
+    CLC ; Prep add.
+    ADC #$FF ; Sdd with.
+    ASL A ; << 2, *4.
     ASL A
-    ASL A
-    CMP #$3C
-    BCC L_1B:0666
-    LDA #$3C
-L_1B:0666: ; 1B:0666, 0x036666
-    STA SOUND_UNK_79F
-    JMP L_1B:05A3
-L_1B:066C: ; 1B:066C, 0x03666C
-    TYA
+    CMP #$3C ; If _ #$3C
+    BCC OUTPUT_UPDATE_UNK ; <, goto.
+    LDA #$3C ; Seed max.
+OUTPUT_UPDATE_UNK: ; 1B:0666, 0x036666
+    STA SOUND_UNK_79F ; Store ??
+    JMP ENTER_UNK ; Goto.
+DO_DMC_STUFFS: ; 1B:066C, 0x03666C
+    TYA ; Save Y.
     PHA
-    JSR L_1B:0693
+    JSR SUB_DO_DMC_HELPER ; Do ??
     PLA
-    AND #$3F
-    TAY
-    JSR L_1B:067B
-    JMP L_1B:0633
-L_1B:067B: ; 1B:067B, 0x03667B
-    LDA SOUND_UNK_REQUEST?[7]
-    BNE L_1B:0692
-    LDA L_1B:01F0,Y
+    AND #$3F ; Range.
+    TAY ; To Y again.
+    JSR SUB_WRITE_DATA_TO_NOISE ; Do sub.
+    JMP DO_MOVE_RELATED
+SUB_WRITE_DATA_TO_NOISE: ; 1B:067B, 0x03667B
+    LDA SOUND_UNK_REQUEST?[7] ; Load ??
+    BNE RTS ; != 0, leave.
+    LDA NOISE_CTRL_DATA,Y ; Move data to register.
     STA APU_NSE_CTRL
-    LDA L_1B:01F1,Y
+    LDA NOISE_LOOP_DATA,Y
     STA APU_NSE_LOOP
-    LDA L_1B:01F2,Y
+    LDA NOISE_LENGTH_DATA,Y
     STA APU_NSE_LENGTH
-L_1B:0692: ; 1B:0692, 0x036692
-    RTS
-L_1B:0693: ; 1B:0693, 0x036693
-    TYA
-    AND #$C0
-    CMP #$40
-    BEQ L_1B:069F
-    CMP #$80
-    BEQ L_1B:06A9
-    RTS
-L_1B:069F: ; 1B:069F, 0x03669F
+RTS: ; 1B:0692, 0x036692
+    RTS ; Leave.
+SUB_DO_DMC_HELPER: ; 1B:0693, 0x036693
+    TYA ; Y to A.
+    AND #$C0 ; Keep upper.
+    CMP #$40 ; If _ #$40
+    BEQ UPPER_EQ_0x40 ; ==, goto.
+    CMP #$80 ; If _ #$80
+    BEQ VAL_EQ_0x80
+    RTS ; Leave.
+UPPER_EQ_0x40: ; 1B:069F, 0x03669F
     LDA #$0E
-    STA SOUND_PTR_REGISTER/DATA+1
-    LDA #$07
+    STA SOUND_PTR_REGISTER/DATA+1 ; Set ??
+    LDA #$07 ; Seed DMC.
     LDY #$00
-    BEQ L_1B:06B1
-L_1B:06A9: ; 1B:06A9, 0x0366A9
+    BEQ START_DMC_SAMPLE ; Always taken, goto.
+VAL_EQ_0x80: ; 1B:06A9, 0x0366A9
     LDA #$0E
-    STA SOUND_PTR_REGISTER/DATA+1
-    LDA #$0F
+    STA SOUND_PTR_REGISTER/DATA+1 ; Set ??
+    LDA #$0F ; Seed DMC.
     LDY #$02
-L_1B:06B1: ; 1B:06B1, 0x0366B1
-    STA APU_DMC_LENGTH
+START_DMC_SAMPLE: ; 1B:06B1, 0x0366B1
+    STA APU_DMC_LENGTH ; Set DMC.
     STY APU_DMC_ADDR
-    LDA SOUND_SAMPLE_FLAG_DONT_RESET_LEVEL
-    BNE L_1B:06D0
-    LDA SOUND_PTR_REGISTER/DATA+1
+    LDA SOUND_SAMPLE_FLAG_DONT_RESET_LEVEL ; Load ??
+    BNE VAL_NONZERO ; != 0, leave.
+    LDA SOUND_PTR_REGISTER/DATA+1 ; Move CTRL.
     STA APU_DMC_CTRL
-    LDA #$0F
+    LDA #$0F ; Move status.
     STA APU_STATUS
-    LDA #$00
+    LDA #$00 ; Set load.
     STA APU_DMC_LOAD
-    LDA #$1F
+    LDA #$1F ; Set status.
     STA APU_STATUS
-L_1B:06D0: ; 1B:06D0, 0x0366D0
-    RTS
-L_1B:06D1: ; 1B:06D1, 0x0366D1
-    LDY SND_ARR_B6_FPTR_INDEXES,X
-    INC SND_ARR_B6_FPTR_INDEXES,X
-    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y
-    RTS
-L_1B:06DA: ; 1B:06DA, 0x0366DA
+VAL_NONZERO: ; 1B:06D0, 0x0366D0
+    RTS ; Leave.
+STREAM_CONSUME_UNK: ; 1B:06D1, 0x0366D1
+    LDY SND_ARR_B6_FPTR_INDEXES,X ; Load index for.
+    INC SND_ARR_B6_FPTR_INDEXES,X ; Index array to.
+    LDA [SND_ENGINE_PRIMARY_USE_PTR_A[2]],Y ; Load from stream.
+    RTS ; Leave.
+SND_ARR_PTR_L: ; 1B:06DA, 0x0366DA
     .db 4C
-L_1B:06DB: ; 1B:06DB, 0x0366DB
+SND_ARR_PTR_H: ; 1B:06DB, 0x0366DB
     .db 87
     .db 53
     .db 87
@@ -1459,9 +1459,9 @@ L_1B:06DB: ; 1B:06DB, 0x0366DB
     .db 44
     .db 22
     .db FF
-L_1B:0890: ; 1B:0890, 0x036890
+LENGTH_DATA?: ; 1B:0890, 0x036890
     .db 07
-L_1B:0891: ; 1B:0891, 0x036891
+DATA_TIMER_L/UNK: ; 1B:0891, 0x036891
     .db F0
     .db 00
     .db 00
@@ -1599,7 +1599,7 @@ L_1B:0891: ; 1B:0891, 0x036891
     .db 0A
     .db 00
     .db 01
-L_1B:091A: ; 1B:091A, 0x03691A
+SOUND_DATA_ARR_UNK: ; 1B:091A, 0x03691A
     .db 04
     .db 08
     .db 10
@@ -1717,7 +1717,7 @@ L_1B:091A: ; 1B:091A, 0x03691A
     .db 01
     .db 02
     .db 17
-L_1B:098F: ; 1B:098F, 0x03698F
+ROM_DATA_UNK: ; 1B:098F, 0x03698F
     .db 00
     .db 00
     .db 00
@@ -1742,7 +1742,7 @@ L_1B:098F: ; 1B:098F, 0x03698F
     .db 00
     .db 00
     .db 00
-L_1B:09A7: ; 1B:09A7, 0x0369A7
+REBASE_DATA_UNK_A: ; 1B:09A7, 0x0369A7
     .db 00
     .db 00
     .db 00
@@ -1771,7 +1771,7 @@ L_1B:09A7: ; 1B:09A7, 0x0369A7
     .db 00
     .db 00
     .db 00
-L_1B:09C3: ; 1B:09C3, 0x0369C3
+DATA_MOVE_UNK_A: ; 1B:09C3, 0x0369C3
     .db 00
     .db 28
     .db BF
@@ -1782,7 +1782,7 @@ L_1B:09C3: ; 1B:09C3, 0x0369C3
     .db 8C
     .db DD
     .db 8C
-L_1B:09CD: ; 1B:09CD, 0x0369CD
+DATA_ARR_UNK: ; 1B:09CD, 0x0369CD
     .db 00
     .db 18
     .db 6B

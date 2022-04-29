@@ -392,7 +392,7 @@ SND_TIMER_ARR_UNK:                            .rs 1 ; 0x07BC
 
           .rsset 0x07C0
 CHANNELS_SWEEP_COPY:                          .rs 1 ; 0x07C0
-SOUND_UNK_7C1:                                .rs 1 ; 0x07C1
+SOUND_UNK_7C1_SWEEP_SQ2?:                     .rs 1 ; 0x07C1
 
 
           .rsset 0x07C3
@@ -408,7 +408,7 @@ SND_UNK_7CA:                                  .rs 1 ; 0x07CA
 
           .rsset 0x07CC
 SND_REBASED_UNK:                              .rs 1 ; 0x07CC
-SND_ARR_UNK_7CD:                              .rs 1 ; 0x07CD
+SND_ARR_DATA_INDEX_UNK:                       .rs 1 ; 0x07CD
 
 
           .rsset 0x07D1
@@ -437,13 +437,9 @@ SND_ARR_UNK_7E7:                              .rs 1 ; 0x07E7
 SND_UNK_7E8:                                  .rs 1 ; 0x07E8
 
 
-          .rsset 0x07EF
-SCRIPT_UNK_TESTED:                            .rs 6 ; 0x07EF to 0x07F4
-
-
           .rsset 0x07F0
 SND_CODE_HELPER_ARR:                          .rs 1 ; 0x07F0
-R_**:$07F1:                                   .rs 1 ; 0x07F1
+SOUND_EXTRA_UNK:                              .rs 1 ; 0x07F1
 
 
           .rsset 0x07F3

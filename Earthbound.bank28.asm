@@ -549,7 +549,7 @@ SOUND_FORWARD?: ; 1C:0277, 0x038277
     LDA #$00 ; Clear val.
     LDX #$06 ; Index ??
 LOOP_NONZERO: ; 1C:0292, 0x038292
-    STA SCRIPT_UNK_TESTED[6],X ; Clear slot.
+    STA **:$07EF,X ; Clear slot.
     DEX ; Slot--
     BNE LOOP_NONZERO ; != 0, do next.
     RTS ; Leave.
@@ -1509,7 +1509,7 @@ STORE_PATH: ; 1C:0946, 0x038946
 SOUND_PATH_SET_UNK: ; 1C:094E, 0x03894E
     LDA #$7F ; Seed ??
     STA CHANNELS_SWEEP_COPY ; Set ??
-    STA SOUND_UNK_7C1 ; Set ??
+    STA SOUND_UNK_7C1_SWEEP_SQ2? ; Set ??
     JSR SILENCE_AND_ARRAYS_MOVE ; Do ??
 EXIT_SQUARES_AND_LOTS_MORE: ; 1C:0959, 0x038959
     JMP SOUND_SQUARE_AND_MORE_TODO ; Goto.
@@ -1924,7 +1924,7 @@ VAL_DEC_ZERO: ; 1C:0BC0, 0x038BC0
     STA SND_DATA_8100_PTR[2]
     LDA SND_DATA_PTRS_H,Y
     STA SND_DATA_8100_PTR+1
-    LDA SND_ARR_UNK_7CD,X ; Load ??
+    LDA SND_ARR_DATA_INDEX_UNK,X ; Load ??
     LSR A ; >> 1, /2. Nibble flag adjust.
     TAY ; To Y index.
     LDA [SND_DATA_8100_PTR[2]],Y ; Load from file.
@@ -1933,7 +1933,7 @@ VAL_DEC_ZERO: ; 1C:0BC0, 0x038BC0
     BEQ VAL_EQ_0x1C ; ==, goto.
     CMP #$F0 ; If _ #$F0
     BEQ VAL_EQ_0xF0 ; ==, goto.
-    LDA SND_ARR_UNK_7CD,X ; Load ??
+    LDA SND_ARR_DATA_INDEX_UNK,X ; Load ??
     AND #$01 ; Keep lower.
     BNE USE_LOWER_NIBBLE
     LSR SND_NIBBLY_TEMP ; Shift to lower otherwise.
@@ -1949,7 +1949,7 @@ USE_LOWER_NIBBLE: ; 1C:0BEA, 0x038BEA
     ORA SOUND_PTR_REGISTER/DATA[2] ; Set lower with.
     TAY ; To Y.
 INC_AND_WRITE_ATTEMPT?: ; 1C:0BF8, 0x038BF8
-    INC SND_ARR_UNK_7CD,X ; ++ ??
+    INC SND_ARR_DATA_INDEX_UNK,X ; ++ ??
 INDEX_SEEDED: ; 1C:0BFB, 0x038BFB
     LDA SND_DISABLE_WRITE_ARR_UNK,X ; Load ??
     BNE RTS ; != 0, leave.
@@ -2062,7 +2062,7 @@ SOUND_STREAM_CONSUMER_TODO_NOTES_MAIN?: ; 1C:0C95, 0x038C95
     DEC SND_FLAGS_ARR_CHANNELS_RELATED?[4],X ; --
     BNE EXIT_SUBS_JUMP ; != 0, goto.
     LDA #$00
-    STA SND_ARR_UNK_7CD,X ; Clear ??
+    STA SND_ARR_DATA_INDEX_UNK,X ; Clear ??
     STA SND_ARR_UNK_7D1,X
 LOOP_CONSUME: ; 1C:0CB9, 0x038CB9
     JSR SOUND_CONSUME_FROM_FILE_B6 ; Consume.
