@@ -59,7 +59,7 @@ COPY_PROTECTION_VAL:                          .rs 1 ; 0x0006
 ENGINE_SOUND_ENGINE_BANK_VAL?:                .rs 1 ; 0x0007
 NMI_GFX_COUNTER:                              .rs 1 ; 0x0008
 WORLD_POS?_CARRY_ADDS_UNK:                    .rs 3 ; 0x0009 to 0x000B
-R_**:$000C:                                   .rs 1 ; 0x000C
+FILE_MOVE_VAL_UNK:                            .rs 1 ; 0x000C
 SCRIPT_ACTION_IDFK:                           .rs 1 ; 0x000D
 SWITCH_INIT_PORTION?:                         .rs 1 ; 0x000E
 R_**:$000F:                                   .rs 1 ; 0x000F
@@ -71,7 +71,7 @@ R_**:$0014:                                   .rs 1 ; 0x0014
 SCRIPT_R6_ROUTINE_SELECT:                     .rs 1 ; 0x0015
 R_**:$0016:                                   .rs 1 ; 0x0016
 R_**:$0017:                                   .rs 1 ; 0x0017
-SCRIPT_PAIR_PTR_B?:                           .rs 2 ; 0x0018 to 0x0019
+SCRIPT_PAIR_PTR_B_SEED?:                      .rs 2 ; 0x0018 to 0x0019
 SCRIPT_PAIR_PTR?:                             .rs 2 ; 0x001A to 0x001B
 R_**:$001C:                                   .rs 1 ; 0x001C
 R_**:$001D:                                   .rs 1 ; 0x001D
@@ -86,7 +86,7 @@ ENGINE_FLAG_25_SKIP_UNK:                      .rs 1 ; 0x0025
 R_**:$0026:                                   .rs 1 ; 0x0026
 R_**:$0027:                                   .rs 1 ; 0x0027
 R_**:$0028:                                   .rs 1 ; 0x0028
-PTR_CREATE_SEED?:                             .rs 1 ; 0x0029
+PTR_CREATE_SEED_UNK:                          .rs 1 ; 0x0029
 R_**:$002A:                                   .rs 1 ; 0x002A
 R_**:$002B:                                   .rs 1 ; 0x002B
 ROUTINE_CONTINUE_FLAG?:                       .rs 1 ; 0x002C
@@ -94,13 +94,13 @@ R_**:$002D:                                   .rs 1 ; 0x002D
 
 
           .rsset 0x0030
-ENGINE_FPTR_30:                               .rs 2 ; 0x0030 to 0x0031
+ENGINE_MAP_OBJ_RESERVATIONS/??:               .rs 2 ; 0x0030 to 0x0031
 ENGINE_FPTR_32:                               .rs 2 ; 0x0032 to 0x0033
 
 
           .rsset 0x0035
 STREAM_INDEX_FILE_UNK_SCRIPT/COMMANDS_TEXT?:  .rs 1 ; 0x0035
-GAME_SLOT_CURRENT?:                           .rs 1 ; 0x0036
+SAVE_ID_FOCUS:                                .rs 1 ; 0x0036
 SLOT/DATA_OFFSET_USE?:                        .rs 1 ; 0x0037
 R6_BANKED_ADDR_MOVED:                         .rs 2 ; 0x0038 to 0x0039
 STREAM_WRITE_ARR_UNK:                         .rs 4 ; 0x003A to 0x003D
@@ -111,15 +111,13 @@ R_**:$0044:                                   .rs 1 ; 0x0044
 ENGINE_FLAG_LATCHY_GFX_FLAGS:                 .rs 1 ; 0x0045
 LATCH_VAL_ADDL?:                              .rs 1 ; 0x0046
 STREAM_REPLACE_COUNT?:                        .rs 1 ; 0x0047
-SOUND_MAIN_SONG_ID:                           .rs 1 ; 0x0048
+SCRIPT_ENCOUNTER_ID?(SAID_SONG_ID???):        .rs 1 ; 0x0048
 R_**:$0049:                                   .rs 1 ; 0x0049
 R_**:$004A:                                   .rs 1 ; 0x004A
 R_**:$004B:                                   .rs 1 ; 0x004B
 R_**:$004C:                                   .rs 1 ; 0x004C
 R_**:$004D:                                   .rs 1 ; 0x004D
-
-
-          .rsset 0x0050
+SUB/MOD_VAL_UNK_WORD:                         .rs 2 ; 0x004E to 0x004F
 R_**:$0050:                                   .rs 1 ; 0x0050
 R_**:$0051:                                   .rs 1 ; 0x0051
 R_**:$0052:                                   .rs 1 ; 0x0052
@@ -138,36 +136,33 @@ FPTR_5C_UNK:                                  .rs 2 ; 0x005C to 0x005D
 
 
           .rsset 0x0060
-MISC_USE_A:                                   .rs 1 ; 0x0060
-MISC_USE_B:                                   .rs 1 ; 0x0061
-MISC_USE_C:                                   .rs 1 ; 0x0062
-MISC_USE_D/DECIMAL_POS?:                      .rs 1 ; 0x0063
+BCD/MODULO/DIGITS_USE_A:                      .rs 1 ; 0x0060
+BCD/MODULO/DIGITS_USE_B:                      .rs 1 ; 0x0061
+BCD/MODULO/DIGITS_USE_C:                      .rs 1 ; 0x0062
+BCD/MODULO/DIGITS_USE_D:                      .rs 1 ; 0x0063
 SAVE_GAME_MOD_PAGE_PTR:                       .rs 2 ; 0x0064 to 0x0065
 ALT_STUFF_INDEX?:                             .rs 1 ; 0x0066
 ALT_COUNT_UNK:                                .rs 1 ; 0x0067
-ARR_BITS_TO_UNK:                              .rs 8 ; 0x0068 to 0x006F
+LOCAL_VARS_ARR?:                              .rs 8 ; 0x0068 to 0x006F
 R_**:$0070:                                   .rs 1 ; 0x0070
 ENGINE_PACKINATOR_ARG_SEED_0xA0_PRE_COUNT:    .rs 1 ; 0x0071
 ENGINE_SCRIPT_SWITCH_VAL?:                    .rs 1 ; 0x0072
-ARG_IDFK:                                     .rs 1 ; 0x0073
-FPTR_PACKET_CREATION:                         .rs 2 ; 0x0074 to 0x0075
-PACKET_HPOS_COORD?:                           .rs 1 ; 0x0076
-PACKET_YPOS_COORD?:                           .rs 1 ; 0x0077
+ARG/PTR_L:                                    .rs 1 ; 0x0073
+FPTR_PACKET_CREATION/PTR_H_FILE_IDK:          .rs 2 ; 0x0074 to 0x0075
+GFX_COORD_HORIZONTAL_OFFSET:                  .rs 1 ; 0x0076
+GFX_COORD_VERTICAL_OFFSET:                    .rs 1 ; 0x0077
 PACKET_PPU_ADDR_HL:                           .rs 2 ; 0x0078 to 0x0079
 PACKET_CONSUMED/INDEX?:                       .rs 1 ; 0x007A
 DISP_UPDATE_COUNT_SMART_INVERTED/MISC:        .rs 1 ; 0x007B
 ENGINE_PTR_PACKET_MANAGER:                    .rs 2 ; 0x007C to 0x007D
 DATA_APPEND_COUNT?:                           .rs 1 ; 0x007E
 PACKET_PRE_SEED_0xA0_COUNT:                   .rs 1 ; 0x007F
-FPTR_SPRITES?:                                .rs 2 ; 0x0080 to 0x0081
-FPTR_UNK_84_MENU_SELECTION?:                  .rs 2 ; 0x0082 to 0x0083
-
-
-          .rsset 0x0083
-MENU_HELPER_STATUS?:                          .rs 1 ; 0x0083
-FPTR_UNK_84_MENU?:                            .rs 2 ; 0x0084 to 0x0085
-STREAM_TARGET?:                               .rs 1 ; 0x0086
-CARRY_UP?:                                    .rs 1 ; 0x0087
+FPTR_MENU_MASTER:                             .rs 2 ; 0x0080 to 0x0081
+MENU_SELECTED_SUBMENU_OPTION_INDEX_FINAL:     .rs 1 ; 0x0082
+SCRIPT_MENU_STATUS:                           .rs 1 ; 0x0083
+FPTR_MENU_SUBMENUUUUUUUUUUUUU:                .rs 2 ; 0x0084 to 0x0085
+MENU_COLUMN_INDEX:                            .rs 1 ; 0x0086
+MENU_ROW_INDEX:                               .rs 1 ; 0x0087
 SCRIPT_B800_PTR_UNK:                          .rs 2 ; 0x0088 to 0x0089
 STREAM_DEEP_HELPER_UNK:                       .rs 2 ; 0x008A to 0x008B
 PPU_GROUPED_ADDR_LH:                          .rs 2 ; 0x008C to 0x008D
@@ -199,10 +194,13 @@ STREAM_DEEP_C:                                .rs 1 ; 0x00A6
 STREAM_DEEP_D?:                               .rs 1 ; 0x00A7
 SCRIPT_COUNT_UNK:                             .rs 1 ; 0x00A8
 R_**:$00A9:                                   .rs 1 ; 0x00A9
-SCRIPT_LOADED_SHIFTED_UNK:                    .rs 1 ; 0x00AA
+SCRIPT_LOADED_SHIFTED_UNK:                    .rs 2 ; 0x00AA to 0x00AB
+
+
+          .rsset 0x00AB
 SCRIPT_USE_UNK_A:                             .rs 1 ; 0x00AB
-SCRIPT_USE_UNK_B:                             .rs 1 ; 0x00AC
-SCRIPT_USE_UNK_C:                             .rs 1 ; 0x00AD
+SCRIPT_USE_UNK_B_PTR_L:                       .rs 1 ; 0x00AC
+SCRIPT_USE_UNK_C_PTR_H:                       .rs 1 ; 0x00AD
 R_**:$00AE:                                   .rs 1 ; 0x00AE
 R_**:$00AF:                                   .rs 1 ; 0x00AF
 SOUND_PTR_REGISTER/DATA:                      .rs 2 ; 0x00B0 to 0x00B1
@@ -240,21 +238,19 @@ INPUT_COUNT_UNK_A:                            .rs 1 ; 0x00D0
 INP_COUNT_UNK_B:                              .rs 1 ; 0x00D1
 INP_COUNT_UNK_C:                              .rs 1 ; 0x00D2
 INPUT_COUNTER_MATCHED:                        .rs 1 ; 0x00D3
-
-
-          .rsset 0x00D5
-R_**:$00D5:                                   .rs 1 ; 0x00D5
+SCRIPT_SPECIAL_EVENT_MASK?:                   .rs 1 ; 0x00D4
+ENGINE/SCRIPT_R1_BANK_USE_TODO:               .rs 1 ; 0x00D5
 R_**:$00D6:                                   .rs 1 ; 0x00D6
 RAM_CODE_UNK:                                 .rs 3 ; 0x00D7 to 0x00D9
 CONTROL_ACCUMULATED?:                         .rs 2 ; 0x00DA to 0x00DB
 CTRL_NEWLY_PRESSED:                           .rs 2 ; 0x00DC to 0x00DD
 CTRL_BUTTONS_PREVIOUS:                        .rs 2 ; 0x00DE to 0x00DF
-NMI_FLAG_A_OVERRIDE?:                         .rs 1 ; 0x00E0
+NMI_FLAG_EXECUTE_HOLD_MULTIPART/BOTTOM?:      .rs 1 ; 0x00E0
 BMI_FLAG_SET_DIFF_MODDED_UNK:                 .rs 1 ; 0x00E1
 NMI_FLAG_OBJECT_PROCESSING?:                  .rs 1 ; 0x00E2
 E3_TARGET_UNK:                                .rs 1 ; 0x00E3
 SPRITE_INDEX_SWAP:                            .rs 1 ; 0x00E4
-NMI_FLAG_B:                                   .rs 1 ; 0x00E5
+NMI_FLAG_EXECUTE_UPDATE_BUF:                  .rs 1 ; 0x00E5
 NMI_PPU_CMD_PACKETS_INDEX:                    .rs 1 ; 0x00E6
 NMI_FLAG_ACTION?:                             .rs 1 ; 0x00E7
 NMI_FP_UNK:                                   .rs 2 ; 0x00E8 to 0x00E9
@@ -439,7 +435,7 @@ SND_UNK_7E8:                                  .rs 1 ; 0x07E8
 
           .rsset 0x07F0
 SND_CODE_HELPER_ARR:                          .rs 1 ; 0x07F0
-SOUND_EXTRA_UNK:                              .rs 1 ; 0x07F1
+SOUND_FX_REQUEST_B?:                          .rs 1 ; 0x07F1
 
 
           .rsset 0x07F3
@@ -496,14 +492,14 @@ R_**:$6780:                                   .rs 1
           .rsset 0x6784
 R_**:$6784:                                   .rs 1
 R_**:$6785:                                   .rs 1
-R_**:$6786:                                   .rs 1
-R_**:$6787:                                   .rs 1
+WRAM_SPECIAL_A?:                              .rs 1
+WRAM_SPECIAL_B?:                              .rs 1
 R_**:$6788:                                   .rs 1
 
 
           .rsset 0x6794
 R_**:$6794:                                   .rs 1
-R_**:$6795:                                   .rs 1
+WRAM_SCRIPT_COMBINE_IDFK:                     .rs 1
 R_**:$6796:                                   .rs 1
 R_**:$6797:                                   .rs 1
 
@@ -536,5 +532,9 @@ CURRENT_SAVE_MANIPULATION_PAGE:               .rs 768
 
 
           .rsset 0x7402
-SAVE_SLOT_DATA_UNK_A:                         .rs 1
-SAVE_SLOT_DATA_UNK_B:                         .rs 1
+SAVE_SLOT_DATA_CHECKSUM_ADJUST_A:             .rs 1
+SAVE_SLOT_DATA_CHECKSUM_ADJUST_B:             .rs 1
+
+
+          .rsset 0x743C
+BUTTON_ACTION_INDEX_ARRAY:                    .rs 3
