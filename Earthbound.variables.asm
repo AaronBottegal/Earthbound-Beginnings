@@ -63,7 +63,7 @@ FILE_MOVE_VAL_UNK:                            .rs 1 ; 0x000C
 SCRIPT_ACTION_IDFK:                           .rs 1 ; 0x000D
 SWITCH_INIT_PORTION?:                         .rs 1 ; 0x000E
 R_**:$000F:                                   .rs 1 ; 0x000F
-SCRIPT_R6_UNK:                                .rs 1 ; 0x0010
+SCRIPT_R6_UNK/R2_GFX_BANK_UNK:                .rs 1 ; 0x0010
 R_**:$0011:                                   .rs 1 ; 0x0011
 SCRIPT_R7_UNK:                                .rs 1 ; 0x0012
 R_**:$0013:                                   .rs 1 ; 0x0013
@@ -83,11 +83,10 @@ SCRIPT_FLAG_0x22_AUTO_MOVE:                   .rs 1 ; 0x0022
 FLAG_UNK_23:                                  .rs 1 ; 0x0023
 CLEAR_AFTER_HELL_ALOT_LOL:                    .rs 1 ; 0x0024
 ENGINE_FLAG_25_SKIP_UNK:                      .rs 1 ; 0x0025
-R_**:$0026:                                   .rs 1 ; 0x0026
-R_**:$0027:                                   .rs 1 ; 0x0027
+RANDOM_PAIR_A:                                .rs 2 ; 0x0026 to 0x0027
 PARTY/BATTLE_ID?_TODO:                        .rs 1 ; 0x0028
 PTR_CREATE_SEED_UNK:                          .rs 1 ; 0x0029
-PAIR_UNK_2A:                                  .rs 2 ; 0x002A to 0x002B
+PAIR_UNK_LEVEL_UP_RELATED?:                   .rs 2 ; 0x002A to 0x002B
 ROUTINE_CONTINUE_FLAG?:                       .rs 1 ; 0x002C
 R_**:$002D:                                   .rs 1 ; 0x002D
 
@@ -95,10 +94,8 @@ R_**:$002D:                                   .rs 1 ; 0x002D
           .rsset 0x0030
 ENGINE_MAP_OBJ_RESERVATIONS/??:               .rs 2 ; 0x0030 to 0x0031
 SCRIPT_MAIN_FPTR:                             .rs 2 ; 0x0032 to 0x0033
-
-
-          .rsset 0x0035
-SCRIPT_MAIN_FILE_INDEX:                       .rs 1 ; 0x0035
+SCRIPT_COMPARE_TODO_UNK:                      .rs 1 ; 0x0034
+SCRIPT_MAIN_FILE_STREAM_INDEX:                .rs 1 ; 0x0035
 SAVE_ID_FOCUS/OTHER:                          .rs 1 ; 0x0036
 SLOT/DATA_OFFSET_USE/CURR?:                   .rs 1 ; 0x0037
 R6_BANKED_ADDR_MOVED:                         .rs 2 ; 0x0038 to 0x0039
@@ -485,7 +482,7 @@ R_**:$6714:                                   .rs 1
 
 
           .rsset 0x6780
-WRAM_6780_BASE:                               .rs 1
+WRAM_6780_BASE_FOR_ATTR_FETCH/RTN?:           .rs 1
 
 
           .rsset 0x6784
@@ -493,11 +490,11 @@ R_**:$6784:                                   .rs 1
 R_**:$6785:                                   .rs 1
 WRAM_SPECIAL_A?:                              .rs 1
 WRAM_SPECIAL_B?:                              .rs 1
-R_**:$6788:                                   .rs 1
+ROUTINE_ATTRIBUTES_SCRIPT_WORD_A:             .rs 1
 
 
           .rsset 0x6794
-R_**:$6794:                                   .rs 1
+ROUTINE_ATTRIBUTES_SCRIPT_WORD_B :            .rs 1
 WRAM_SCRIPT_COMBINE_IDFK:                     .rs 1
 WRAM_SCRIPT_PAIR_UNK:                         .rs 2
 
@@ -508,21 +505,20 @@ WRAM_UNK_6797:                                .rs 1
 
           .rsset 0x6799
 WRAM_ONEOFF_IDFK:                             .rs 1
-R_**:$679A:                                   .rs 1
+WRAM_UNK:                                     .rs 1
 
 
           .rsset 0x679E
-R_**:$679E:                                   .rs 1
-R_**:$679F:                                   .rs 1
+WRAM_8F00_PAIR:                               .rs 2
 R_**:$67A0:                                   .rs 1
 
 
           .rsset 0x67C0
-R_**:$67C0:                                   .rs 1
+WRAM_UNK_SET_A:                               .rs 1
 
 
           .rsset 0x67E0
-R_**:$67E0:                                   .rs 1
+WRAM_UNK_SET_B:                               .rs 1
 
 
           .rsset 0x6D00
@@ -553,6 +549,10 @@ CURRENT_SAVE_MANIPULATION_PAGE:               .rs 768
           .rsset 0x7402
 SAVE_SLOT_DATA_CHECKSUM_ADJUST_A:             .rs 1
 SAVE_SLOT_DATA_CHECKSUM_ADJUST_B:             .rs 1
+
+
+          .rsset 0x7408
+WRAM_ARR_PARTY_CHARACTER_IDS?:                .rs 6
 
 
           .rsset 0x743C

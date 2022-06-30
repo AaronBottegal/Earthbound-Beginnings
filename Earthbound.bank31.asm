@@ -495,6 +495,7 @@ LIB_SCRIPT_DIRECT_UNK_B: ; 1F:02A2, 0x03E2A2
     LSR A
     STA [ENGINE_MAP_OBJ_RESERVATIONS/??[2]],Y ; Store to file.
     JSR ENGINE_WRAM_STATE_WRITE_DISABLED ; Disable.
+DATA_MAP_RESERVATION_HELPER?_TODO: ; 1F:02BF, 0x03E2BF
     LDA DATA_UNK_C,X ; Load ??
     CLC ; Prep add.
     LDY #$16 ; Stream index.
@@ -865,7 +866,7 @@ UPPER_EQ_0x00: ; 1F:052F, 0x03E52F
     STA STREAM_DEEP_B ; Clear ??
     LDA [STREAM_UNK_DEEP_A[2]],Y ; Load stream.
     BMI STREAM_NEGATIVE ; Negative, goto.
-    LDA SCRIPT_R6_UNK ; Load ??
+    LDA SCRIPT_R6_UNK/R2_GFX_BANK_UNK ; Load ??
     BIT SPRITE_PAGE+165 ; Test ?? TODO: Bug? Why?
     LSR A ; A >> 1
     ROR STREAM_DEEP_B ; Rotate into.
@@ -995,14 +996,14 @@ SUB_PTR_SETUP_CHECK_IDFK_GOSH: ; 1F:060E, 0x03E60E
     BEQ TEST_EXIT_ALT ; ==, goto.
     BNE EXIT_CC ; !=, exit CC.
 TEST_EXIT: ; 1F:0625, 0x03E625
-    JSR GET_STREAM_INDEX_AND_VALUE_TODO ; Do.
+    JSR SCRIPT_LOWER_TO_INDEX_AND_UPPER_AS_SAVE_INDEX_TO_RET ; Do.
     AND LIB_LUT_BIT_TEST_0x80-0x01,X ; And with LUT.
     BNE VALUE_SET ; Set, goto.
 EXIT_CC: ; 1F:062D, 0x03E62D
     CLC ; Not set, ret CC.
     RTS ; Leave.
 TEST_EXIT_ALT: ; 1F:062F, 0x03E62F
-    JSR GET_STREAM_INDEX_AND_VALUE_TODO ; Get value.
+    JSR SCRIPT_LOWER_TO_INDEX_AND_UPPER_AS_SAVE_INDEX_TO_RET ; Get value.
     AND LIB_LUT_BIT_TEST_0x80-0x01,X ; Test bit.
     BNE EXIT_CC ; If set, exit CC.
 VALUE_SET: ; 1F:0637, 0x03E637
@@ -1015,7 +1016,7 @@ VALUE_SET: ; 1F:0637, 0x03E637
 SETUP_PTR_AND_STREAM_PAGE_VAL_TODO: ; 1F:0641, 0x03E641
     JSR SETUP_PTR_FROM_PTR_TODO
     LDY #$04 ; Seed stream index ??
-GET_STREAM_INDEX_AND_VALUE_TODO: ; 1F:0646, 0x03E646
+SCRIPT_LOWER_TO_INDEX_AND_UPPER_AS_SAVE_INDEX_TO_RET: ; 1F:0646, 0x03E646
     LDA [SCRIPT_MAIN_FPTR[2]],Y ; Load alt stream.
     AND #$07 ; Keep lower.
     TAX ; To X index.
@@ -1180,24 +1181,24 @@ SCRIPT_RTN_Y: ; 1F:0756, 0x03E756
     JSR STREAM_MOD_LOWER_ONLY_UNK
     JSR STREAM_SET_FILE_DONE?
     JSR SETUP_PTR_FROM_PTR_TODO
-    JSR GET_FILE_DATA_UNK ; Get data.
+    JSR LIB_GET_FILE_DATA_BIT_TO_SET_UNK ; Get data.
     AND LIB_LUT_BIT_TEST_0x80-0x01,X ; And with.
     BEQ VAL_CLEAR ; Use 0x00.
     LDA #$04 ; Seed alt ??
 VAL_CLEAR: ; 1F:076C, 0x03E76C
     JSR EXIT_STREAM_ADD_TOGETHER_FILE_VALS ; Do ??
     JMP SUB_SWITCH_SET_0x88 ; Goto.
-GET_FILE_DATA_UNK: ; 1F:0772, 0x03E772
+LIB_GET_FILE_DATA_BIT_TO_SET_UNK: ; 1F:0772, 0x03E772
     LDY #$06 ; Stream.
     LDA [SCRIPT_MAIN_FPTR[2]],Y ; Load from file.
-    ASL A ; << 1, *2. Bit from.
+    ASL A ; << 1, *2. Bit from. Does +0x20 to Y index.
     LDY #$07 ; Stream mod. INY better here.
-    LDA [SCRIPT_MAIN_FPTR[2]],Y ; Load from file.
+    LDA [SCRIPT_MAIN_FPTR[2]],Y ; Load from file, index/bit to set. XXXX.XBBB, CC=X+0x20
     AND #$07 ; Keep lower.
-    TAX ; To X index.
-    LDA [SCRIPT_MAIN_FPTR[2]],Y ; Load from file.
+    TAX ; To X index. Bit to set.
+    LDA [SCRIPT_MAIN_FPTR[2]],Y ; Reload.
     ROR A ; Rotate above shift into this for index.
-    LSR A ; >> 2, /4.
+    LSR A ; >> 2, /4. All down with above shift in place. 0x00 - 0x3F range.
     LSR A
     TAY ; To Y index.
     LDA CURRENT_SAVE_MANIPULATION_PAGE+544,Y ; Load from save page.
@@ -1271,7 +1272,7 @@ EXIT_JMP_DATA_INDEX_SWITCH_MOVE_UNK: ; 1F:07F9, 0x03E7F9
 FLAG_SET_MAYBE_FIX_PULL_UNK: ; 1F:07FC, 0x03E7FC
     LDA ENGINE_FLAG_25_SKIP_UNK ; Load ??
     BNE VAL_EXTENDED ; Set, goto.
-    JMP RANDOMIZE_GROUP_0x26 ; Do random.
+    JMP RANDOMIZE_GROUP_A ; Do random.
 VAL_EXTENDED: ; 1F:0803, 0x03E803
     PLA ; Pull A.
     PLA
@@ -1305,7 +1306,7 @@ VAL_LT_0x10: ; 1F:082B, 0x03E82B
     LDA [ENGINE_MAP_OBJ_RESERVATIONS/??[2]],Y ; Load from file.
     AND #$7F ; Keep lower.
     PHA ; Save it.
-    JSR STREAM_UNK ; Do sub.
+    JSR STREAM_UNK_RESERVATION_ATTRS_UNK ; Do sub.
     PLA ; Pull value.
     JMP SWITCH_SCRIPT_ROUTINES ; Goto.
 SCRIPT_RTN_F: ; 1F:083F, 0x03E83F
@@ -1680,7 +1681,7 @@ VAL_NONZERO: ; 1F:0AA1, 0x03EAA1
     BNE EXIT_NO_STATE? ; Set, goto.
     LDA #$80
     STA FLAG_UNK_23 ; Set flag ??
-    JSR SLOTS_AND_FPTRS_IDFK ; Do slots and ptrs.
+    JSR SLOTS_AND_FPTRS_TODO_LARGER_FILES ; Do slots and ptrs.
     LDX #$00 ; Seed ??
     JSR ACTION_INDEX_STORE_AND_RETURN_VALUE_UNK
 EXIT_NO_STATE?: ; 1F:0ABB, 0x03EABB
@@ -2017,7 +2018,7 @@ LIB_CHECK_ENDING_TEST_ALOT_FADE_AND_MOAR: ; 1F:0CA3, 0x03ECA3
     CLC ; Game continue.
 GAME_ENDED: ; 1F:0CB6, 0x03ECB6
     PHP ; Save status of last JSR.
-    JSR L_1E:1977 ; Do ??
+    JSR FOCUS/ID_RELATED_TODO ; Do ??
     LDX #$3C ; Timeout max.Save status.
 VAL_NONZERO: ; 1F:0CBC, 0x03ECBC
     JSR ENGINE_NMI_0x01_SET/WAIT
@@ -2350,7 +2351,7 @@ SCRIPT_SCROLL_INVERT_RTN?: ; 1F:0EF0, 0x03EEF0
     STA BCD/MODULO/DIGITS_USE_A ; Store val.
     ASL BCD/MODULO/DIGITS_USE_A ; Shift it.
     BCC RTS ; CC, leave.
-    JSR RANDOMIZE_GROUP_0x26 ; Adds ??
+    JSR RANDOMIZE_GROUP_A ; Adds ??
     AND #$C0 ; Keep 1100.0000
     BNE RTS ; Nonzero, leave.
     JSR ENGINE_PALETTE_SCRIPT_TO_TARGET ; Do.
@@ -2464,7 +2465,7 @@ LOOP_CTRL_INPUT_WAITER: ; 1F:0FB8, 0x03EFB8
     LDX #$00
     STX CONTROL_ACCUMULATED?[2] ; Clear buttons.
 Y_LOOPS_CHECK: ; 1F:0FBC, 0x03EFBC
-    JSR RANDOMIZE_GROUP_0x26 ; Do ??
+    JSR RANDOMIZE_GROUP_A ; Do ??
     JSR ENGINE_NMI_0x01_SET/WAIT ; Settle.
     LDA CONTROL_ACCUMULATED?[2] ; Load.
     BNE CONTROLS_PRESSED ; != 0, goto.
@@ -2821,18 +2822,18 @@ ADD_VAL_TO_BITS: ; 1F:11D4, 0x03F1D4
     CPY #$08 ; If _ #$08
     BCC ENGINE_DEC_TO_BIN24 ; <, goto.
     RTS ; Leave.
-RANDOMIZE_GROUP_0x26: ; 1F:11ED, 0x03F1ED
+RANDOMIZE_GROUP_A: ; 1F:11ED, 0x03F1ED
     CLC ; Prep add.
-    LDA R_**:$0026 ; Load ??
-    ADC R_**:$0027 ; Add with.
-    STA R_**:$0027 ; Store to.
+    LDA RANDOM_PAIR_A[2] ; Load ??
+    ADC RANDOM_PAIR_A+1 ; Add with.
+    STA RANDOM_PAIR_A+1 ; Store to.
     CLC ; Prep add.
-    LDA R_**:$0026 ; Load.
+    LDA RANDOM_PAIR_A[2] ; Load.
     ADC #$75 ; Add with.
-    STA R_**:$0026 ; Store to.
-    LDA R_**:$0027 ; Load.
+    STA RANDOM_PAIR_A[2] ; Store to.
+    LDA RANDOM_PAIR_A+1 ; Load.
     ADC #$63 ; Add with.
-    STA R_**:$0027 ; Store to.
+    STA RANDOM_PAIR_A+1 ; Store to.
     RTS
 LIB_BATTLE_ENDED?: ; 1F:1202, 0x03F202
     JSR ENGINE_HELPER_R7_0x17 ; R7 to 0x17
@@ -3014,7 +3015,7 @@ SCRIPT_HARD_SWITCH_TO_SOMETHING_HUGE: ; 1F:12ED, 0x03F2ED
     LDA BCD/MODULO/DIGITS_USE_B ; Load ??
     AND #$FC ; Keep 1111.1100
     PHA ; Save.
-    LDX #$06 ; Seed iterations.
+    LDX #$06 ; Seed iterations to shift. *64
 LOOP_ROTATE: ; 1F:130B, 0x03F30B
     ASL BCD/MODULO/DIGITS_USE_A ; << 1
     ROL BCD/MODULO/DIGITS_USE_B ; Roll into.
@@ -3022,7 +3023,7 @@ LOOP_ROTATE: ; 1F:130B, 0x03F30B
     BNE LOOP_ROTATE ; != 0, loop.
     STX BCD/MODULO/DIGITS_USE_C ; Clear.
     TXA ; Clear A.
-    PHA
+    PHA ; 0x00 to stack.
     LDA BCD/MODULO/DIGITS_USE_B ; Save shifty.
     PHA
     LDA BCD/MODULO/DIGITS_USE_A
@@ -3030,11 +3031,11 @@ LOOP_ROTATE: ; 1F:130B, 0x03F30B
     LDA #$64
     STA SAVE_GAME_MOD_PAGE_PTR[2] ; Seed PTR L.
     JSR ENGINE_BINARY_MODULO_HELPER ; Do numbers.
-    JSR RANDOMIZE_GROUP_0x26 ; Do adds.
-    LSR A ; A >> 1
-    PHP ; Save status.
+    JSR RANDOMIZE_GROUP_A ; Randomize.
+    LSR A ; A >> 1 to get random decision.
+    PHP ; Save the randomness.
     TAX ; To X index.
-    LDA ROM_TABLE_UNK,X ; Move ??
+    LDA ROM_TABLE_RANDOM_UNK,X ; Move ??
     STA SAVE_GAME_MOD_PAGE_PTR[2]
     JSR LIB_DECIMAL?_UNK ; Do 
     PLP ; Pull status.
@@ -3088,7 +3089,7 @@ LOOP_SHIFT: ; 1F:1357, 0x03F357
     TAX ; Restore X.
     PLA ; Restore A.
     RTS ; Leave.
-ROM_TABLE_UNK: ; 1F:137D, 0x03F37D
+ROM_TABLE_RANDOM_UNK: ; 1F:137D, 0x03F37D
     .db 00
     .db 00
     .db 00
