@@ -3726,7 +3726,7 @@ FILE_E: ; 00:0D34, 0x000D34
     .db F4
     .db AE
     .db 00
-    .db 20
+    .db 20 ; Update packet HERE.
     .db 03
     .db 13
     .db 21
@@ -7933,8 +7933,11 @@ FILE_E: ; 00:0D34, 0x000D34
     .db 00
     .db 0A
     .db E9
+BATTLE_ARR_UNK_C: ; 00:1EE9, 0x001EE9
     .db 84
+BATTLE_ARRAY_UNK_A: ; 00:1EEA, 0x001EEA
     .db FF
+BATTLE_ARRAY_UNK_B: ; 00:1EEB, 0x001EEB
     .db 06
     .db 00
     .db 30

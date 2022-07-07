@@ -11,7 +11,7 @@
     AND #$BF ; Keep 1011.1111 only.
     STA NMI_FLAG_ACTION?
     LDA #$00
-    STA NMI_FP_UNK[2] ; Clear ??
+    STA NMI_FP_UNK[2] ; Clear FP.
     STA NMI_FP_UNK+1
     LDA ENGINE_PPU_CTRL_COPY ; Load ??
     AND #$FC ; Clear nametable bits.
@@ -21,9 +21,9 @@
     STX ENGINE_SCROLL_X ; Set scroll.
     STY ENGINE_SCROLL_Y
     LDA #$FF
-    JSR SOUND_ASSIGN_NEW_MAIN_SONG ; Set ??
+    JSR SOUND_ASSIGN_NEW_MAIN_SONG ; No music.
     LDA #$1B
-    STA ENGINE_SOUND_ENGINE_BANK_VAL? ; Set ??
+    STA ENGINE_SOUND_ENGINE_BANK_VAL? ; Store val.
     JSR ENGINE_NMI_0x01_SET/WAIT ; Wait.
     LDA #$D3 ; Set FPTR 1A:02D3
     STA GFX_BANKS_EXTENSION[4]
@@ -32,8 +32,8 @@
 LOOP_STREAM_RESET: ; 1A:0042, 0x034042
     LDY #$00 ; Stream reset.
     LDA [GFX_BANKS_EXTENSION[4]],Y ; Load from stream.
-    BEQ GAME_END_INFINITE_LOOP ; == 0, end.
-    JSR SUB_STREAMY ; Do ??
+    BEQ GAME_END_INFINITE_LOOP ; == 0, end/freeze.
+    JSR SCRIPT_SWITCH_ROUTINE_A ; Do ??
     CLC ; Prep add.
     TYA ; Y to A.
     ADC GFX_BANKS_EXTENSION[4] ; Advance FPTR by stream index.
@@ -44,7 +44,7 @@ LOOP_STREAM_RESET: ; 1A:0042, 0x034042
     JMP LOOP_STREAM_RESET
 GAME_END_INFINITE_LOOP: ; 1A:005A, 0x03405A
     JMP GAME_END_INFINITE_LOOP
-SUB_STREAMY: ; 1A:005D, 0x03405D
+SCRIPT_SWITCH_ROUTINE_A: ; 1A:005D, 0x03405D
     ASL A ; << 1, *2
     TAX ; To X index.
     LDA RTN_PTRS_H,X
@@ -58,8 +58,8 @@ RTN_PTRS_H: ; 1A:0069, 0x034069
     HIGH(GAME_END_INFINITE_LOOP) ; End, infinite loop.
     LOW(RTN_0x1) ; 0x01
     HIGH(RTN_0x1) ; Stream delay count.
-    LOW(RTN_0x2) ; 0x02
-    HIGH(RTN_0x2) ; Stream trigger button wait.
+    LOW(SCRIPT_ROUTINE_WAIT_ANY_BUTTONS_WITH_MASK) ; 0x02
+    HIGH(SCRIPT_ROUTINE_WAIT_ANY_BUTTONS_WITH_MASK) ; Stream trigger button wait.
     LOW(SCRIPT_FADE_OUT_AND_CLEAR_SCREEN) ; 0x03
     HIGH(SCRIPT_FADE_OUT_AND_CLEAR_SCREEN) ; Fade, clear screen, reset stream to 0x01
     LOW(RTN_0x4_SET_BANKS_FROM_STREAM) ; 0x04
@@ -106,14 +106,14 @@ WAIT_X_TIMES: ; 1A:0094, 0x034094
     BNE WAIT_X_TIMES ; != 09, goto.
     INY ; Stream++
     RTS ; Leave.
-RTN_0x2: ; 1A:00A0, 0x0340A0
+SCRIPT_ROUTINE_WAIT_ANY_BUTTONS_WITH_MASK: ; 1A:00A0, 0x0340A0
     LDA #$00
     STA CONTROL_ACCUMULATED?[2] ; Clear CTRL.
     INY ; Stream++
     LDA [GFX_BANKS_EXTENSION[4]],Y ; Load from stream.
-TEST_NOT_TRIGGERED: ; 1A:00A7, 0x0340A7
+MASK_CLEAR: ; 1A:00A7, 0x0340A7
     BIT CONTROL_ACCUMULATED?[2] ; Test accumulated.
-    BEQ TEST_NOT_TRIGGERED ; == 0, wait for trigger.
+    BEQ MASK_CLEAR ; == 0, wait for trigger.
     LDA #$00
     STA CONTROL_ACCUMULATED?[2] ; Clear pressed/accumulated.
     INY ; Stream++

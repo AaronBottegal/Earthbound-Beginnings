@@ -1,4 +1,4 @@
-    .db 00
+    .db 00 ; This bank probably battle stats or something similar.
     .db 00
     .db 00
     .db 2C

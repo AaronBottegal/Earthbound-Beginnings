@@ -58,7 +58,7 @@ R_**:$0002:                                   .rs 1 ; 0x0002
 COPY_PROTECTION_VAL:                          .rs 1 ; 0x0006
 ENGINE_SOUND_ENGINE_BANK_VAL?:                .rs 1 ; 0x0007
 NMI_GFX_COUNTER:                              .rs 1 ; 0x0008
-WORLD_POS?_CARRY_ADDS_UNK:                    .rs 3 ; 0x0009 to 0x000B
+PPU_LOCATION_FOCUS_VAL_24B:                   .rs 3 ; 0x0009 to 0x000B
 FILE_MOVE_VAL_UNK:                            .rs 1 ; 0x000C
 SCRIPT_ACTION_IDFK:                           .rs 1 ; 0x000D
 SWITCH_INIT_PORTION?:                         .rs 1 ; 0x000E
@@ -94,7 +94,7 @@ R_**:$002D:                                   .rs 1 ; 0x002D
           .rsset 0x0030
 ENGINE_MAP_OBJ_RESERVATIONS/??:               .rs 2 ; 0x0030 to 0x0031
 SCRIPT_MAIN_FPTR:                             .rs 2 ; 0x0032 to 0x0033
-SCRIPT_COMPARE_TODO_UNK:                      .rs 1 ; 0x0034
+SCRIPT_COMPARE_ENDING_INDEX?:                 .rs 1 ; 0x0034
 SCRIPT_MAIN_FILE_STREAM_INDEX:                .rs 1 ; 0x0035
 SAVE_ID_FOCUS/OTHER:                          .rs 1 ; 0x0036
 SLOT/DATA_OFFSET_USE/CURR?:                   .rs 1 ; 0x0037
@@ -107,38 +107,35 @@ SCRIPT_REPLACE_LATCH_MOD_VAL?:                .rs 1 ; 0x0044
 ENGINE_FLAG_LATCHY_GFX_FLAGS:                 .rs 1 ; 0x0045
 LATCH_VAL_MOD?:                               .rs 1 ; 0x0046
 STREAM_REPLACE_COUNT?:                        .rs 1 ; 0x0047
-SCRIPT_ENCOUNTER_ID?(SAID_SONG_ID???):        .rs 1 ; 0x0048
+SCRIPT_OVERWORLD_BATTLE_ENCOUNTER?:           .rs 1 ; 0x0048
 TRIO_FILE_OFFSET_UNK:                         .rs 3 ; 0x0049 to 0x004B
 R_**:$004C:                                   .rs 1 ; 0x004C
 R_**:$004D:                                   .rs 1 ; 0x004D
 SUB/MOD_VAL_UNK_WORD:                         .rs 2 ; 0x004E to 0x004F
-R_**:$0050:                                   .rs 1 ; 0x0050
-R_**:$0051:                                   .rs 1 ; 0x0051
-R_**:$0052:                                   .rs 1 ; 0x0052
-SCRIPT_INDEX_53_UNK:                          .rs 1 ; 0x0053
-R_**:$0054:                                   .rs 1 ; 0x0054
+SCRIPT_PACKET_CREATE_SAVED_UNK:               .rs 2 ; 0x0050 to 0x0051
+SCRIPT?_UNK_0x52:                             .rs 1 ; 0x0052
+SCRIPT_BATTLE_PARTY_ID_FOCUS:                 .rs 1 ; 0x0053
+SCRIPT_BATTLE_PARTY_ID_ATTR_COMMITTING/FOCUS_SPECIAL?: .rs 1 ; 0x0054
 57_INDEX_UNK:                                 .rs 1 ; 0x0055
-56_THING_NAME_SIZE:                           .rs 1 ; 0x0056
-
-
-          .rsset 0x0058
+56_OBJECT_NAME_SIZE?:                         .rs 1 ; 0x0056
+R_**:$0057:                                   .rs 1 ; 0x0057
 R_**:$0058:                                   .rs 1 ; 0x0058
-R_**:$0059:                                   .rs 1 ; 0x0059
+SCRIPT_UNK_0x59:                              .rs 1 ; 0x0059
 FLAG_SPRITE_OFF_SCREEN_UNK:                   .rs 1 ; 0x005A
 SCRIPT_UNK_BATTLE?_OBJECT_ID_FOCUSED?:        .rs 1 ; 0x005B
-FPTR_5C_UNK:                                  .rs 2 ; 0x005C to 0x005D
+FPTR_5C_BATTLE_PARTY_SCRIPT?:                 .rs 2 ; 0x005C to 0x005D
 FPTR_UNK_BANK_17_PTR:                         .rs 2 ; 0x005E to 0x005F
-BCD/MODULO/DIGITS_USE_A:                      .rs 1 ; 0x0060
-BCD/MODULO/DIGITS_USE_B:                      .rs 1 ; 0x0061
-BCD/MODULO/DIGITS_USE_C:                      .rs 1 ; 0x0062
-BCD/MODULO/DIGITS_USE_D:                      .rs 1 ; 0x0063
-SAVE_GAME_MOD_PAGE_PTR:                       .rs 2 ; 0x0064 to 0x0065
+LIB_BCD/EXTRA_FILE_BCD_A:                     .rs 1 ; 0x0060
+LIB_BCD/EXTRA_FILE_BCD_B:                     .rs 1 ; 0x0061
+LIB_BCD2/EXTRA_FILE_STREAM_INDEX:             .rs 1 ; 0x0062
+LIB_BCD/EXTRA_FILE_D:                         .rs 1 ; 0x0063
+SAVE_GAME_MOD_PAGE_PTR/MATH_HELPER:           .rs 2 ; 0x0064 to 0x0065
 ALT_STUFF_COUNT?:                             .rs 1 ; 0x0066
 ALT_COUNT_UNK:                                .rs 1 ; 0x0067
 RENAME_THIS_ARR_SOMETHING_SANE_EVENTUALLY:    .rs 8 ; 0x0068 to 0x006F
 R_**:$0070:                                   .rs 1 ; 0x0070
 ENGINE_PACKINATOR_ARG_SEED_BLANK_PRE_COUNT:   .rs 1 ; 0x0071
-ENGINE_SCRIPT_SWITCH_VAL?:                    .rs 1 ; 0x0072
+ENGINE_SCRIPT_SWITCH_VAL_CONTINUE_UPDATES?:   .rs 1 ; 0x0072
 ARG/PTR_L:                                    .rs 1 ; 0x0073
 FPTR_PACKET_CREATION/PTR_H_FILE_IDK:          .rs 2 ; 0x0074 to 0x0075
 GFX_COORD_HORIZONTAL_OFFSET:                  .rs 1 ; 0x0076
@@ -285,6 +282,12 @@ OBJ?_PTR?:                                    .rs 2 ; 0x0306 to 0x0307
           .rsset 0x03E0
 R_**:$03E0:                                   .rs 1 ; 0x03E0
 SPRITE_SLOT_Y_OFF_SCREEN_UNK:                 .rs 1 ; 0x03E1
+R_**:$03E2:                                   .rs 1 ; 0x03E2
+R_**:$03E3:                                   .rs 1 ; 0x03E3
+R_**:$03E4:                                   .rs 1 ; 0x03E4
+R_**:$03E5:                                   .rs 1 ; 0x03E5
+R_**:$03E6:                                   .rs 1 ; 0x03E6
+R_**:$03E7:                                   .rs 1 ; 0x03E7
 
 
           .rsset 0x0400
@@ -307,11 +310,49 @@ CHARACTER_NAMES_ARR:                          .rs 8 ; 0x0580 to 0x0587
 
           .rsset 0x0584
 WRAM/RAM_ARR_UNK_RAM:                         .rs 4 ; 0x0584 to 0x0587
+R_**:$0588:                                   .rs 1 ; 0x0588
+R_**:$0589:                                   .rs 1 ; 0x0589
+R_**:$058A:                                   .rs 1 ; 0x058A
+
+
+          .rsset 0x0590
+BATTLE_ARRAY_UNK:                             .rs 4 ; 0x0590 to 0x0593
+R_**:$0594:                                   .rs 1 ; 0x0594
 
 
           .rsset 0x0600
-STREAM_INDEXES_ARR_UNK:                       .rs 24 ; 0x0600 to 0x0617
-STREAM_PTRS_ARR_UNK:                          .rs 48 ; 0x0618 to 0x0647
+SCRIPT_PARTY_ATTRIBUTES:                      .rs 32 ; 0x0600 to 0x061F
+
+
+          .rsset 0x0618
+PARTY_ATTR_PTR:                               .rs 2 ; 0x0618 to 0x0619
+
+
+          .rsset 0x0619
+PARTY_ATTR_PTR+1:                             .rs 1 ; 0x0619
+
+
+          .rsset 0x0660
+R_**:$0660:                                   .rs 1 ; 0x0660
+
+
+          .rsset 0x0680
+ENEMY_A_ATTRIBUTES:                           .rs 32 ; 0x0680 to 0x069F
+
+
+          .rsset 0x0683
+R_**:$0683:                                   .rs 1 ; 0x0683
+R_**:$0684:                                   .rs 1 ; 0x0684
+
+
+          .rsset 0x068C
+R_**:$068C:                                   .rs 1 ; 0x068C
+
+
+          .rsset 0x06A0
+ENEMY_B_ATTRIBUTES:                           .rs 32 ; 0x06A0 to 0x06BF
+ENEMY_C_ATTRIBUTES:                           .rs 32 ; 0x06C0 to 0x06DF
+ENEMY_D_ATTRIBUTES:                           .rs 32 ; 0x06E0 to 0x06FF
 
 
           .rsset 0x076C
@@ -427,13 +468,6 @@ SND_UNK_7E8:                                  .rs 1 ; 0x07E8
 
           .rsset 0x07F0
 SOUND_EFFECT_REQUEST_ARRAY:                   .rs 5 ; 0x07F0 to 0x07F4
-
-
-          .rsset 0x07F3
-R_**:$07F3:                                   .rs 1 ; 0x07F3
-
-
-          .rsset 0x07F5
 SOUND_MAIN_SONG_INIT_ID:                      .rs 1 ; 0x07F5
 
 
@@ -486,8 +520,8 @@ WRAM_6780_BASE_FOR_ATTR_FETCH/RTN?:           .rs 1
 
 
           .rsset 0x6784
-R_**:$6784:                                   .rs 1
-R_**:$6785:                                   .rs 1
+WRAM_6784_UNK:                                .rs 1
+WRAM_6785_UNK:                                .rs 1
 WRAM_SPECIAL_A?:                              .rs 1
 WRAM_SPECIAL_B?:                              .rs 1
 ROUTINE_ATTRIBUTES_SCRIPT_WORD_A:             .rs 1
