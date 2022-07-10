@@ -106,25 +106,24 @@ GFX_BANKS_EXTENSION:                          .rs 4 ; 0x0040 to 0x0043
 SCRIPT_REPLACE_LATCH_MOD_VAL?:                .rs 1 ; 0x0044
 ENGINE_FLAG_LATCHY_GFX_FLAGS:                 .rs 1 ; 0x0045
 LATCH_VAL_MOD?:                               .rs 1 ; 0x0046
-STREAM_REPLACE_COUNT?:                        .rs 1 ; 0x0047
+STREAM_REPLACE_COUNT?_TODO_BETTER:            .rs 1 ; 0x0047
 SCRIPT_OVERWORLD_BATTLE_ENCOUNTER?:           .rs 1 ; 0x0048
 TRIO_FILE_OFFSET_UNK:                         .rs 3 ; 0x0049 to 0x004B
-R_**:$004C:                                   .rs 1 ; 0x004C
-R_**:$004D:                                   .rs 1 ; 0x004D
+SCRIPT_BATTLE_ACCUMULATOR_UNSIGNED_INT_UNK:   .rs 2 ; 0x004C to 0x004D
 SUB/MOD_VAL_UNK_WORD:                         .rs 2 ; 0x004E to 0x004F
 SCRIPT_PACKET_CREATE_SAVED_UNK:               .rs 2 ; 0x0050 to 0x0051
 SCRIPT?_UNK_0x52:                             .rs 1 ; 0x0052
 SCRIPT_BATTLE_PARTY_ID_FOCUS:                 .rs 1 ; 0x0053
-SCRIPT_BATTLE_PARTY_ID_ATTR_COMMITTING/FOCUS_SPECIAL?: .rs 1 ; 0x0054
+SCRIPT_BATTLE_PARTY_ID_FOCUS_ALT/ATTR_COMMITING: .rs 1 ; 0x0054
 57_INDEX_UNK:                                 .rs 1 ; 0x0055
 56_OBJECT_NAME_SIZE?:                         .rs 1 ; 0x0056
-R_**:$0057:                                   .rs 1 ; 0x0057
-R_**:$0058:                                   .rs 1 ; 0x0058
-SCRIPT_UNK_0x59:                              .rs 1 ; 0x0059
+SCRIPT_BATTLE_UNK:                            .rs 1 ; 0x0057
+SCRIPT_EFFECT_SFX_AND_SCRIPT_DO_UNK_GIVE_ITEM?: .rs 1 ; 0x0058
+SCRIPT_BATTLE_UNK_0x59:                       .rs 1 ; 0x0059
 FLAG_SPRITE_OFF_SCREEN_UNK:                   .rs 1 ; 0x005A
 SCRIPT_UNK_BATTLE?_OBJECT_ID_FOCUSED?:        .rs 1 ; 0x005B
-FPTR_5C_BATTLE_PARTY_SCRIPT?:                 .rs 2 ; 0x005C to 0x005D
-FPTR_UNK_BANK_17_PTR:                         .rs 2 ; 0x005E to 0x005F
+BATTLE_PARTY_FPTR_DATA_TODO:                  .rs 2 ; 0x005C to 0x005D
+FPTR_BATTLE_PTR_UNK_5E:                       .rs 2 ; 0x005E to 0x005F
 LIB_BCD/EXTRA_FILE_BCD_A:                     .rs 1 ; 0x0060
 LIB_BCD/EXTRA_FILE_BCD_B:                     .rs 1 ; 0x0061
 LIB_BCD2/EXTRA_FILE_STREAM_INDEX:             .rs 1 ; 0x0062
@@ -146,10 +145,10 @@ DISP_UPDATE_COUNT_SMART_INVERTED/MISC:        .rs 1 ; 0x007B
 ENGINE_PTR_PACKET_MANAGER:                    .rs 2 ; 0x007C to 0x007D
 DATA_APPEND_COUNT?:                           .rs 1 ; 0x007E
 PACKET_PRE_SEED_0xA0_COUNT:                   .rs 1 ; 0x007F
-FPTR_MENU_MASTER:                             .rs 2 ; 0x0080 to 0x0081
+FPTR_MENU_PRIMARY:                            .rs 2 ; 0x0080 to 0x0081
 MENU_SELECTED_SUBMENU_OPTION_INDEX_FINAL:     .rs 1 ; 0x0082
 SCRIPT_MENU_STATUS:                           .rs 1 ; 0x0083
-FPTR_MENU_SUBMENU:                            .rs 2 ; 0x0084 to 0x0085
+FPTR_MENU_SECONDARY/SUBMENU:                  .rs 2 ; 0x0084 to 0x0085
 MENU_COLUMN_INDEX:                            .rs 1 ; 0x0086
 MENU_ROW_INDEX:                               .rs 1 ; 0x0087
 SCRIPT_B800_PTR_UNK:                          .rs 2 ; 0x0088 to 0x0089
@@ -168,9 +167,9 @@ R_**:$0094:                                   .rs 1 ; 0x0094
 B800_PTR_ADDL:                                .rs 1 ; 0x0096
 SCRIPT_INVERT_UNK:                            .rs 1 ; 0x0097
 R_**:$0098:                                   .rs 1 ; 0x0098
-R_**:$0099:                                   .rs 1 ; 0x0099
+LIB_INVERT_MASK_UNK:                          .rs 1 ; 0x0099
 R_**:$009A:                                   .rs 1 ; 0x009A
-R_**:$009B:                                   .rs 1 ; 0x009B
+LIB_COUNTER?_UNK:                             .rs 1 ; 0x009B
 
 
           .rsset 0x00A0
@@ -242,8 +241,8 @@ SPRITE_INDEX_SWAP:                            .rs 1 ; 0x00E4
 NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO:    .rs 1 ; 0x00E5
 NMI_PPU_CMD_PACKETS_INDEX:                    .rs 1 ; 0x00E6
 NMI_FLAG_ACTION?:                             .rs 1 ; 0x00E7
-NMI_FP_UNK:                                   .rs 2 ; 0x00E8 to 0x00E9
-ENGINE_NMI_CONFIG_FLAGS_DIS:0x80:             .rs 1 ; 0x00EA
+NMI_FP_BATTLE_UNK:                            .rs 2 ; 0x00E8 to 0x00E9
+ENGINE_NMI_CONFIG_FLAGS_TODO_BETTER:          .rs 1 ; 0x00EA
 ENGINE_IRQ_LATCH_CURRENT?:                    .rs 1 ; 0x00EB
 NMI_LATCH_FLAG_UNK:                           .rs 1 ; 0x00EC
 ENGINE_IRQ_RTN_INDEX:                         .rs 1 ; 0x00ED
@@ -270,7 +269,10 @@ NMI_PPU_READ_BUF_UNK:                         .rs 64 ; 0x0110 to 0x014F
 
           .rsset 0x0200
 SPRITE_PAGE:                                  .rs 256 ; 0x0200 to 0x02FF
-OBJ?_BYTE_0x0_STATUS?:                        .rs 1 ; 0x0300
+WORLD_OBJECT_PAGE_EXTRA_ATTRS:                .rs 256 ; 0x0300 to 0x03FF
+
+
+          .rsset 0x0301
 OBJ?_BYTE_0x1_UNK:                            .rs 1 ; 0x0301
 OBJ?_BYTE_0x2_UNK:                            .rs 1 ; 0x0302
 OBJ?_BYTE_0x3_UNK:                            .rs 1 ; 0x0303
@@ -279,9 +281,8 @@ OBJ?_BYTE_0x5_BYTE:                           .rs 1 ; 0x0305
 OBJ?_PTR?:                                    .rs 2 ; 0x0306 to 0x0307
 
 
-          .rsset 0x03E0
-R_**:$03E0:                                   .rs 1 ; 0x03E0
-SPRITE_SLOT_Y_OFF_SCREEN_UNK:                 .rs 1 ; 0x03E1
+          .rsset 0x03E1
+ENGINE_NMI_HELPER_SLOT_OFFSCREEN_ALWAYS_NMI_CURSOR_DELETE: .rs 1 ; 0x03E1
 R_**:$03E2:                                   .rs 1 ; 0x03E2
 R_**:$03E3:                                   .rs 1 ; 0x03E3
 R_**:$03E4:                                   .rs 1 ; 0x03E4
@@ -311,13 +312,11 @@ CHARACTER_NAMES_ARR:                          .rs 8 ; 0x0580 to 0x0587
           .rsset 0x0584
 WRAM/RAM_ARR_UNK_RAM:                         .rs 4 ; 0x0584 to 0x0587
 R_**:$0588:                                   .rs 1 ; 0x0588
-R_**:$0589:                                   .rs 1 ; 0x0589
-R_**:$058A:                                   .rs 1 ; 0x058A
+FILE_BATTLE_PTR_UNK:                          .rs 2 ; 0x0589 to 0x058A
 
 
           .rsset 0x0590
-BATTLE_ARRAY_UNK:                             .rs 4 ; 0x0590 to 0x0593
-R_**:$0594:                                   .rs 1 ; 0x0594
+BATTLE_ARRAY_UNK:                             .rs 5 ; 0x0590 to 0x0594
 
 
           .rsset 0x0600
@@ -485,8 +484,7 @@ WRAM/RAM_ARR_UNK_WRAM:                        .rs 4
 WRAM_PAGE_LARGE_UNK:                          .rs 384
 
 
-          .rsset 0x6700
-R_**:$6700:                                   .rs 1
+          .rsset 0x6701
 R_**:$6701:                                   .rs 1
 R_**:$6702:                                   .rs 1
 

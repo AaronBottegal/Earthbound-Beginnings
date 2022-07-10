@@ -510,7 +510,6 @@
     .db FF
     .db FF
     .db FF
-BANK_0_PTR_A: ; 1E:0200, 0x03C200
     LDA #$0F
     STA R_**:$0100 ; Set ??
     LDA #$03 ; Set config for R3.
@@ -621,7 +620,7 @@ LATCH_NO_FLAG_RTN: ; 1E:0274, 0x03C274
     STA SOUND_SAMPLE_FLAG_DONT_RESET_LEVEL ; Set ??
     LDA #$0F
     STA APU_STATUS ; Enable APU channels.
-    JSR ENGINE_NMI_0x01_SET/WAIT ; Wait.
+    JSR ENGINE_SET_NMI_FLAG_UPDATE_TODO_WAIT ; Wait.
     LDX #$00 ; IRQ index.
 SLOT_LT_0x1A?: ; 1E:0296, 0x03C296
     LDA #$25 ; Load PTR L.
@@ -658,7 +657,7 @@ LOOP_AND_RESETTLE_FOR_UPDATE: ; 1E:02B6, 0x03C2B6
     JSR FORWARD_PACKET_CREATION_FP_BY_A ; Forward ptr.
     LDA ENGINE_SCRIPT_SWITCH_VAL_CONTINUE_UPDATES? ; Load.
     CMP #$00 ; If _ #$00
-    BNE VAL_NONZERO ; != 0, goto.
+    BNE COMPARE_NONZERO ; != 0, goto.
     JSR ENGINE_PACKET_CREATE_FROM_FILE ; Do.
     JSR SCRIPT_UPDATES_AND_MORE_UNK ; Do.
     PLA ; Pull A.
@@ -672,8 +671,8 @@ VAL_LT_ARR: ; 1E:02E9, 0x03C2E9
     CMP #$00 ; If _ #$00
     BNE LOOP_AND_RESETTLE_FOR_UPDATE ; != 0, goto.
     RTS ; Leave.
-VAL_NONZERO: ; 1E:02F0, 0x03C2F0
-    INC GFX_COORD_VERTICAL_OFFSET ; ++
+COMPARE_NONZERO: ; 1E:02F0, 0x03C2F0
+    INC GFX_COORD_VERTICAL_OFFSET ; VCoord
     JSR SETUP_CREATION_LOWER_VOFFSET ; Do.
     JSR SCRIPT_UPDATES_AND_MORE_UNK ; Do.
     PLA ; Pull A.
@@ -686,7 +685,7 @@ VAL_LT: ; 1E:0303, 0x03C303
     JMP LATCH_FLAG_RTN ; Do ??
 SCRIPT_UPDATES_AND_MORE_UNK: ; 1E:0306, 0x03C306
     STY NMI_PPU_CMD_PACKETS_INDEX ; Store index.
-    JSR LIB_UGH_MORE ; Do ??
+    JSR LIB_PACKET_DISPLAY_TODO ; Do ??
     LDA #$00
     STA NMI_PPU_CMD_PACKETS_BUF[69],X ; Clear for EOF.
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
@@ -881,7 +880,7 @@ LIB_OBJECTS_AND_SETTLE_AND_FLAGS_UNK: ; 1E:03F4, 0x03C3F4
     STA SOUND_SAMPLE_FLAG_DONT_RESET_LEVEL ; Clear ??
     PLP ; Pull status.
     RTS ; Leave.
-ENGINE_PACKET_CREATE_BATTLE_UNK: ; 1E:0406, 0x03C406
+ENGINE_PACKET_CREATE_BATTLE_UNK_NO_MASKING: ; 1E:0406, 0x03C406
     LDA #$FF ; Mask, none.
 TODO_ROUTINE_MASK_A: ; 1E:0408, 0x03C408
     STA LIB_BCD/EXTRA_FILE_BCD_A ; Store passed.
@@ -938,7 +937,7 @@ RET_NONZERO: ; 1E:0458, 0x03C458
     PLA ; Pull R6 saved.
     LDX #$06 ; R6 set.
     JMP ENGINE_MAPPER_COMMIT_BANK_X_VAL_A ; Set it again, abuse RTS.
-LIB_UGH_MORE: ; 1E:046E, 0x03C46E
+LIB_PACKET_DISPLAY_TODO: ; 1E:046E, 0x03C46E
     LDA DATA_APPEND_COUNT? ; Load.
     LSR A ; A >> 1
     ADC #$00 ; Carry added to val.
@@ -1092,7 +1091,7 @@ Y_INDEX_POSITIVE: ; 1E:056A, 0x03C56A
     LDY #$00 ; Reset index.
 SMALL_TABLE_LOOP: ; 1E:0572, 0x03C572
     LDA DATA_TABLE_SMOL,Y ; Load index.
-    STA R_**:$6700,X ; Store to arr.
+    STA WRAM_PAGE_LARGE_UNK+256,X ; Store to arr.
     INX ; Indexes++
     INY
     CPY #$05 ; If _ #$05
@@ -1100,10 +1099,10 @@ SMALL_TABLE_LOOP: ; 1E:0572, 0x03C572
     PLA ; Pull table index.
     TAY ; Back to Y.
     LDA ROM_DATA_UNK,Y ; Move ??
-    STA R_**:$6700,X
+    STA WRAM_PAGE_LARGE_UNK+256,X
     INX ; Arr++
     LDA ROM_DATA_UNK_PAIR,Y ; Move pair.
-    STA R_**:$6700,X
+    STA WRAM_PAGE_LARGE_UNK+256,X
     INX ; Arr++
     LDY #$1B ; Seed ??
     BNE LOOP_MOVE_TABLE_TO_0x1E_UNK
@@ -1116,7 +1115,7 @@ DATA_CARRY_CLEAR_Y_SUB_LOOP: ; 1E:0592, 0x03C592
     JSR DATA_MOVE_AND_MOD_WITH_PTR_UNK ; Do ??
 LOOP_MOVE_TABLE_TO_0x1E_UNK: ; 1E:059B, 0x03C59B
     LDA ROM_DATA_UNK,Y ; Move from table.
-    STA R_**:$6700,X
+    STA WRAM_PAGE_LARGE_UNK+256,X
     INX ; Indexes++
     INY
     CPY #$1E ; If _ #$1E
@@ -1156,7 +1155,7 @@ DATA_GTE_0x3: ; 1E:05DB, 0x03C5DB
     ASL A ; << 1, *2.
     TAX ; To X index.
     LDA #$04
-    STA R_**:$6700 ; Set ??
+    STA WRAM_PAGE_LARGE_UNK+256 ; Set ??
     STA R_**:$670A ; Set ??
     CPX #$04 ; If _ #$04
     BCS X_GTE_0x4 ; >=, goto.
@@ -1213,26 +1212,26 @@ RTS: ; 1E:0636, 0x03C636
     RTS ; Leave.
 DATA_MOVE_AND_MOD_WITH_PTR_UNK: ; 1E:0637, 0x03C637
     LDA ROM_DATA_UNK,Y ; Move from Y to X indexes.
-    STA R_**:$6700,X
+    STA WRAM_PAGE_LARGE_UNK+256,X
     INX ; Indexes++
     INY
     LDA ROM_DATA_UNK,Y ; 2x
-    STA R_**:$6700,X
+    STA WRAM_PAGE_LARGE_UNK+256,X
     INX ; ++
     INY
     LDA ROM_DATA_UNK,Y ; 3x
-    STA R_**:$6700,X
+    STA WRAM_PAGE_LARGE_UNK+256,X
     INX ; ++
     INY
     CLC ; Prep add.
     LDA ROM_DATA_UNK,Y ; Load from arr.
     ADC LIB_BCD/EXTRA_FILE_BCD_A ; Add with ptr L.
-    STA R_**:$6700,X ; Store to arr.
+    STA WRAM_PAGE_LARGE_UNK+256,X ; Store to arr.
     INX ; ++
     INY
     LDA ROM_DATA_UNK,Y ; Load from arr.
     ADC LIB_BCD/EXTRA_FILE_BCD_B ; Add with ptr H.
-    STA R_**:$6700,X ; Store to arr.
+    STA WRAM_PAGE_LARGE_UNK+256,X ; Store to arr.
     INX ; ++
     INY
     RTS
@@ -2002,7 +2001,7 @@ MAIN_LOOP_REENTRY_LARGEST: ; 1E:0B5D, 0x03CB5D
     EOR #$84 ; Invet to set.
     STA SCRIPT_ACTION_IDFK ; Store to.
 MAIN_LOOP_REENTRY_SECOND_LARGEST: ; 1E:0B70, 0x03CB70
-    JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_OBJ_RAM ; Settle, no sprites.
+    JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_OBJ_EXTRA_MEMORY ; Settle, no sprites.
     JSR ENGINE_SETTLE_UPDATES_TODO ; Settle, scroll, ??
 MAIN_LOOP_REENTRY_THIRD_LARGEST: ; 1E:0B76, 0x03CB76
     JSR ENGINE_MAP_DISPLAY_OR_SCRIPT_RUN? ; Do.
@@ -2260,7 +2259,7 @@ LOOP_NONZERO: ; 1E:0D26, 0x03CD26
     JSR ENGINE_DELAY_X_FRAMES ; Delay.
     JSR ENGINE_WRAM_ARR_MOD_LOOPS_UNK ; Do.
     JSR HOLY_HELL_ALOT ; Holy hell.
-    JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_OBJ_RAM ; Do no sprites.
+    JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_OBJ_EXTRA_MEMORY ; Do no sprites.
     JSR ENGINE_SETTLE_UPDATES_TODO ; Settle.
     JSR SUB_WRITE_SAVE_PAGE_UNK ; Do save.
     LDX #$2C ; Seed loops?
@@ -2549,8 +2548,8 @@ INDEX_POSITIVE: ; 1E:0F32, 0x03CF32
     STA R_**:$00AE
     LDA #$00 ; Clear ??
     STA R_**:$00AF
-    LDA #$10 ; Set ??
-    STA R_**:$009B
+    LDA #$10 ; Set count.
+    STA LIB_COUNTER?_UNK
 LOOP_JMP: ; 1E:0F68, 0x03CF68
     SEC ; Prep sub.
     LDA SCRIPT_PAIR_PTR_B_SEED?[2] ; Load ??
@@ -2563,7 +2562,7 @@ LOOP_JMP: ; 1E:0F68, 0x03CF68
     LDA #$13
     STA SCRIPT_COUNT_UNK ; Set ??
     JSR DEEP_STREAMER_IDFK ; Do ??
-    DEC R_**:$009B ; --
+    DEC LIB_COUNTER?_UNK ; --
     BEQ COUNT_EQ_ZERO ; == 0, goto.
     CLC ; Prep add.
     LDA SCRIPT_USE_UNK_B_PTR_L ; Load.
@@ -2608,7 +2607,7 @@ ENGINE_SETTLE_UPDATES_TODO: ; 1E:0FAC, 0x03CFAC
     STA ENGINE_PPU_CTRL_COPY ; Store back.
     STX ENGINE_SCROLL_X ; X and Y as.
     STY ENGINE_SCROLL_Y
-    STY R_**:$0099 ; Y to, also.
+    STY LIB_INVERT_MASK_UNK ; Y to, also.
     CLC ; Prep add.
     LDA SCRIPT_PAIR_PTR?[2] ; Load ??
     AND #$C0 ; Keep upper.
@@ -2618,23 +2617,23 @@ ENGINE_SETTLE_UPDATES_TODO: ; 1E:0FAC, 0x03CFAC
     ADC #$03 ; += 0x3
     STA SCRIPT_USE_UNK_C_PTR_H ; Store ptr H.
     LDA #$0F
-    STA R_**:$009B ; Set ??
+    STA LIB_COUNTER?_UNK ; Set ??
 LOOP_RTN: ; 1E:0FD8, 0x03CFD8
     CLC ; Prep add.
-    LDA R_**:$0099 ; Load.
+    LDA LIB_INVERT_MASK_UNK ; Load.
     ADC #$F0 ; += 0xF0
     BCS ADD_OVERFLOW ; Overflow, goto.
     ADC #$F0 ; Add to sub?
 ADD_OVERFLOW: ; 1E:0FE1, 0x03CFE1
-    STA R_**:$0099 ; Store to.
+    STA LIB_INVERT_MASK_UNK ; Store to.
     LDA SCRIPT_PAIR_PTR_B_SEED?[2] ; Load.
     AND #$C0 ; Keep upper.
     STA SCRIPT_LOADED_SHIFTED_UNK[2] ; Store to.
     LDA SCRIPT_PAIR_PTR_B_SEED?+1 ; Move ??
     STA SCRIPT_USE_UNK_A
-    LDX R_**:$009B ; Load index.
+    LDX LIB_COUNTER?_UNK ; Load index.
     LDA ROM_DATA_UNK,X ; Load ??
-    EOR R_**:$0099 ; Invert with.
+    EOR LIB_INVERT_MASK_UNK ; Invert with.
     AND #$10 ; Keep ??
     BNE VABIT_SET ; If set, use as-is.
     LDA ROM_DATA_UNK,X ; Load otherwise.
@@ -2647,9 +2646,9 @@ VABIT_SET: ; 1E:0FFB, 0x03CFFB
     STA NMI_PPU_CMD_PACKETS_INDEX ; Reset index.
     LDA #$80
     STA NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO ; Set flag.
-    DEC R_**:$009B ; --
+    DEC LIB_COUNTER?_UNK ; --
     BEQ TIMER_EQ_0x00 ; == 0, goto.
-    LDA R_**:$009B ; Load left.
+    LDA LIB_COUNTER?_UNK ; Load left.
     ASL A ; << 1, *2.
     TAX ; To X index.
     JSR WAIT_NMI/IRQ_CLEAR ; Wait.
@@ -3019,10 +3018,10 @@ DATA_POSITIVE: ; 1E:123F, 0x03D23F
     BCS SKIP_SUB ; No overflow.
     ADC #$F0 ; -= 0x11
 SKIP_SUB: ; 1E:126C, 0x03D26C
-    STA R_**:$0099 ; Store ??
+    STA LIB_INVERT_MASK_UNK ; Store ??
     LDA ROM_DATA_UNK,X ; Load ??
     BMI EXIT_ALT_CREATOR ; Negative, goto.
-    EOR R_**:$0099 ; Invert with.
+    EOR LIB_INVERT_MASK_UNK ; Invert with.
     AND #$10 ; Keep bit.
     BNE NO_LOAD_UNK ; != 0,  goto.
     LDA ROM_DATA_UNK+3,X ; Load ??
@@ -3213,7 +3212,7 @@ PACKET_CREATOR_HELPER_TODO_B: ; 1E:1398, 0x03D398
     JSR SCRIPT_R6/R7_PAIRED_AND_STREAMS_UNK ; Banks setup.
     SEC ; Prep sub.
     LDA #$F0 ; Diff of 0x10.
-    SBC R_**:$0099 ; Sub with.
+    SBC LIB_INVERT_MASK_UNK ; Sub with.
     CLC ; Prep add.
     ADC STREAM_DEEP_INDEX ; Add with.
     STA STREAM_DEEP_INDEX ; Store result.
@@ -3240,7 +3239,7 @@ PACKET_CREATOR_HELPER_TODO_B: ; 1E:1398, 0x03D398
     ORA #$01 ; Set 0x1.
     STA NMI_PPU_CMD_PACKETS_BUF+34,X ; Store to, addr pair for column.
     INX ; Index++
-    LDA R_**:$0099 ; Move ??
+    LDA LIB_INVERT_MASK_UNK ; Move ??
     STA PPU_GROUPED_ADDR_LH[2]
 LOOP_CREATION : ; 1E:13DA, 0x03D3DA
     LDA PPU_GROUPED_ADDR_LH[2] ; Load.
@@ -3292,7 +3291,7 @@ COUNT_EQ_0x00: ; 1E:1425, 0x03D425
     LDA PACKET_UPDATES_COUNT/SCRATCH ; Load.
     STA NMI_PPU_CMD_PACKETS_BUF[69],X ; Store.
     INX ; Index++
-    LDA R_**:$0099 ; Load val.
+    LDA LIB_INVERT_MASK_UNK ; Load val.
     AND #$10 ; Keep bit.
     BEQ MOD_ALONE_UNK ; Clear, goto.
     SEC ; Prep sub.
@@ -3388,7 +3387,7 @@ SCRIPT_R6/R7_PAIRED_AND_STREAMS_UNK: ; 1E:14B7, 0x03D4B7
     LSR R_**:$009A ; 2x
     ROR A
     STA R_**:$0098 ; Store built to.
-    LDA R_**:$0099 ; Load ??
+    LDA LIB_INVERT_MASK_UNK ; Load ??
     EOR STREAM_DEEP_INDEX ; Invert.
     AND #$10 ; Keep.
     BNE BIT_0x10_SET ; != 0, set, goto.
@@ -3410,7 +3409,7 @@ BIT_0x10_SET: ; 1E:14ED, 0x03D4ED
     SBC #$10 ; Sub ??
 TEST_POSITIVE: ; 1E:1501, 0x03D501
     STA DEEP_BASE_UNK ; Store ??
-    LDA R_**:$0099 ; Load.
+    LDA LIB_INVERT_MASK_UNK ; Load.
     AND #$F0 ; Keep upper.
     STA PPU_GROUPED_ADDR_LH[2] ; Store to.
     LDA R_**:$009A ; Load.
@@ -3433,7 +3432,7 @@ TEST_POSITIVE: ; 1E:1501, 0x03D501
     LSR A
     AND #$07 ; Keep lower.
     STA R_**:$008E ; Store to.
-    LDA R_**:$0099 ; Load ??
+    LDA LIB_INVERT_MASK_UNK ; Load ??
     LSR A ; >> 2, /4.
     LSR A
     AND #$38 ; Keep 0011.1000
@@ -4043,7 +4042,7 @@ LOADED_ZERO: ; 1E:190E, 0x03D90E
     LDA #$00
     STA MAIN_FLAG_UNK ; Clear flag.
     STA FLAG_UNK_23 ; Clear ??
-    LDX STREAM_REPLACE_COUNT? ; Index ??
+    LDX STREAM_REPLACE_COUNT?_TODO_BETTER ; Index ??
     LDY Y_INDEXES_UNK,X ; Load index from X.
     LDX #$03 ; Count 4
 COUNT_POSITIVE: ; 1E:1950, 0x03D950
@@ -4233,7 +4232,7 @@ VAL_LT_0x4: ; 1E:1A77, 0x03DA77
     LDY #$01 ; Stream index.
     LDA [R6_BANKED_ADDR_MOVED[2]],Y ; Load ??
     BMI VAL_NEGATIVE ; Negative, goto.
-    LDA STREAM_REPLACE_COUNT? ; Load ??
+    LDA STREAM_REPLACE_COUNT?_TODO_BETTER ; Load ??
     BNE SUBS_UNDERFLOWED ; != 0, goto.
     LDY #$11 ; Stream index.
     CLC ; Prep add.
@@ -4283,7 +4282,7 @@ RTN_RET_CS: ; 1E:1ADD, 0x03DADD
     CPX #$04 ; If _ #$04
     BCC VAL_LT_0x4 ; <, goto.
     JSR LIB_PACKET_R6_0x00_TODO ; Do ??
-    LDA STREAM_REPLACE_COUNT? ; Load ??
+    LDA STREAM_REPLACE_COUNT?_TODO_BETTER ; Load ??
     BNE EXIT_DISABLE_WRAM ; != 0, goto.
     JSR ENGINE_WRAM_STATE_WRITEABLE ; Do writeable.
     LDX #$12 ; Index.
@@ -4317,19 +4316,19 @@ INDEX_LT_0x4: ; 1E:1B1B, 0x03DB1B
     JSR BANKED_DERP ; Do ??
     PLA ; Restore X.
     TAX
-    BCC CALL_INTO_0x17_IDFK ; CC, goto, passed.
+    BCC HELPER_AND_SFX/SCRIPT_THINGY ; CC, goto, passed.
 RET_CS: ; 1E:1B2B, 0x03DB2B
     INX ; Index++
     CPX #$04 ; If _ #$04
     BCC INDEX_LT_0x4 ; <, loop.
 EXIT_DISABLE_WRAM: ; 1E:1B30, 0x03DB30
     JMP ENGINE_WRAM_STATE_WRITE_DISABLED ; Exit disabling wram.
-CALL_INTO_0x17_IDFK: ; 1E:1B33, 0x03DB33
-    JSR ENGINE_HELPER_R7_0x17 ; To bank.
+HELPER_AND_SFX/SCRIPT_THINGY: ; 1E:1B33, 0x03DB33
+    JSR ENGINE_HELPER_R7_0x17 ; To bank, menus?
     LDA #$06
     STA SOUND_EFFECT_REQUEST_ARRAY+1 ; Set ??
-    LDA #$8C ; Val ??
-    JMP SCRIPT_REENTER_UNK ; Goto ??
+    LDA #$8C ; Script.
+    JMP SCRIPT_TEXT_AND_REENTER_THINGY??? ; Script run.
 LIB_IDFK_DECIMALY_AND_IDK: ; 1E:1B40, 0x03DB40
     TAX ; A to X.
     INX ; ++
@@ -4365,11 +4364,11 @@ VAL_LT_0x63: ; 1E:1B75, 0x03DB75
     JSR LIB_PACKET_R6_0x00_TODO ; Do lib.
     JSR ENGINE_WRAM_STATE_WRITEABLE ; Do writeable.
     LDA #$FF
-    JSR SOUND_ASSIGN_NEW_MAIN_SONG ; Set.
+    JSR SOUND_ASSIGN_NEW_MAIN_SONG ; Set no song.
     LDA #$1F
     JSR SOUND_ASSIGN_NEW_MAIN_SONG ; Set song, battle won.
-    LDA #$82 ; Seed ??
-    JSR $A3F8
+    LDA #$82 ; Seed script?
+    JSR SCRIPT_TEXT_AND_REENTER_THINGY??? ; TODO is R17? Seems could be.
     JSR LIB_SETUP_PTR_AND_R6_UNK ; Set up.
     LDY #$03
 VAL_LT_0x8: ; 1E:1B93, 0x03DB93
@@ -4391,15 +4390,15 @@ VAL_LT_0x8: ; 1E:1B93, 0x03DB93
 VAL_LT_0x10: ; 1E:1BAA, 0x03DBAA
     CLC ; Prep add.
     LDA [R6_BANKED_ADDR_MOVED[2]],Y ; Load  stream.
-    ADC R_**:$004D,Y ; Add with.
+    ADC SCRIPT_BATTLE_ACCUMULATOR_UNSIGNED_INT_UNK+1,Y ; Add with.
     BCC NO_CARRY ; No carry, goto.
-    SBC R_**:$004D,Y ; Sub with, right val.
+    SBC SCRIPT_BATTLE_ACCUMULATOR_UNSIGNED_INT_UNK+1,Y ; Sub with, right val.
     EOR #$FF ; Invert.
-    STA R_**:$004D,Y ; Store back.
+    STA SCRIPT_BATTLE_ACCUMULATOR_UNSIGNED_INT_UNK+1,Y ; Store back.
     LDA #$FF ; Seed ??
 NO_CARRY: ; 1E:1BBC, 0x03DBBC
     STA [R6_BANKED_ADDR_MOVED[2]],Y ; Store to arr.
-    LDA R_**:$004D,Y ; Load from arr.
+    LDA SCRIPT_BATTLE_ACCUMULATOR_UNSIGNED_INT_UNK+1,Y ; Load from arr.
     BEQ VAL_EQ_0x00 ; == 0, goto.
     TYA ; Save Y.
     PHA
@@ -4413,10 +4412,10 @@ VAL_EQ_0x00: ; 1E:1BCD, 0x03DBCD
     CPY #$10 ; If _ #$10
     BCC VAL_LT_0x10 ; <, goto.
     LDY #$07 ; Index ??
-    LDA R_**:$0058 ; Load ??
+    LDA SCRIPT_EFFECT_SFX_AND_SCRIPT_DO_UNK_GIVE_ITEM? ; Load ??
     JSR CARRY_ADD_FILE_UNK ; Carry add into file.
     LDY #$09 ; Index ??
-    LDA SCRIPT_UNK_0x59 ; Load ??
+    LDA SCRIPT_BATTLE_UNK_0x59 ; Load ??
     JSR CARRY_ADD_FILE_UNK ; Do.
     LDY #$0E ; Stream index.
     LDA [R6_BANKED_ADDR_MOVED[2]],Y ; Load from file.
@@ -4447,10 +4446,10 @@ EXIT_CC: ; 1E:1C0F, 0x03DC0F
     RTS
 LIB_ADD_TO_GROUP_24-BIT: ; 1E:1C11, 0x03DC11
     CLC ; Prep add.
-    LDA R_**:$004C ; Load adding.
+    LDA SCRIPT_BATTLE_ACCUMULATOR_UNSIGNED_INT_UNK[2] ; Load adding.
     ADC CURRENT_SAVE_MANIPULATION_PAGE[768],X ; Add with X indexed.
     STA CURRENT_SAVE_MANIPULATION_PAGE[768],X ; Store result.
-    LDA R_**:$004D ; Load adding.
+    LDA SCRIPT_BATTLE_ACCUMULATOR_UNSIGNED_INT_UNK+1 ; Load adding.
     ADC CURRENT_SAVE_MANIPULATION_PAGE+1,X ; Add with pair.
     STA CURRENT_SAVE_MANIPULATION_PAGE+1,X ; Store result.
     LDA #$00 ; Carry add prep.
@@ -4464,7 +4463,7 @@ LIB_ADD_TO_GROUP_24-BIT: ; 1E:1C11, 0x03DC11
 VALUE_VALID_PROBABLY: ; 1E:1C37, 0x03DC37
     RTS ; Leave.
 INDEX_AND_BANKED_UNK: ; 1E:1C38, 0x03DC38
-    LDX FPTR_5C_BATTLE_PARTY_SCRIPT?+1 ; X from ??
+    LDX BATTLE_PARTY_FPTR_DATA_TODO+1 ; X from ??
     BEQ RTS ; == 0, goto.
     JMP $A3F8 ; Goto banked.
 STATS_THINGY_LARGE: ; 1E:1C3F, 0x03DC3F
@@ -4490,7 +4489,7 @@ VAL_EQ_0x00: ; 1E:1C5C, 0x03DC5C
     TXA ; X to A.
     ASL A ; << 1, *2.
     JSR ADDS_SHIFTS_AND_STATS_THINGY? ; Do sub.
-    STA FPTR_5C_BATTLE_PARTY_SCRIPT?+1 ; Store result.
+    STA BATTLE_PARTY_FPTR_DATA_TODO+1 ; Store result.
 CARRY_ADD_FILE_UNK: ; 1E:1C64, 0x03DC64
     CLC ; Prep add.
     ADC [R6_BANKED_ADDR_MOVED[2]],Y ; Add with.
@@ -4549,7 +4548,7 @@ X_STORE_LOOP?: ; 1E:1C97, 0x03DC97
     LDA #$09
     STA SOUND_EFFECT_REQUEST_ARRAY+1 ; Set ??
     LDA #$83 ; Val ??
-    JSR SCRIPT_REENTER_UNK ; Goto. TODO: Might not be 0x17 bank.
+    JSR SCRIPT_TEXT_AND_REENTER_THINGY??? ; Goto. TODO: Might not be 0x17 bank.
 VAL_GTE_STREAM: ; 1E:1CC6, 0x03DCC6
     LDX PTR_CREATE_SEED_UNK ; Load.
     INX ; ++
@@ -5022,6 +5021,6 @@ CARRY_CLEAR_VALS: ; 1E:1FEC, 0x03DFEC
     LDA #$18
     STA E3_TARGET_UNK ; Set ??
     LDA #$00
-    STA OBJ?_BYTE_0x0_STATUS? ; Set ??
+    STA WORLD_OBJECT_PAGE_EXTRA_ATTRS[256] ; Set ??
     LDX #$08 ; Val ??
     JSR ENGINE_WRAM_STATE_WRITEABLE ; Enable writes.

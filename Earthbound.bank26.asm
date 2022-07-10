@@ -11,8 +11,8 @@
     AND #$BF ; Keep 1011.1111 only.
     STA NMI_FLAG_ACTION?
     LDA #$00
-    STA NMI_FP_UNK[2] ; Clear FP.
-    STA NMI_FP_UNK+1
+    STA NMI_FP_BATTLE_UNK[2] ; Clear FP.
+    STA NMI_FP_BATTLE_UNK+1
     LDA ENGINE_PPU_CTRL_COPY ; Load ??
     AND #$FC ; Clear nametable bits.
     LDX #$10 ; Seed X and Y scroll.
@@ -24,7 +24,7 @@
     JSR SOUND_ASSIGN_NEW_MAIN_SONG ; No music.
     LDA #$1B
     STA ENGINE_SOUND_ENGINE_BANK_VAL? ; Store val.
-    JSR ENGINE_NMI_0x01_SET/WAIT ; Wait.
+    JSR ENGINE_SET_NMI_FLAG_UPDATE_TODO_WAIT ; Wait.
     LDA #$D3 ; Set FPTR 1A:02D3
     STA GFX_BANKS_EXTENSION[4]
     LDA #$A2
@@ -120,7 +120,7 @@ MASK_CLEAR: ; 1A:00A7, 0x0340A7
     RTS ; Leave.
 SCRIPT_FADE_OUT_AND_CLEAR_SCREEN: ; 1A:00B1, 0x0340B1
     JSR ENGINE_PALETTE_FADE_OUT ; Do fade.
-    JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_OBJ_RAM ; Nothing on screen.
+    JSR SETTLE_SPRITES_OFFSCREEN/CLEAR_OBJ_EXTRA_MEMORY ; Nothing on screen.
     JSR ENGINE_CLEAR_SCREENS_0x2000-0x2800 ; Clear screens.
     LDY #$01 ; Val ??
     RTS ; Leave.
@@ -245,7 +245,7 @@ RTN_0x9_FILE_TO_OBJ_STUFF: ; 1A:018A, 0x03418A
     STA OBJ?_BYTE_0x1_UNK,X ; Store to OBJ.
     INY ; Stream++
     LDA [GFX_BANKS_EXTENSION[4]],Y ; Move from file to OBJ status.
-    STA OBJ?_BYTE_0x0_STATUS?,X
+    STA WORLD_OBJECT_PAGE_EXTRA_ATTRS[256],X
     INY ; Stream++
     LDA [GFX_BANKS_EXTENSION[4]],Y ; Move ??
     STA OBJ?_BYTE_0x2_UNK,X
@@ -297,11 +297,11 @@ RTN_0xB_NEW_MAIN_SONG: ; 1A:01F0, 0x0341F0
 RTN_0xE_STREAM_REPLACE_COUNT_TODO_BETTER: ; 1A:01F8, 0x0341F8
     INY ; Stream++
     LDA [GFX_BANKS_EXTENSION[4]],Y ; Load from file.
-    STA STREAM_REPLACE_COUNT? ; Store to ??
+    STA STREAM_REPLACE_COUNT?_TODO_BETTER ; Store to ??
     INY ; Stream++
     RTS ; Leave.
 RTN_0xF_DEC/GOTO_OR_RESET: ; 1A:01FF, 0x0341FF
-    DEC STREAM_REPLACE_COUNT? ; -- ??
+    DEC STREAM_REPLACE_COUNT?_TODO_BETTER ; -- ??
     BNE RTN_0x8_STREAM_GOTO ; != 0, goto.
     LDY #$03 ; Stream reset.
     RTS ; Leave.
@@ -325,7 +325,7 @@ RTN_0x10_OBJECT_DESTROY: ; 1A:0215, 0x034215
     ASL A
     TAX ; To X index. Sprite slot.
     LDA #$00
-    STA OBJ?_BYTE_0x0_STATUS?,X ; Clear ??
+    STA WORLD_OBJECT_PAGE_EXTRA_ATTRS[256],X ; Clear ??
     INY ; Stream++
     RTS ; Leave.
 RTN_0x11_PPU_READS_MOVE_LINES?: ; 1A:0226, 0x034226

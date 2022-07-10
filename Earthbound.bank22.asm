@@ -8112,8 +8112,10 @@
     .db B1
     .db 9F
     .db 01
+DATA_HOFFSET_TODO: ; 16:1FB2, 0x02DFB2
     .db 07
     .db 13
+DATA_VOFFSET_TODO: ; 16:1FB4, 0x02DFB4
     .db 12
     .db 14
     .db 16

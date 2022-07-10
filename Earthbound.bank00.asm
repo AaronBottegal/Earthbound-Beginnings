@@ -1,2509 +1,2509 @@
-    .db 00 ; PTRS?
-    .db C2
-    .db E9
-    .db E7
-    .db A0
-    .db C2
-    .db E1
-    .db E7
-    .db 00
-    .db D0
-    .db E8
-    .db EF
-    .db EE
-    .db E5
-    .db A0
-    .db C3
-    .db E1
-    .db F2
-    .db E4
-    .db 00
-    .db C3
-    .db F2
-    .db F5
-    .db ED
-    .db E2
-    .db F3
-    .db 00
-    .db D2
-    .db E5
-    .db F0
-    .db E5
-    .db EC
-    .db A0
-    .db D2
-    .db E9
-    .db EE
-    .db E7
-    .db 00
-    .db C2
-    .db F5
-    .db F4
-    .db F4
-    .db E5
-    .db F2
-    .db CB
-    .db EE
-    .db E9
-    .db E6
-    .db E5
-    .db 00
-    .db D3
-    .db F5
-    .db F2
-    .db F6
-    .db AE
-    .db CB
-    .db EE
-    .db E9
-    .db E6
-    .db E5
-    .db 00
-    .db D3
-    .db F7
-    .db EF
-    .db F2
-    .db E4
-    .db 00
-    .db CB
-    .db E1
-    .db F4
-    .db E1
-    .db EE
-    .db E1
-    .db 00
-    .db D3
-    .db F4
-    .db F5
-    .db EE
-    .db A0
-    .db C7
-    .db F5
-    .db EE
-    .db 00
-    .db C1
-    .db E9
-    .db F2
-    .db A0
-    .db C7
-    .db F5
-    .db EE
-    .db 00
-    .db D0
-    .db EC
-    .db E1
-    .db F3
-    .db F4
-    .db E9
-    .db E3
-    .db A0
-    .db C2
-    .db E1
-    .db F4
-    .db 00
-    .db D7
-    .db EF
-    .db EF
-    .db E4
-    .db E5
-    .db EE
-    .db A0
-    .db C2
-    .db E1
-    .db F4
-    .db 00
-    .db C1
-    .db EC
-    .db F5
-    .db ED
-    .db E9
-    .db EE
-    .db F5
-    .db ED
-    .db C2
-    .db E1
-    .db F4
-    .db 00
-    .db C8
-    .db E1
-    .db EE
-    .db EB
-    .db A7
-    .db F3
-    .db A0
-    .db C2
-    .db E1
-    .db F4
-    .db 00
-    .db C6
-    .db F2
-    .db F9
-    .db E9
-    .db EE
-    .db E7
-    .db A0
-    .db D0
-    .db E1
-    .db EE
-    .db 00
-    .db CE
-    .db EF
-    .db EE
-    .db F3
-    .db F4
-    .db E9
-    .db E3
-    .db EB
-    .db D0
-    .db E1
-    .db EE
-    .db 00
-    .db C9
-    .db F2
-    .db EF
-    .db EE
-    .db D3
-    .db EB
-    .db E9
-    .db EC
-    .db EC
-    .db E5
-    .db F4
-    .db 00
-    .db D3
-    .db EC
-    .db E9
-    .db EE
-    .db E7
-    .db F3
-    .db E8
-    .db EF
-    .db F4
-    .db 00
-    .db C2
-    .db EF
-    .db EF
-    .db ED
-    .db E5
-    .db F2
-    .db E1
-    .db EE
-    .db E7
-    .db 00
-    .db C9
-    .db EE
-    .db F3
-    .db E5
-    .db E3
-    .db F4
-    .db E9
-    .db E3
-    .db E9
-    .db E4
-    .db E5
-    .db 00
-    .db D3
-    .db F5
-    .db F0
-    .db E5
-    .db F2
-    .db A0
-    .db D3
-    .db F0
-    .db F2
-    .db E1
-    .db F9
-    .db 00
-    .db C6
-    .db EC
-    .db E5
-    .db E1
-    .db A0
-    .db C2
-    .db E1
-    .db E7
-    .db 00
-    .db D7
-    .db EF
-    .db F2
-    .db E4
-    .db F3
-    .db CF
-    .db A7
-    .db CC
-    .db EF
-    .db F6
-    .db E5
-    .db 00
-    .db D3
-    .db F7
-    .db E5
-    .db E1
-    .db F2
-    .db A0
-    .db D7
-    .db EF
-    .db F2
-    .db E4
-    .db F3
-    .db 00
-    .db D3
-    .db F4
-    .db EB
-    .db F9
-    .db CD
-    .db E1
-    .db E3
-    .db E8
-    .db E9
-    .db EE
-    .db E5
-    .db 00
-    .db C6
-    .db EC
-    .db E1
-    .db F3
-    .db E8
-    .db E4
-    .db E1
-    .db F2
-    .db EB
-    .db 00
-    .db D3
-    .db F4
-    .db EF
-    .db EE
-    .db E5
-    .db CF
-    .db F2
-    .db E9
-    .db E7
-    .db E9
-    .db EE
-    .db 00
-    .db D0
-    .db EF
-    .db E9
-    .db F3
-    .db EE
-    .db CE
-    .db E5
-    .db E5
-    .db E4
-    .db EC
-    .db E5
-    .db 00
-    .db C6
-    .db EC
-    .db A0
-    .db D4
-    .db E8
-    .db F2
-    .db EF
-    .db F7
-    .db E5
-    .db F2
-    .db 00
-    .db C2
-    .db EF
-    .db ED
-    .db E2
-    .db 00
-    .db D3
-    .db F5
-    .db F0
-    .db E5
-    .db F2
-    .db A0
-    .db C2
-    .db EF
-    .db ED
-    .db E2
-    .db 00
-    .db CC
-    .db E1
-    .db F3
-    .db E5
-    .db F2
-    .db A0
-    .db C2
-    .db E5
-    .db E1
-    .db ED
-    .db 00
-    .db D0
-    .db EC
-    .db E1
-    .db F3
-    .db ED
-    .db E1
-    .db A0
-    .db C2
-    .db E5
-    .db E1
-    .db ED
-    .db 00
-    .db D2
-    .db EF
-    .db F0
-    .db E5
-    .db 00
-    .db D0
-    .db E5
-    .db E1
-    .db E3
-    .db E5
-    .db A0
-    .db C3
-    .db EF
-    .db E9
-    .db EE
-    .db 00
-    .db D0
-    .db F2
-    .db EF
-    .db F4
-    .db E5
-    .db E3
-    .db F4
-    .db C3
-    .db EF
-    .db E9
-    .db EE
-    .db 00
-    .db CD
-    .db E1
-    .db E7
-    .db E9
-    .db E3
-    .db A0
-    .db C3
-    .db EF
-    .db E9
-    .db EE
-    .db 00
-    .db C2
-    .db F2
-    .db E1
-    .db F3
-    .db F3
-    .db A0
-    .db D2
-    .db E9
-    .db EE
-    .db E7
-    .db 00
-    .db D3
-    .db E9
-    .db EC
-    .db F6
-    .db E5
-    .db F2
-    .db A0
-    .db D2
-    .db E9
-    .db EE
-    .db E7
-    .db 00
-    .db C7
-    .db EF
-    .db EC
-    .db E4
-    .db A0
-    .db D2
-    .db E9
-    .db EE
-    .db E7
-    .db 00
-    .db C8
-    .db B2
-    .db EF
-    .db A0
-    .db D0
-    .db E5
-    .db EE
-    .db E4
-    .db E1
-    .db EE
-    .db F4
-    .db 00
-    .db C6
-    .db E9
-    .db F2
-    .db E5
-    .db D0
-    .db E5
-    .db EE
-    .db E4
-    .db E1
-    .db EE
-    .db F4
-    .db 00
-    .db C5
-    .db E1
-    .db F2
-    .db F4
-    .db E8
-    .db D0
-    .db E5
-    .db EE
-    .db E4
-    .db EE
-    .db F4
-    .db 00
-    .db D3
-    .db E5
-    .db E1
-    .db A0
-    .db D0
-    .db E5
-    .db EE
-    .db E4
-    .db E1
-    .db EE
-    .db F4
-    .db 00
-    .db CF
-    .db F2
-    .db E1
-    .db EE
-    .db E7
-    .db E5
-    .db CA
-    .db F5
-    .db E9
-    .db E3
-    .db E5
-    .db 00
-    .db C6
-    .db F2
-    .db E5
-    .db EE
-    .db E3
-    .db E8
-    .db C6
-    .db F2
-    .db E9
-    .db E5
-    .db F3
-    .db 00
-    .db CD
-    .db E1
-    .db E7
-    .db E9
-    .db E3
-    .db A0
-    .db C8
-    .db E5
-    .db F2
-    .db E2
-    .db 00
-    .db C8
-    .db E1
-    .db ED
-    .db E2
-    .db F5
-    .db F2
-    .db E7
-    .db E5
-    .db F2
-    .db 00
-    .db D3
-    .db F0
-    .db EF
-    .db F2
-    .db F4
-    .db F3
-    .db C4
-    .db F2
-    .db E9
-    .db EE
-    .db EB
-    .db 00
-    .db CC
-    .db E9
-    .db E6
-    .db E5
-    .db D5
-    .db F0
-    .db C3
-    .db F2
-    .db E5
-    .db E1
-    .db ED
-    .db 00
-    .db C1
-    .db F3
-    .db F4
-    .db E8
-    .db ED
-    .db E1
-    .db D3
-    .db F0
-    .db F2
-    .db E1
-    .db F9
-    .db 00
-    .db C1
-    .db EE
-    .db F4
-    .db E9
-    .db E4
-    .db EF
-    .db F4
-    .db E5
-    .db 00
-    .db CD
-    .db EF
-    .db F5
-    .db F4
-    .db E8
-    .db F7
-    .db E1
-    .db F3
-    .db E8
-    .db 00
-    .db E2
-    .db E5
-    .db F2
-    .db F2
-    .db F9
-    .db A0
-    .db D4
-    .db EF
-    .db E6
-    .db F5
-    .db 00
-    .db C2
-    .db F2
-    .db E5
-    .db E1
-    .db E4
-    .db 00
-    .db CE
-    .db EF
-    .db E2
-    .db EC
-    .db E5
-    .db A0
-    .db D3
-    .db E5
-    .db E5
-    .db E4
-    .db 00
-    .db D0
-    .db D3
-    .db C9
-    .db A0
-    .db D3
-    .db F4
-    .db EF
-    .db EE
-    .db E5
-    .db 00
-    .db CD
-    .db E1
-    .db E7
-    .db E9
-    .db E3
-    .db D2
-    .db E9
-    .db E2
-    .db E2
-    .db EF
-    .db EE
-    .db 00
-    .db CD
-    .db E1
-    .db E7
-    .db E9
-    .db E3
-    .db A0
-    .db C3
-    .db E1
-    .db EE
-    .db E4
-    .db F9
-    .db 00
-    .db D1
-    .db F5
-    .db E9
-    .db E3
-    .db EB
-    .db C3
-    .db E1
-    .db F0
-    .db F3
-    .db F5
-    .db EC
-    .db 00
-    .db D7
-    .db E9
-    .db F3
-    .db E4
-    .db EF
-    .db ED
-    .db A0
-    .db C3
-    .db E1
-    .db F0
-    .db F3
-    .db 00
-    .db D0
-    .db E8
-    .db F9
-    .db F3
-    .db E9
-    .db E3
-    .db E1
-    .db EC
-    .db C3
-    .db E1
-    .db F0
-    .db 00
-    .db C6
-    .db EF
-    .db F2
-    .db E3
-    .db E5
-    .db C3
-    .db E1
-    .db F0
-    .db F3
-    .db F5
-    .db EC
-    .db 00
-    .db C6
-    .db E9
-    .db E7
-    .db E8
-    .db F4
-    .db C3
-    .db E1
-    .db F0
-    .db F3
-    .db F5
-    .db EC
-    .db 00
-    .db C2
-    .db E1
-    .db F3
-    .db E5
-    .db ED
-    .db E5
-    .db EE
-    .db F4
-    .db CB
-    .db E5
-    .db F9
-    .db 00
-    .db DA
-    .db EF
-    .db EF
-    .db A0
-    .db CB
-    .db E5
-    .db F9
-    .db 00
-    .db C7
-    .db E8
-    .db EF
-    .db F3
-    .db F4
-    .db A0
-    .db CB
-    .db E5
-    .db F9
-    .db 00
-    .db C7
-    .db C7
-    .db C6
-    .db A7
-    .db F3
-    .db A0
-    .db C4
-    .db E9
-    .db E1
-    .db F2
-    .db F9
-    .db 00
-    .db D0
-    .db E1
-    .db F3
-    .db F3
-    .db 00
-    .db D4
-    .db E9
-    .db E3
-    .db EB
-    .db E5
-    .db F4
-    .db 00
-    .db C3
-    .db E1
-    .db EE
-    .db E1
-    .db F2
-    .db F9
-    .db C3
-    .db E8
-    .db E9
-    .db E3
-    .db EB
-    .db 00
-    .db C2
-    .db EF
-    .db F4
-    .db F4
-    .db EC
-    .db D2
-    .db EF
-    .db E3
-    .db EB
-    .db E5
-    .db F4
-    .db 00
-    .db C8
-    .db E1
-    .db F4
-    .db 00
-    .db C4
-    .db E5
-    .db EE
-    .db F4
-    .db F5
-    .db F2
-    .db E5
-    .db F3
-    .db 00
-    .db D4
-    .db E9
-    .db E3
-    .db EB
-    .db E5
-    .db F4
-    .db A0
-    .db D3
-    .db F4
-    .db F5
-    .db E2
-    .db 00
-    .db C9
-    .db C3
-    .db AD
-    .db E3
-    .db E8
-    .db E9
-    .db F0
-    .db 00
-    .db CF
-    .db E3
-    .db E1
-    .db F2
-    .db E9
-    .db EE
-    .db E1
-    .db 00
-    .db C6
-    .db F2
-    .db E1
-    .db EE
-    .db EB
-    .db EC
-    .db EE
-    .db C2
-    .db E4
-    .db E7
-    .db E5
-    .db 00
-    .db C6
-    .db F2
-    .db EE
-    .db E4
-    .db F3
-    .db E8
-    .db F0
-    .db D2
-    .db E9
-    .db EE
-    .db E7
-    .db 00
-    .db CF
-    .db EE
-    .db F9
-    .db F8
-    .db A0
-    .db C8
-    .db EF
-    .db EF
-    .db EB
-    .db 00
-    .db CC
-    .db E1
-    .db F3
-    .db F4
-    .db A0
-    .db D7
-    .db E5
-    .db E1
-    .db F0
-    .db EF
-    .db EE
-    .db 00
-    .db D2
-    .db F5
-    .db EC
-    .db E5
-    .db F2
-    .db 00
-    .db C3
-    .db E1
-    .db F3
-    .db E8
-    .db A0
-    .db C3
-    .db E1
-    .db F2
-    .db E4
-    .db 00
-    .db D2
-    .db E5
-    .db E4
-    .db A0
-    .db D7
-    .db E5
-    .db E5
-    .db E4
-    .db 00
-    .db C2
-    .db F5
-    .db EC
-    .db EC
-    .db E8
-    .db EF
-    .db F2
-    .db EE
-    .db 00
-    .db CD
-    .db E1
-    .db F0
-    .db 00
-    .db C4
-    .db E5
-    .db E2
-    .db F5
-    .db E7
-    .db 00
-    .db 00
-    .db C6
-    .db EC
-    .db E9
-    .db E7
-    .db E8
-    .db F4
-    .db F0
-    .db EC
-    .db E1
-    .db EE
-    .db C1
-    .db 00
-    .db C6
-    .db EC
-    .db E9
-    .db E7
-    .db E8
-    .db F4
-    .db F0
-    .db EC
-    .db E1
-    .db EE
-    .db C2
-    .db 00
-    .db C6
-    .db EC
-    .db E9
-    .db E7
-    .db E8
-    .db F4
-    .db F0
-    .db EC
-    .db E1
-    .db EE
-    .db C3
-    .db 00
-    .db C8
-    .db E9
-    .db EE
-    .db F4
-    .db A0
-    .db B1
-    .db 00
-    .db C8
-    .db E9
-    .db EE
-    .db F4
-    .db A0
-    .db B2
-    .db 00
-    .db C8
-    .db E9
-    .db EE
-    .db F4
-    .db A0
-    .db B3
-    .db 00
-    .db D2
-    .db E5
-    .db E1
-    .db EC
-    .db A0
-    .db D2
-    .db EF
-    .db E3
-    .db EB
-    .db E5
-    .db F4
-    .db 00
-    .db D4
-    .db E9
-    .db ED
-    .db E5
-    .db CD
-    .db E1
-    .db E3
-    .db E8
-    .db E9
-    .db EE
-    .db E5
-    .db 00
-    .db 00
-    .db CD
-    .db F9
-    .db C8
-    .db EF
-    .db ED
-    .db E5
-    .db 00
-    .db D0
-    .db EF
-    .db E4
-    .db F5
-    .db EE
-    .db EB
-    .db 00
-    .db CD
-    .db E5
-    .db F2
-    .db F2
-    .db F9
-    .db F3
-    .db F6
-    .db E9
-    .db EC
-    .db EC
-    .db E5
-    .db 00
-    .db D2
-    .db E5
-    .db E9
-    .db EE
-    .db E4
-    .db E5
-    .db E5
-    .db F2
-    .db 00
-    .db D3
-    .db F0
-    .db EF
-    .db EF
-    .db EB
-    .db E1
-    .db EE
-    .db E5
-    .db 00
-    .db D3
-    .db EE
-    .db EF
-    .db F7
-    .db ED
-    .db E1
-    .db EE
-    .db 00
-    .db D9
-    .db EF
-    .db F5
-    .db EE
-    .db E7
-    .db F4
-    .db EF
-    .db F7
-    .db EE
-    .db 00
-    .db C5
-    .db EC
-    .db EC
-    .db E1
-    .db F9
-    .db 00
-    .db D5
-    .db EE
-    .db E9
-    .db EF
-    .db EE
-    .db 00
-    .db 00
-    .db D4
-    .db E5
-    .db EC
-    .db E5
-    .db F0
-    .db E1
-    .db F4
-    .db E8
-    .db F9
-    .db 00
-    .db D4
-    .db E5
-    .db EC
-    .db E5
-    .db F0
-    .db EF
-    .db F2
-    .db F4
-    .db 00
-    .db CC
-    .db E9
-    .db E6
-    .db E5
-    .db D5
-    .db F0
-    .db A0
-    .db BB
-    .db 00
-    .db CC
-    .db E9
-    .db E6
-    .db E5
-    .db D5
-    .db F0
-    .db A0
-    .db BC
-    .db 00
-    .db CC
-    .db E9
-    .db E6
-    .db E5
-    .db D5
-    .db F0
-    .db A0
-    .db BD
-    .db 00
-    .db CC
-    .db E9
-    .db E6
-    .db E5
-    .db D5
-    .db F0
-    .db A0
-    .db BE
-    .db 00
-    .db CC
-    .db E9
-    .db E6
-    .db E5
-    .db D5
-    .db F0
-    .db A0
-    .db BF
-    .db 00
-    .db C8
-    .db E5
-    .db E1
-    .db EC
-    .db E9
-    .db EE
-    .db E7
-    .db A0
-    .db BB
-    .db 00
-    .db C8
-    .db E5
-    .db E1
-    .db EC
-    .db E9
-    .db EE
-    .db E7
-    .db A0
-    .db BC
-    .db 00
-    .db C8
-    .db E5
-    .db E1
-    .db EC
-    .db E9
-    .db EE
-    .db E7
-    .db A0
-    .db BD
-    .db 00
-    .db C8
-    .db E5
-    .db E1
-    .db EC
-    .db E9
-    .db EE
-    .db E7
-    .db A0
-    .db BE
-    .db 00
-    .db D3
-    .db F5
-    .db F0
-    .db F2
-    .db C8
-    .db E5
-    .db E1
-    .db EC
-    .db E9
-    .db EE
-    .db E7
-    .db 00
-    .db D0
-    .db D3
-    .db C9
-    .db D3
-    .db E8
-    .db E9
-    .db E5
-    .db EC
-    .db E4
-    .db A0
-    .db BB
-    .db 00
-    .db D0
-    .db D3
-    .db C9
-    .db D3
-    .db E8
-    .db E9
-    .db E5
-    .db EC
-    .db E4
-    .db A0
-    .db BC
-    .db 00
-    .db D0
-    .db EF
-    .db F7
-    .db E5
-    .db F2
-    .db D3
-    .db E8
-    .db E9
-    .db E5
-    .db EC
-    .db E4
-    .db 00
-    .db C2
-    .db F2
-    .db E1
-    .db E9
-    .db EE
-    .db D3
-    .db E8
-    .db EF
-    .db E3
-    .db EB
-    .db 00
-    .db C2
-    .db F2
-    .db E1
-    .db E9
-    .db EE
-    .db C3
-    .db F9
-    .db E3
-    .db EC
-    .db EF
-    .db EE
-    .db 00
-    .db C8
-    .db F9
-    .db F0
-    .db EE
-    .db EF
-    .db F3
-    .db E9
-    .db F3
-    .db 00
-    .db D0
-    .db E1
-    .db F2
-    .db E1
-    .db EC
-    .db F9
-    .db F3
-    .db E9
-    .db F3
-    .db 00
-    .db C4
-    .db E1
-    .db F2
-    .db EB
-    .db EE
-    .db E5
-    .db F3
-    .db F3
-    .db 00
-    .db D0
-    .db D3
-    .db C9
-    .db AD
-    .db CD
-    .db E1
-    .db E7
-    .db EE
-    .db E5
-    .db F4
-    .db 00
-    .db D3
-    .db E8
-    .db E9
-    .db E5
-    .db EC
-    .db E4
-    .db AD
-    .db CF
-    .db E6
-    .db E6
-    .db 00
-    .db D0
-    .db D3
-    .db C9
-    .db AD
-    .db C2
-    .db EC
-    .db EF
-    .db E3
-    .db EB
-    .db 00
-    .db CF
-    .db E6
-    .db E6
-    .db E5
-    .db EE
-    .db F3
-    .db E5
-    .db D5
-    .db F0
-    .db 00
-    .db C4
-    .db E5
-    .db E6
-    .db E5
-    .db EE
-    .db F3
-    .db E5
-    .db D5
-    .db F0
-    .db A0
-    .db BB
-    .db 00
-    .db C4
-    .db E5
-    .db E6
-    .db E5
-    .db EE
-    .db F3
-    .db E5
-    .db D5
-    .db F0
-    .db A0
-    .db BC
-    .db 00
-    .db D1
-    .db F5
-    .db E9
-    .db E3
-    .db EB
-    .db D5
-    .db F0
-    .db 00
-    .db C4
-    .db E5
-    .db E6
-    .db AE
-    .db C4
-    .db EF
-    .db F7
-    .db EE
-    .db A0
-    .db BB
-    .db 00
-    .db C4
-    .db E5
-    .db E6
-    .db AE
-    .db C4
-    .db EF
-    .db F7
-    .db EE
-    .db A0
-    .db BC
-    .db 00
-    .db B4
-    .db F4
-    .db E8
-    .db AD
-    .db C4
-    .db A0
-    .db D3
-    .db EC
-    .db E9
-    .db F0
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db C6
-    .db F2
-    .db E5
-    .db E5
-    .db FA
-    .db E5
-    .db A0
-    .db BB
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db C6
-    .db F2
-    .db E5
-    .db E5
-    .db FA
-    .db E5
-    .db A0
-    .db BC
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db C6
-    .db F2
-    .db E5
-    .db E5
-    .db FA
-    .db E5
-    .db A0
-    .db BD
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db C6
-    .db F2
-    .db E5
-    .db E5
-    .db FA
-    .db E5
-    .db A0
-    .db BF
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db C6
-    .db E9
-    .db F2
-    .db E5
-    .db A0
-    .db BB
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db C6
-    .db E9
-    .db F2
-    .db E5
-    .db A0
-    .db BC
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db C6
-    .db E9
-    .db F2
-    .db E5
-    .db A0
-    .db BD
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db C6
-    .db E9
-    .db F2
-    .db E5
-    .db A0
-    .db BF
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db C2
-    .db E5
-    .db E1
-    .db ED
-    .db A0
-    .db BB
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db C2
-    .db E5
-    .db E1
-    .db ED
-    .db A0
-    .db BC
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db C2
-    .db E5
-    .db E1
-    .db ED
-    .db A0
-    .db BD
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db C2
-    .db E5
-    .db E1
-    .db ED
-    .db A0
-    .db BF
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db D4
-    .db E8
-    .db F5
-    .db EE
-    .db E4
-    .db E5
-    .db F2
-    .db BB
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db D4
-    .db E8
-    .db F5
-    .db EE
-    .db E4
-    .db E5
-    .db F2
-    .db BC
-    .db 00
-    .db D0
-    .db CB
-    .db A0
-    .db D4
-    .db E8
-    .db F5
-    .db EE
-    .db E4
-    .db E5
-    .db F2
-    .db BD
-    .db 00
-    .db C6
-    .db E1
-    .db E9
-    .db EE
-    .db F4
-    .db E4
-    .db 00
-    .db A0
-    .db D3
-    .db F4
-    .db EF
-    .db EE
-    .db E5
-    .db 00
-    .db D0
-    .db E1
-    .db F2
-    .db EC
-    .db FA
-    .db E4
-    .db 00
-    .db C1
-    .db F3
-    .db EC
-    .db E5
-    .db E5
-    .db F0
-    .db 00
-    .db C3
-    .db EF
-    .db EE
-    .db E6
-    .db F3
-    .db E4
-    .db 00
-    .db D0
-    .db F5
-    .db FA
-    .db FA
-    .db EC
-    .db E4
-    .db 00
-    .db D0
-    .db EF
-    .db E9
-    .db F3
-    .db EF
-    .db EE
-    .db 00
-    .db A0
-    .db A0
-    .db C3
-    .db EF
-    .db EC
-    .db E4
-    .db 00
-    .db 00
-    .db C2
-    .db E9
-    .db E7
-    .db D7
-    .db EF
-    .db EF
-    .db E4
-    .db EF
-    .db E8
-    .db 00
-    .db C4
-    .db F2
-    .db E1
-    .db E7
-    .db EF
-    .db EE
-    .db 00
-    .db D2
-    .db B7
-    .db B0
-    .db B3
-    .db B8
-    .db 00
-    .db C5
-    .db EC
-    .db E5
-    .db F0
-    .db E8
-    .db E1
-    .db EE
-    .db F4
-    .db 00
-    .db C2
-    .db E5
-    .db E1
-    .db F2
-    .db 00
-    .db C2
-    .db E9
-    .db E7
-    .db A0
-    .db C6
-    .db EF
-    .db EF
-    .db F4
-    .db 00
-    .db CD
-    .db E1
-    .db E4
-    .db A0
-    .db D4
-    .db F2
-    .db F5
-    .db E3
-    .db EB
-    .db 00
-    .db CF
-    .db EC
-    .db E4
-    .db A0
-    .db D2
-    .db EF
-    .db E2
-    .db EF
-    .db F4
-    .db 00
-    .db CD
-    .db E5
-    .db E7
-    .db E1
-    .db E2
-    .db EF
-    .db F2
-    .db E7
-    .db 00
-    .db C7
-    .db E1
-    .db F2
-    .db E7
-    .db EF
-    .db F9
-    .db EC
-    .db E5
-    .db 00
-    .db C7
-    .db E1
-    .db E2
-    .db E9
-    .db EC
-    .db E1
-    .db EE
-    .db 00
-    .db C7
-    .db EF
-    .db F2
-    .db E9
-    .db EC
-    .db EC
-    .db E1
-    .db 00
-    .db C2
-    .db E9
-    .db F3
-    .db EF
-    .db EE
-    .db 00
-    .db D4
-    .db E9
-    .db E7
-    .db E5
-    .db F2
-    .db 00
-    .db CD
-    .db E1
-    .db E4
-    .db A0
-    .db C3
-    .db E1
-    .db F2
-    .db 00
-    .db D2
-    .db E1
-    .db E5
-    .db E2
-    .db A0
-    .db D9
-    .db E4
-    .db E4
-    .db E5
-    .db F4
-    .db 00
-    .db CD
-    .db E1
-    .db E7
-    .db E9
-    .db E3
-    .db A0
-    .db D3
-    .db EE
-    .db E1
-    .db E9
-    .db EC
-    .db 00
-    .db D4
-    .db E9
-    .db F4
-    .db E1
-    .db EE
-    .db E5
-    .db E5
-    .db F3
-    .db 00
-    .db C7
-    .db E9
-    .db E5
-    .db E7
-    .db F5
-    .db E5
-    .db 00
-    .db C5
-    .db E1
-    .db E7
-    .db EC
-    .db E5
-    .db 00
-    .db D7
-    .db EF
-    .db EC
-    .db E6
-    .db 00
-    .db D3
-    .db E5
-    .db E1
-    .db E7
-    .db F5
-    .db EC
-    .db EC
-    .db 00
-    .db C1
-    .db EC
-    .db EC
-    .db E9
-    .db E7
-    .db E1
-    .db F4
-    .db EF
-    .db F2
-    .db 00
-    .db C5
-    .db EE
-    .db E5
-    .db F2
-    .db E7
-    .db F9
-    .db D2
-    .db EF
-    .db E2
-    .db EF
-    .db F4
-    .db 00
-    .db D4
-    .db E8
-    .db E5
-    .db A0
-    .db C6
-    .db E9
-    .db F3
-    .db E8
-    .db 00
-    .db C6
-    .db F5
-    .db E7
-    .db E9
-    .db F4
-    .db E9
-    .db F6
-    .db E5
-    .db 00
-    .db C2
-    .db AE
-    .db C2
-    .db AE
-    .db A7
-    .db F3
-    .db A0
-    .db C2
-    .db EF
-    .db F3
-    .db F3
-    .db 00
-    .db C2
-    .db E1
-    .db F2
-    .db E2
-    .db EF
-    .db F4
-    .db 00
-    .db CE
-    .db E1
-    .db EE
-    .db E3
-    .db F9
-    .db 00
-    .db D3
-    .db F4
-    .db E1
-    .db F2
-    .db ED
-    .db E1
-    .db EE
-    .db 00
-    .db D5
-    .db EC
-    .db EC
-    .db F2
-    .db E9
-    .db E3
-    .db E8
-    .db 00
-    .db C3
-    .db E5
-    .db F2
-    .db E5
-    .db E2
-    .db F2
-    .db F5
-    .db ED
-    .db 00
-    .db CD
-    .db EF
-    .db EF
-    .db EB
-    .db 00
-    .db C1
-    .db F2
-    .db ED
-    .db EF
-    .db F2
-    .db 00
-    .db D7
-    .db EF
-    .db EF
-    .db E4
-    .db EF
-    .db E8
-    .db 00
-    .db D7
-    .db E1
-    .db EC
-    .db EC
-    .db F9
-    .db 00
-    .db D4
-    .db E8
-    .db E5
-    .db A0
-    .db C8
-    .db E9
-    .db F0
-    .db F0
-    .db E9
-    .db E5
-    .db 00
-    .db C2
-    .db E1
-    .db E7
-    .db A0
-    .db CC
-    .db E1
-    .db E4
-    .db F9
-    .db 00
-    .db C2
-    .db AE
-    .db C2
-    .db AE
-    .db A0
-    .db C7
-    .db E1
-    .db EE
-    .db E7
-    .db 00
-    .db C4
-    .db F2
-    .db AE
-    .db C4
-    .db E9
-    .db F3
-    .db F4
-    .db EF
-    .db F2
-    .db F4
-    .db EF
-    .db 00
-    .db C7
-    .db E1
-    .db EE
-    .db E7
-    .db A0
-    .db DA
-    .db EF
-    .db ED
-    .db E2
-    .db E9
-    .db E5
-    .db 00
-    .db D0
-    .db F3
-    .db E5
-    .db F5
-    .db E4
-    .db EF
-    .db DA
-    .db EF
-    .db ED
-    .db E2
-    .db E9
-    .db 00
-    .db C3
-    .db F2
-    .db EF
-    .db F7
-    .db 00
-    .db D3
-    .db EE
-    .db E1
-    .db EB
-    .db E5
-    .db 00
-    .db C8
-    .db F9
-    .db E5
-    .db EE
-    .db E1
-    .db 00
-    .db C3
-    .db EF
-    .db F5
-    .db E7
-    .db E1
-    .db F2
-    .db 00
-    .db C3
-    .db E5
-    .db EE
-    .db F4
-    .db E9
-    .db F0
-    .db E5
-    .db E4
-    .db E5
-    .db 00
-    .db C4
-    .db F5
-    .db F3
-    .db F4
-    .db A0
-    .db C2
-    .db E1
-    .db EC
-    .db EC
-    .db 00
-    .db C6
-    .db EC
-    .db F9
-    .db 00
-    .db D3
-    .db F0
-    .db E9
-    .db E4
-    .db E5
-    .db F2
-    .db 00
-    .db D3
-    .db E3
-    .db EF
-    .db F2
-    .db F0
-    .db E9
-    .db EF
-    .db EE
-    .db 00
-    .db D2
-    .db EF
-    .db F0
-    .db E5
-    .db 00
-    .db C6
-    .db E9
-    .db F2
-    .db E5
-    .db A0
-    .db C2
-    .db E1
-    .db EC
-    .db EC
-    .db 00
-    .db D7
-    .db E1
-    .db F4
-    .db E3
-    .db E8
-    .db E5
-    .db F2
-    .db 00
-    .db C7
-    .db F2
-    .db EF
-    .db F5
-    .db E3
-    .db E8
-    .db EF
-    .db 00
-    .db C7
-    .db E8
-    .db EF
-    .db F3
-    .db F4
-    .db 00
-    .db CC
-    .db E9
-    .db EC
-    .db A0
-    .db D3
-    .db E1
-    .db F5
-    .db E3
-    .db E5
-    .db F2
-    .db 00
-    .db CD
-    .db F2
-    .db AE
-    .db A0
-    .db C2
-    .db E1
-    .db F4
-    .db 00
-    .db D3
-    .db F4
-    .db E1
-    .db F2
-    .db ED
-    .db E1
-    .db EE
-    .db A0
-    .db CA
-    .db F2
-    .db AE
-    .db 00
-    .db D3
-    .db EB
-    .db F5
-    .db EE
-    .db EB
-    .db 00
-    .db D3
-    .db E8
-    .db F2
-    .db EF
-    .db F5
-    .db E4
-    .db EC
-    .db E5
-    .db F9
-    .db 00
-    .db D2
-    .db E1
-    .db F4
-    .db 00
-    .db C2
-    .db EF
-    .db ED
-    .db E2
-    .db E5
-    .db F2
-    .db 00
-    .db C4
-    .db EF
-    .db EC
-    .db EC
-    .db 00
-    .db CC
-    .db E1
-    .db ED
-    .db F0
-    .db 00
-    .db C2
-    .db E9
-    .db EF
-    .db EE
-    .db E9
-    .db E3
-    .db C3
-    .db E5
-    .db EE
-    .db F4
-    .db E9
-    .db 00
-    .db C2
-    .db E9
-    .db EF
-    .db EE
-    .db E9
-    .db E3
-    .db D3
-    .db E3
-    .db EF
-    .db F2
-    .db F0
-    .db 00
-    .db D2
-    .db E5
-    .db E4
-    .db A0
-    .db D3
-    .db EE
-    .db E1
-    .db EB
-    .db E5
-    .db 00
-    .db CC
-    .db EF
-    .db EE
-    .db E5
-    .db A0
-    .db D7
-    .db EF
-    .db EC
-    .db E6
-    .db 00
-    .db D0
-    .db EF
-    .db EC
-    .db E1
-    .db F2
-    .db A0
-    .db C2
-    .db E5
-    .db E1
-    .db F2
-    .db 00
-    .db D2
-    .db E1
-    .db F4
-    .db F4
-    .db EC
-    .db E5
-    .db F3
-    .db EE
-    .db E1
-    .db EB
-    .db E5
-    .db 00
-    .db D4
-    .db E1
-    .db F2
-    .db E1
-    .db EE
-    .db F4
-    .db F5
-    .db EC
-    .db E1
-    .db 00
-    .db C3
-    .db F2
-    .db EF
-    .db E3
-    .db EF
-    .db E4
-    .db E9
-    .db EC
-    .db E5
-    .db 00
-    .db C2
-    .db F5
-    .db E6
-    .db E6
-    .db E1
-    .db EC
-    .db EF
-    .db 00
-    .db C2
-    .db E9
-    .db EF
-    .db EE
-    .db E9
-    .db E3
-    .db A0
-    .db C2
-    .db E1
-    .db F4
-    .db 00
-    .db D3
-    .db F4
-    .db F2
-    .db E1
-    .db F9
-    .db A0
-    .db C4
-    .db EF
-    .db E7
-    .db 00
-    .db D0
-    .db F3
-    .db F9
-    .db E3
-    .db E8
-    .db EF
-    .db A0
-    .db C3
-    .db E1
-    .db F2
-    .db 00
-    .db D0
-    .db F3
-    .db F9
-    .db E3
-    .db E8
-    .db EF
-    .db D4
-    .db F2
-    .db F5
-    .db E3
-    .db EB
-    .db 00
-    .db CD
-    .db E1
-    .db EE
-    .db E9
-    .db E1
-    .db E3
-    .db D4
-    .db F2
-    .db F5
-    .db E3
-    .db EB
-    .db 00
-    .db C1
-    .db EC
-    .db E1
-    .db F2
-    .db ED
-    .db A0
-    .db C7
-    .db E8
-    .db EF
-    .db F3
-    .db F4
-    .db 00
-    .db C6
-    .db EF
-    .db F5
-    .db F2
-    .db E5
-    .db F9
-    .db E5
-    .db F3
-    .db 00
-    .db C4
-    .db E1
-    .db E4
-    .db F3
-    .db E5
-    .db F9
-    .db E5
-    .db F3
-    .db 00
-    .db CD
-    .db EF
-    .db ED
-    .db F3
-    .db E5
-    .db F9
-    .db E5
-    .db F3
-    .db 00
-    .db D3
-    .db EB
-    .db F9
-    .db A0
-    .db D9
-    .db E4
-    .db E4
-    .db E5
-    .db F4
-    .db 00
-    .db C7
-    .db E9
-    .db E7
-    .db E1
-    .db A0
-    .db C2
-    .db EF
-    .db F2
-    .db E7
-    .db 00
-    .db CF
-    .db ED
-    .db E5
-    .db E7
-    .db E1
-    .db A0
-    .db C2
-    .db EF
-    .db F2
-    .db E7
-    .db 00
-    .db D3
-    .db E3
-    .db F2
-    .db E1
-    .db F0
-    .db F0
-    .db E5
-    .db F2
-    .db 00
-    .db D5
-    .db EC
-    .db F4
-    .db F2
-    .db E1
-    .db C2
-    .db E1
-    .db F2
-    .db E2
-    .db EF
-    .db F4
-    .db 00
-    .db CF
-    .db ED
-    .db E5
-    .db E7
-    .db E1
-    .db D3
-    .db E1
-    .db F5
-    .db E3
-    .db E5
-    .db F2
-    .db 00
-    .db CB
-    .db E5
-    .db EC
-    .db EC
-    .db F9
-    .db 00
-    .db D3
-    .db F4
-    .db E1
-    .db F2
-    .db A0
-    .db CD
-    .db E9
-    .db EE
-    .db E5
-    .db F2
-    .db 00
-    .db D3
-    .db F5
-    .db F0
-    .db E5
-    .db F2
-    .db C5
-    .db EE
-    .db E5
-    .db F2
-    .db E7
-    .db F9
-    .db 00
-    .db CA
-    .db F5
-    .db E1
-    .db EE
-    .db E1
-    .db 00
-    .db C2
-    .db EC
-    .db F5
-    .db E5
-    .db D3
-    .db F4
-    .db E1
-    .db F2
-    .db ED
-    .db E1
-    .db EE
-    .db 00
-    .db D2
-    .db EF
-    .db E3
-    .db EB
-    .db EF
-    .db F9
-    .db EC
-    .db E5
-    .db 00
-    .db D4
-    .db E9
-    .db F4
-    .db E1
-    .db EE
-    .db E9
-    .db E1
-    .db EE
-    .db 00
-    .db CF
-    .db E8
-    .db AD
-    .db CD
-    .db EF
-    .db EF
-    .db EB
-    .db 00
-    .db DA
-    .db EF
-    .db ED
-    .db E2
-    .db E9
-    .db E5
-    .db 00
-    .db CE
-    .db E1
-    .db F3
-    .db F4
-    .db F9
-    .db DA
-    .db EF
-    .db ED
-    .db E2
-    .db E9
-    .db E5
-    .db 00
-    .db D3
-    .db E9
-    .db EC
-    .db F6
-    .db E5
-    .db F2
-    .db A0
-    .db D7
-    .db EF
-    .db EC
-    .db E6
-    .db 00
-    .db D2
-    .db B7
-    .db B0
-    .db B3
-    .db B7
-    .db 00
-    .db C7
-    .db F2
-    .db E9
-    .db FA
-    .db FA
-    .db EC
-    .db F9
-    .db C2
-    .db E5
-    .db E1
-    .db F2
-    .db 00
-    .db D2
-    .db B7
-    .db B0
-    .db B3
-    .db B8
-    .db D8
-    .db D8
-    .db 00
-    .db CC
-    .db E1
-    .db F3
-    .db F4
-    .db D3
-    .db F4
-    .db E1
-    .db F2
-    .db ED
-    .db E1
+    LOW(1E:0200) ; This bank seems to be battle-related?
+    HIGH(1E:0200)
+    LOW(1F:07E9)
+    HIGH(1F:07E9)
+    LOW(1E:02A0)
+    HIGH(1E:02A0)
+    LOW(1F:07E1)
+    HIGH(1F:07E1)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(1F:0FE8)
+    HIGH(1F:0FE8)
+    LOW(1F:05EE)
+    HIGH(1F:05EE)
+    LOW(PTR_SEEDED_UNK_K)
+    HIGH(PTR_SEEDED_UNK_K)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(SPRITE_INDEX_SWAP)
+    HIGH(SPRITE_INDEX_SWAP)
+    LOW(1F:12C3)
+    HIGH(1F:12C3)
+    LOW(1F:0DF5)
+    HIGH(1F:0DF5)
+    LOW(1F:13E2)
+    HIGH(1F:13E2)
+    LOW(1E:1200)
+    HIGH(1E:1200)
+    LOW(1F:10E5)
+    HIGH(1F:10E5)
+    LOW(1F:0CE5)
+    HIGH(1F:0CE5)
+    LOW(1E:12A0)
+    HIGH(1E:12A0)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(NMI_FLAG_ACTION?)
+    HIGH(NMI_FLAG_ACTION?)
+    LOW(SAVE_FLAG_SET_SUBMENU_AND_MENU_SINGLE_UNK_TODO)
+    HIGH(SAVE_FLAG_SET_SUBMENU_AND_MENU_SINGLE_UNK_TODO)
+    LOW(USE_XCOORD_ASIS)
+    HIGH(USE_XCOORD_ASIS)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(1F:0ECB)
+    HIGH(1F:0ECB)
+    LOW(1F:06E9)
+    HIGH(1F:06E9)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:15D3)
+    HIGH(1F:15D3)
+    LOW(1F:16F2)
+    HIGH(1F:16F2)
+    LOW(1E:0BAE)
+    HIGH(1E:0BAE)
+    LOW(1F:09EE)
+    HIGH(1F:09EE)
+    LOW(1F:05E6)
+    HIGH(1F:05E6)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(1F:0FF7)
+    HIGH(1F:0FF7)
+    LOW(1F:04F2)
+    HIGH(1F:04F2)
+    LOW(1E:0B00)
+    HIGH(1E:0B00)
+    LOW(1F:14E1)
+    HIGH(1F:14E1)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW(BMI_FLAG_SET_DIFF_MODDED_UNK)
+    HIGH(BMI_FLAG_SET_DIFF_MODDED_UNK)
+    LOW(1F:14D3)
+    HIGH(1F:14D3)
+    LOW(1F:0EF5)
+    HIGH(1F:0EF5)
+    LOW(1E:07A0)
+    HIGH(1E:07A0)
+    LOW(1F:0EF5)
+    HIGH(1F:0EF5)
+    LOW(1E:0100)
+    HIGH(1E:0100)
+    LOW(1F:12E9)
+    HIGH(1F:12E9)
+    LOW(1E:07A0)
+    HIGH(1E:07A0)
+    LOW(1F:0EF5)
+    HIGH(1F:0EF5)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(1F:01EC)
+    HIGH(1F:01EC)
+    LOW(1F:14F3)
+    HIGH(1F:14F3)
+    LOW(1F:03E9)
+    HIGH(1F:03E9)
+    LOW(1E:02A0)
+    HIGH(1E:02A0)
+    LOW(1F:14E1)
+    HIGH(1F:14E1)
+    LOW(1E:1700)
+    HIGH(1E:1700)
+    LOW(1F:0FEF)
+    HIGH(1F:0FEF)
+    LOW(1F:05E4)
+    HIGH(1F:05E4)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:01C2)
+    HIGH(1F:01C2)
+    LOW(**:$00F4)
+    HIGH(**:$00F4)
+    LOW(1F:0CC1)
+    HIGH(1F:0CC1)
+    LOW(1F:0DF5)
+    HIGH(1F:0DF5)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(1F:0DF5)
+    HIGH(1F:0DF5)
+    LOW(1F:01C2)
+    HIGH(1F:01C2)
+    LOW(**:$00F4)
+    HIGH(**:$00F4)
+    LOW(1F:01C8)
+    HIGH(1F:01C8)
+    LOW(1F:0BEE)
+    HIGH(1F:0BEE)
+    LOW(1F:13A7)
+    HIGH(1F:13A7)
+    LOW(1E:02A0)
+    HIGH(1E:02A0)
+    LOW(1F:14E1)
+    HIGH(1F:14E1)
+    LOW(1E:0600)
+    HIGH(1E:0600)
+    LOW(1F:19F2)
+    HIGH(1F:19F2)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:01D0)
+    HIGH(1F:01D0)
+    LOW(MAPPER_INDEX_LAST_WRITTEN)
+    HIGH(MAPPER_INDEX_LAST_WRITTEN)
+    LOW(1F:0FCE)
+    HIGH(1F:0FCE)
+    LOW(1F:13EE)
+    HIGH(1F:13EE)
+    LOW(1F:09F4)
+    HIGH(1F:09F4)
+    LOW(1F:0BE3)
+    HIGH(1F:0BE3)
+    LOW(1F:01D0)
+    HIGH(1F:01D0)
+    LOW(MAPPER_INDEX_LAST_WRITTEN)
+    HIGH(MAPPER_INDEX_LAST_WRITTEN)
+    LOW(1F:12C9)
+    HIGH(1F:12C9)
+    LOW(1F:0EEF)
+    HIGH(1F:0EEF)
+    LOW(1F:0BD3)
+    HIGH(1F:0BD3)
+    LOW(1F:0CE9)
+    HIGH(1F:0CE9)
+    LOW(1F:05EC)
+    HIGH(1F:05EC)
+    LOW(**:$00F4)
+    HIGH(**:$00F4)
+    LOW(1F:0CD3)
+    HIGH(1F:0CD3)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(1F:13E7)
+    HIGH(1F:13E7)
+    LOW(1F:0FE8)
+    HIGH(1F:0FE8)
+    LOW(**:$00F4)
+    HIGH(**:$00F4)
+    LOW(1F:0FC2)
+    HIGH(1F:0FC2)
+    LOW(1F:0DEF)
+    HIGH(1F:0DEF)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW(NMI_FLAG_ACTION?)
+    HIGH(NMI_FLAG_ACTION?)
+    LOW(1F:0EC9)
+    HIGH(1F:0EC9)
+    LOW(1F:05F3)
+    HIGH(1F:05F3)
+    LOW(1F:14E3)
+    HIGH(1F:14E3)
+    LOW(1F:03E9)
+    HIGH(1F:03E9)
+    LOW(1F:04E9)
+    HIGH(1F:04E9)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:15D3)
+    HIGH(1F:15D3)
+    LOW(1F:05F0)
+    HIGH(1F:05F0)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:10D3)
+    HIGH(1F:10D3)
+    LOW(1F:01F2)
+    HIGH(1F:01F2)
+    LOW(**:$00F9)
+    HIGH(**:$00F9)
+    LOW(ANY_BUTTONS_PRESSED)
+    HIGH(ANY_BUTTONS_PRESSED)
+    LOW(1F:01E5)
+    HIGH(1F:01E5)
+    LOW(1E:02A0)
+    HIGH(1E:02A0)
+    LOW(1F:07E1)
+    HIGH(1F:07E1)
+    LOW(1E:1700)
+    HIGH(1E:1700)
+    LOW(1F:12EF)
+    HIGH(1F:12EF)
+    LOW(1F:13E4)
+    HIGH(1F:13E4)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:0FCC)
+    HIGH(1F:0FCC)
+    LOW(1F:05F6)
+    HIGH(1F:05F6)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(1F:05F7)
+    HIGH(1F:05F7)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1E:17A0)
+    HIGH(1E:17A0)
+    LOW(1F:12EF)
+    HIGH(1F:12EF)
+    LOW(1F:13E4)
+    HIGH(1F:13E4)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(DATA_UNK_B)
+    HIGH(DATA_UNK_B)
+    LOW(1E:0DF9)
+    HIGH(1E:0DF9)
+    LOW(1F:03E1)
+    HIGH(1F:03E1)
+    LOW(1F:09E8)
+    HIGH(1F:09E8)
+    LOW(1F:05EE)
+    HIGH(1F:05EE)
+    LOW(1E:0600)
+    HIGH(1E:0600)
+    LOW(1F:01EC)
+    HIGH(1F:01EC)
+    LOW(1F:08F3)
+    HIGH(1F:08F3)
+    LOW(1F:01E4)
+    HIGH(1F:01E4)
+    LOW(1F:0BF2)
+    HIGH(1F:0BF2)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(1F:0FF4)
+    HIGH(1F:0FF4)
+    LOW(1F:05EE)
+    HIGH(1F:05EE)
+    LOW(1F:12CF)
+    HIGH(1F:12CF)
+    LOW(1F:07E9)
+    HIGH(1F:07E9)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(1F:09EF)
+    HIGH(1F:09EF)
+    LOW(1F:0EF3)
+    HIGH(1F:0EF3)
+    LOW(1F:05CE)
+    HIGH(1F:05CE)
+    LOW(1F:04E5)
+    HIGH(1F:04E5)
+    LOW(1F:05EC)
+    HIGH(1F:05EC)
+    LOW(1E:0600)
+    HIGH(1E:0600)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:08D4)
+    HIGH(1F:08D4)
+    LOW(1F:0FF2)
+    HIGH(1F:0FF2)
+    LOW(1F:05F7)
+    HIGH(1F:05F7)
+    LOW(**:$00F2)
+    HIGH(**:$00F2)
+    LOW(1F:0FC2)
+    HIGH(1F:0FC2)
+    LOW(1F:02ED)
+    HIGH(1F:02ED)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(VAL_NONZERO)
+    HIGH(VAL_NONZERO)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(1E:02A0)
+    HIGH(1E:02A0)
+    LOW(1F:0DEF)
+    HIGH(1F:0DEF)
+    LOW(NMI_FLAG_OBJECT_PROCESSING?)
+    HIGH(NMI_FLAG_OBJECT_PROCESSING?)
+    LOW(1F:01CC)
+    HIGH(1F:01CC)
+    LOW(1F:05F3)
+    HIGH(1F:05F3)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:05C2)
+    HIGH(1F:05C2)
+    LOW(TARGET_ITERATION)
+    HIGH(TARGET_ITERATION)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(1F:01EC)
+    HIGH(1F:01EC)
+    LOW(1F:0DF3)
+    HIGH(1F:0DF3)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:05C2)
+    HIGH(1F:05C2)
+    LOW(TARGET_ITERATION)
+    HIGH(TARGET_ITERATION)
+    LOW(1E:1200)
+    HIGH(1E:1200)
+    LOW(1F:10EF)
+    HIGH(1F:10EF)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:05D0)
+    HIGH(1F:05D0)
+    LOW(1F:03E1)
+    HIGH(1F:03E1)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:0FC3)
+    HIGH(1F:0FC3)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(1F:0FF2)
+    HIGH(1F:0FF2)
+    LOW(1F:05F4)
+    HIGH(1F:05F4)
+    LOW(1F:14E3)
+    HIGH(1F:14E3)
+    LOW(1F:0FC3)
+    HIGH(1F:0FC3)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1F:07E1)
+    HIGH(1F:07E1)
+    LOW(1F:03E9)
+    HIGH(1F:03E9)
+    LOW(PTR_SEEDED_UNK_K)
+    HIGH(PTR_SEEDED_UNK_K)
+    LOW(1F:09EF)
+    HIGH(1F:09EF)
+    LOW(MAPPER_INDEX_LAST_WRITTEN)
+    HIGH(MAPPER_INDEX_LAST_WRITTEN)
+    LOW(1F:12C2)
+    HIGH(1F:12C2)
+    LOW(1F:13E1)
+    HIGH(1F:13E1)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:09D2)
+    HIGH(1F:09D2)
+    LOW(1F:07EE)
+    HIGH(1F:07EE)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(1F:0CE9)
+    HIGH(1F:0CE9)
+    LOW(1F:05F6)
+    HIGH(1F:05F6)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:09D2)
+    HIGH(1F:09D2)
+    LOW(1F:07EE)
+    HIGH(1F:07EE)
+    LOW(1E:0700)
+    HIGH(1E:0700)
+    LOW(1F:0CEF)
+    HIGH(1F:0CEF)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:09D2)
+    HIGH(1F:09D2)
+    LOW(1F:07EE)
+    HIGH(1F:07EE)
+    LOW(1E:0800)
+    HIGH(1E:0800)
+    LOW(1F:0FB2)
+    HIGH(1F:0FB2)
+    LOW(1E:10A0)
+    HIGH(1E:10A0)
+    LOW(1F:0EE5)
+    HIGH(1F:0EE5)
+    LOW(1F:01E4)
+    HIGH(1F:01E4)
+    LOW(1F:14EE)
+    HIGH(1F:14EE)
+    LOW(1E:0600)
+    HIGH(1E:0600)
+    LOW(1F:12E9)
+    HIGH(1F:12E9)
+    LOW(1E:10E5)
+    HIGH(1E:10E5)
+    LOW(1F:0EE5)
+    HIGH(1F:0EE5)
+    LOW(1F:01E4)
+    HIGH(1F:01E4)
+    LOW(1F:14EE)
+    HIGH(1F:14EE)
+    LOW(1E:0500)
+    HIGH(1E:0500)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1F:08F4)
+    HIGH(1F:08F4)
+    LOW(1F:05D0)
+    HIGH(1F:05D0)
+    LOW(1F:04EE)
+    HIGH(1F:04EE)
+    LOW(1F:14EE)
+    HIGH(1F:14EE)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(1F:01E5)
+    HIGH(1F:01E5)
+    LOW(1E:10A0)
+    HIGH(1E:10A0)
+    LOW(1F:0EE5)
+    HIGH(1F:0EE5)
+    LOW(1F:01E4)
+    HIGH(1F:01E4)
+    LOW(1F:14EE)
+    HIGH(1F:14EE)
+    LOW(1E:0F00)
+    HIGH(1E:0F00)
+    LOW(1F:01F2)
+    HIGH(1F:01F2)
+    LOW(1F:07EE)
+    HIGH(1F:07EE)
+    LOW(1E:0AE5)
+    HIGH(1E:0AE5)
+    LOW(1F:09F5)
+    HIGH(1F:09F5)
+    LOW(1F:05E3)
+    HIGH(1F:05E3)
+    LOW(1E:0600)
+    HIGH(1E:0600)
+    LOW(1F:05F2)
+    HIGH(1F:05F2)
+    LOW(1F:03EE)
+    HIGH(1F:03EE)
+    LOW(ALT_ENTRY)
+    HIGH(ALT_ENTRY)
+    LOW(1F:09F2)
+    HIGH(1F:09F2)
+    LOW(1F:13E5)
+    HIGH(1F:13E5)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1F:07E1)
+    HIGH(1F:07E1)
+    LOW(1F:03E9)
+    HIGH(1F:03E9)
+    LOW(1E:08A0)
+    HIGH(1E:08A0)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(NMI_FLAG_OBJECT_PROCESSING?)
+    HIGH(NMI_FLAG_OBJECT_PROCESSING?)
+    LOW(1F:01C8)
+    HIGH(1F:01C8)
+    LOW(1F:02ED)
+    HIGH(1F:02ED)
+    LOW(1F:12F5)
+    HIGH(1F:12F5)
+    LOW(1F:05E7)
+    HIGH(1F:05E7)
+    LOW(**:$00F2)
+    HIGH(**:$00F2)
+    LOW(1F:10D3)
+    HIGH(1F:10D3)
+    LOW(1F:12EF)
+    HIGH(1F:12EF)
+    LOW(1F:13F4)
+    HIGH(1F:13F4)
+    LOW(1F:12C4)
+    HIGH(1F:12C4)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(ENGINE_IRQ_LATCH_CURRENT?)
+    HIGH(ENGINE_IRQ_LATCH_CURRENT?)
+    LOW(1F:09CC)
+    HIGH(1F:09CC)
+    LOW(1F:05E6)
+    HIGH(1F:05E6)
+    LOW(1F:10D5)
+    HIGH(1F:10D5)
+    LOW(1F:12C3)
+    HIGH(1F:12C3)
+    LOW(1F:01E5)
+    HIGH(1F:01E5)
+    LOW(ENGINE_IRQ_RTN_INDEX)
+    HIGH(ENGINE_IRQ_RTN_INDEX)
+    LOW(1F:13C1)
+    HIGH(1F:13C1)
+    LOW(1F:08F4)
+    HIGH(1F:08F4)
+    LOW(1F:01ED)
+    HIGH(1F:01ED)
+    LOW(1F:10D3)
+    HIGH(1F:10D3)
+    LOW(1F:01F2)
+    HIGH(1F:01F2)
+    LOW(**:$00F9)
+    HIGH(**:$00F9)
+    LOW(1F:0EC1)
+    HIGH(1F:0EC1)
+    LOW(1F:09F4)
+    HIGH(1F:09F4)
+    LOW(1F:0FE4)
+    HIGH(1F:0FE4)
+    LOW(1F:05F4)
+    HIGH(1F:05F4)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1F:15EF)
+    HIGH(1F:15EF)
+    LOW(1F:08F4)
+    HIGH(1F:08F4)
+    LOW(1F:01F7)
+    HIGH(1F:01F7)
+    LOW(1F:08F3)
+    HIGH(1F:08F3)
+    LOW(1F:0200)
+    HIGH(1F:0200)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(1F:19F2)
+    HIGH(1F:19F2)
+    LOW(1E:14A0)
+    HIGH(1E:14A0)
+    LOW(1F:06EF)
+    HIGH(1F:06EF)
+    LOW(**:$00F5)
+    HIGH(**:$00F5)
+    LOW(1F:12C2)
+    HIGH(1F:12C2)
+    LOW(1F:01E5)
+    HIGH(1F:01E5)
+    LOW(SPRITE_INDEX_SWAP)
+    HIGH(SPRITE_INDEX_SWAP)
+    LOW(1F:0FCE)
+    HIGH(1F:0FCE)
+    LOW(1F:0CE2)
+    HIGH(1F:0CE2)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:05D3)
+    HIGH(1F:05D3)
+    LOW(1F:04E5)
+    HIGH(1F:04E5)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(1E:09D3)
+    HIGH(1E:09D3)
+    LOW(1E:13A0)
+    HIGH(1E:13A0)
+    LOW(1F:0FF4)
+    HIGH(1F:0FF4)
+    LOW(1F:05EE)
+    HIGH(1F:05EE)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1F:07E1)
+    HIGH(1F:07E1)
+    LOW(1F:03E9)
+    HIGH(1F:03E9)
+    LOW(1F:09D2)
+    HIGH(1F:09D2)
+    LOW(1F:02E2)
+    HIGH(1F:02E2)
+    LOW(1F:0EEF)
+    HIGH(1F:0EEF)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1F:07E1)
+    HIGH(1F:07E1)
+    LOW(1F:03E9)
+    HIGH(1F:03E9)
+    LOW(PTR_SEEDED_UNK_K)
+    HIGH(PTR_SEEDED_UNK_K)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW(1F:19E4)
+    HIGH(1F:19E4)
+    LOW(SLOT_EXTRAS)
+    HIGH(SLOT_EXTRAS)
+    LOW(1F:09F5)
+    HIGH(1F:09F5)
+    LOW(1F:0BE3)
+    HIGH(1F:0BE3)
+    LOW(1F:01C3)
+    HIGH(1F:01C3)
+    LOW(1F:13F0)
+    HIGH(1F:13F0)
+    LOW(1F:0CF5)
+    HIGH(1F:0CF5)
+    LOW(1E:1700)
+    HIGH(1E:1700)
+    LOW(1F:13E9)
+    HIGH(1F:13E9)
+    LOW(1F:0FE4)
+    HIGH(1F:0FE4)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:01C3)
+    HIGH(1F:01C3)
+    LOW(1F:13F0)
+    HIGH(1F:13F0)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(1F:19E8)
+    HIGH(1F:19E8)
+    LOW(EXIT_LOAD_ACTION)
+    HIGH(EXIT_LOAD_ACTION)
+    LOW(1F:01E3)
+    HIGH(1F:01E3)
+    LOW(1E:03EC)
+    HIGH(1E:03EC)
+    LOW(1F:10E1)
+    HIGH(1F:10E1)
+    LOW(1E:0600)
+    HIGH(1E:0600)
+    LOW(1F:12EF)
+    HIGH(1F:12EF)
+    LOW(1F:05E3)
+    HIGH(1F:05E3)
+    LOW(1F:01C3)
+    HIGH(1F:01C3)
+    LOW(1F:13F0)
+    HIGH(1F:13F0)
+    LOW(1F:0CF5)
+    HIGH(1F:0CF5)
+    LOW(1E:0600)
+    HIGH(1E:0600)
+    LOW(1F:07E9)
+    HIGH(1F:07E9)
+    LOW(1F:14E8)
+    HIGH(1F:14E8)
+    LOW(1F:01C3)
+    HIGH(1F:01C3)
+    LOW(1F:13F0)
+    HIGH(1F:13F0)
+    LOW(1F:0CF5)
+    HIGH(1F:0CF5)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1F:13E1)
+    HIGH(1F:13E1)
+    LOW(1F:0DE5)
+    HIGH(1F:0DE5)
+    LOW(1F:0EE5)
+    HIGH(1F:0EE5)
+    LOW(1E:0BF4)
+    HIGH(1E:0BF4)
+    LOW(1F:19E5)
+    HIGH(1F:19E5)
+    LOW(1E:1A00)
+    HIGH(1E:1A00)
+    LOW(1F:0FEF)
+    HIGH(1F:0FEF)
+    LOW(1E:0BA0)
+    HIGH(1E:0BA0)
+    LOW(1F:19E5)
+    HIGH(1F:19E5)
+    LOW(1E:0700)
+    HIGH(1E:0700)
+    LOW(1F:0FE8)
+    HIGH(1F:0FE8)
+    LOW(1F:14F3)
+    HIGH(1F:14F3)
+    LOW(1E:0BA0)
+    HIGH(1E:0BA0)
+    LOW(1F:19E5)
+    HIGH(1F:19E5)
+    LOW(1E:0700)
+    HIGH(1E:0700)
+    LOW(1E:06C7)
+    HIGH(1E:06C7)
+    LOW(1F:13A7)
+    HIGH(1F:13A7)
+    LOW(1E:04A0)
+    HIGH(1E:04A0)
+    LOW(1F:01E9)
+    HIGH(1F:01E9)
+    LOW(1F:19F2)
+    HIGH(1F:19F2)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(1F:13E1)
+    HIGH(1F:13E1)
+    LOW(**:$00F3)
+    HIGH(**:$00F3)
+    LOW(VAL_POSITIVE)
+    HIGH(VAL_POSITIVE)
+    LOW(1F:0BE3)
+    HIGH(1F:0BE3)
+    LOW(1F:14E5)
+    HIGH(1F:14E5)
+    LOW(1E:0300)
+    HIGH(1E:0300)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1E:03F9)
+    HIGH(1E:03F9)
+    LOW(1F:09E8)
+    HIGH(1F:09E8)
+    LOW(1F:0BE3)
+    HIGH(1F:0BE3)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1F:14EF)
+    HIGH(1F:14EF)
+    LOW(1F:0CF4)
+    HIGH(1F:0CF4)
+    LOW(1F:0FD2)
+    HIGH(1F:0FD2)
+    LOW(1F:0BE3)
+    HIGH(1F:0BE3)
+    LOW(1F:14E5)
+    HIGH(1F:14E5)
+    LOW(1E:0800)
+    HIGH(1E:0800)
+    LOW(1F:14E1)
+    HIGH(1F:14E1)
+    LOW(1E:0400)
+    HIGH(1E:0400)
+    LOW(1F:0EE5)
+    HIGH(1F:0EE5)
+    LOW(1F:15F4)
+    HIGH(1F:15F4)
+    LOW(1F:05F2)
+    HIGH(1F:05F2)
+    LOW(**:$00F3)
+    HIGH(**:$00F3)
+    LOW(VAL_POSITIVE)
+    HIGH(VAL_POSITIVE)
+    LOW(1F:0BE3)
+    HIGH(1F:0BE3)
+    LOW(1F:14E5)
+    HIGH(1F:14E5)
+    LOW(1E:13A0)
+    HIGH(1E:13A0)
+    LOW(1F:15F4)
+    HIGH(1F:15F4)
+    LOW(NMI_FLAG_OBJECT_PROCESSING?)
+    HIGH(NMI_FLAG_OBJECT_PROCESSING?)
+    LOW(1E:03C9)
+    HIGH(1E:03C9)
+    LOW(FILE_MISMATCH)
+    HIGH(FILE_MISMATCH)
+    LOW(1F:09E8)
+    HIGH(1F:09E8)
+    LOW(ENGINE_MAPPER_BANK_VALS_COMMITTING)
+    HIGH(ENGINE_MAPPER_BANK_VALS_COMMITTING)
+    LOW(1F:03CF)
+    HIGH(1F:03CF)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(BMI_FLAG_SET_DIFF_MODDED_UNK)
+    HIGH(BMI_FLAG_SET_DIFF_MODDED_UNK)
+    LOW(1F:12C6)
+    HIGH(1F:12C6)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW(1F:0CEB)
+    HIGH(1F:0CEB)
+    LOW(1E:02EE)
+    HIGH(1E:02EE)
+    LOW(1F:07E4)
+    HIGH(1F:07E4)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:12C6)
+    HIGH(1F:12C6)
+    LOW(1F:04EE)
+    HIGH(1F:04EE)
+    LOW(1F:08F3)
+    HIGH(1F:08F3)
+    LOW(1E:12F0)
+    HIGH(1E:12F0)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(NMI_FLAG_ACTION?)
+    HIGH(NMI_FLAG_ACTION?)
+    LOW(1F:0ECF)
+    HIGH(1F:0ECF)
+    LOW(1F:18F9)
+    HIGH(1F:18F9)
+    LOW(1E:08A0)
+    HIGH(1E:08A0)
+    LOW(1F:0FEF)
+    HIGH(1F:0FEF)
+    LOW(ENGINE_IRQ_LATCH_CURRENT?)
+    HIGH(ENGINE_IRQ_LATCH_CURRENT?)
+    LOW(1F:01CC)
+    HIGH(1F:01CC)
+    LOW(1F:14F3)
+    HIGH(1F:14F3)
+    LOW(1E:17A0)
+    HIGH(1E:17A0)
+    LOW(1F:01E5)
+    HIGH(1F:01E5)
+    LOW(1F:0FF0)
+    HIGH(1F:0FF0)
+    LOW(MAPPER_INDEX_LAST_WRITTEN)
+    HIGH(MAPPER_INDEX_LAST_WRITTEN)
+    LOW(1F:15D2)
+    HIGH(1F:15D2)
+    LOW(1F:05EC)
+    HIGH(1F:05EC)
+    LOW(**:$00F2)
+    HIGH(**:$00F2)
+    LOW(1F:01C3)
+    HIGH(1F:01C3)
+    LOW(1F:08F3)
+    HIGH(1F:08F3)
+    LOW(PTR_SEEDED_UNK_K)
+    HIGH(PTR_SEEDED_UNK_K)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(SPRITE_INDEX_SWAP)
+    HIGH(SPRITE_INDEX_SWAP)
+    LOW(1F:05D2)
+    HIGH(1F:05D2)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:05D7)
+    HIGH(1F:05D7)
+    LOW(1F:04E5)
+    HIGH(1F:04E5)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1F:0CF5)
+    HIGH(1F:0CF5)
+    LOW(1F:08EC)
+    HIGH(1F:08EC)
+    LOW(1F:12EF)
+    HIGH(1F:12EF)
+    LOW(MAPPER_INDEX_LAST_WRITTEN)
+    HIGH(MAPPER_INDEX_LAST_WRITTEN)
+    LOW(1F:01CD)
+    HIGH(1F:01CD)
+    LOW(ENGINE_MAPPER_BANK_VALS_COMMITTING)
+    HIGH(ENGINE_MAPPER_BANK_VALS_COMMITTING)
+    LOW(1F:05C4)
+    HIGH(1F:05C4)
+    LOW(1F:15E2)
+    HIGH(1F:15E2)
+    LOW(NMI_FLAG_ACTION?)
+    HIGH(NMI_FLAG_ACTION?)
+    LOW(1E:0600)
+    HIGH(1E:0600)
+    LOW(1F:09EC)
+    HIGH(1F:09EC)
+    LOW(1F:08E7)
+    HIGH(1F:08E7)
+    LOW(1F:10F4)
+    HIGH(1F:10F4)
+    LOW(1F:01EC)
+    HIGH(1F:01EC)
+    LOW(1E:01EE)
+    HIGH(1E:01EE)
+    LOW(1E:0600)
+    HIGH(1E:0600)
+    LOW(1F:09EC)
+    HIGH(1F:09EC)
+    LOW(1F:08E7)
+    HIGH(1F:08E7)
+    LOW(1F:10F4)
+    HIGH(1F:10F4)
+    LOW(1F:01EC)
+    HIGH(1F:01EC)
+    LOW(1E:02EE)
+    HIGH(1E:02EE)
+    LOW(1E:0600)
+    HIGH(1E:0600)
+    LOW(1F:09EC)
+    HIGH(1F:09EC)
+    LOW(1F:08E7)
+    HIGH(1F:08E7)
+    LOW(1F:10F4)
+    HIGH(1F:10F4)
+    LOW(1F:01EC)
+    HIGH(1F:01EC)
+    LOW(1E:03EE)
+    HIGH(1E:03EE)
+    LOW(1E:0800)
+    HIGH(1E:0800)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW((null))
+    HIGH((null))
+    LOW(**:$00B1)
+    HIGH(**:$00B1)
+    LOW(1F:09C8)
+    HIGH(1F:09C8)
+    LOW(1F:14EE)
+    HIGH(1F:14EE)
+    LOW((null))
+    HIGH((null))
+    LOW(1E:0800)
+    HIGH(1E:0800)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW((null))
+    HIGH((null))
+    LOW(**:$00B3)
+    HIGH(**:$00B3)
+    LOW(1F:05D2)
+    HIGH(1F:05D2)
+    LOW(1F:0CE1)
+    HIGH(1F:0CE1)
+    LOW(1E:12A0)
+    HIGH(1E:12A0)
+    LOW(VAL_EQ_0x00)
+    HIGH(VAL_EQ_0x00)
+    LOW(1F:05EB)
+    HIGH(1F:05EB)
+    LOW(**:$00F4)
+    HIGH(**:$00F4)
+    LOW(VAL_POSITIVE)
+    HIGH(VAL_POSITIVE)
+    LOW(1F:05ED)
+    HIGH(1F:05ED)
+    LOW(1F:01CD)
+    HIGH(1F:01CD)
+    LOW(1F:08E3)
+    HIGH(1F:08E3)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1E:08F9)
+    HIGH(1E:08F9)
+    LOW(1F:0DEF)
+    HIGH(1F:0DEF)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:0FD0)
+    HIGH(1F:0FD0)
+    LOW(1F:15E4)
+    HIGH(1F:15E4)
+    LOW(1F:0BEE)
+    HIGH(1F:0BEE)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(1F:19F2)
+    HIGH(1F:19F2)
+    LOW(1F:16F3)
+    HIGH(1F:16F3)
+    LOW(1F:0CE9)
+    HIGH(1F:0CE9)
+    LOW(1F:05EC)
+    HIGH(1F:05EC)
+    LOW(1E:1200)
+    HIGH(1E:1200)
+    LOW(1F:09E5)
+    HIGH(1F:09E5)
+    LOW(1F:04EE)
+    HIGH(1F:04EE)
+    LOW(1F:05E5)
+    HIGH(1F:05E5)
+    LOW(**:$00F2)
+    HIGH(**:$00F2)
+    LOW(1F:10D3)
+    HIGH(1F:10D3)
+    LOW(1F:0FEF)
+    HIGH(1F:0FEF)
+    LOW(1F:01EB)
+    HIGH(1F:01EB)
+    LOW(1F:05EE)
+    HIGH(1F:05EE)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(1F:0FEE)
+    HIGH(1F:0FEE)
+    LOW(1F:0DF7)
+    HIGH(1F:0DF7)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW(1E:1900)
+    HIGH(1E:1900)
+    LOW(1F:15EF)
+    HIGH(1F:15EF)
+    LOW(1F:07EE)
+    HIGH(1F:07EE)
+    LOW(1F:0FF4)
+    HIGH(1F:0FF4)
+    LOW(1F:0EF7)
+    HIGH(1F:0EF7)
+    LOW(1E:0500)
+    HIGH(1E:0500)
+    LOW(1F:0CEC)
+    HIGH(1F:0CEC)
+    LOW(1F:19E1)
+    HIGH(1F:19E1)
+    LOW(1E:1500)
+    HIGH(1E:1500)
+    LOW(1F:09EE)
+    HIGH(1F:09EE)
+    LOW(1F:0EEF)
+    HIGH(1F:0EEF)
+    LOW(R_**:$0000)
+    HIGH(R_**:$0000)
+    LOW(1F:05D4)
+    HIGH(1F:05D4)
+    LOW(1F:05EC)
+    HIGH(1F:05EC)
+    LOW(1F:01F0)
+    HIGH(1F:01F0)
+    LOW(1F:08F4)
+    HIGH(1F:08F4)
+    LOW(**:$00F9)
+    HIGH(**:$00F9)
+    LOW(1F:05D4)
+    HIGH(1F:05D4)
+    LOW(1F:05EC)
+    HIGH(1F:05EC)
+    LOW(1F:0FF0)
+    HIGH(1F:0FF0)
+    LOW(1F:14F2)
+    HIGH(1F:14F2)
+    LOW(1E:0C00)
+    HIGH(1E:0C00)
+    LOW(1F:06E9)
+    HIGH(1F:06E9)
+    LOW(1E:15E5)
+    HIGH(1E:15E5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    HIGH(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    LOW(1F:09CC)
+    HIGH(1F:09CC)
+    LOW(1F:05E6)
+    HIGH(1F:05E6)
+    LOW(1F:10D5)
+    HIGH(1F:10D5)
+    LOW((null))
+    HIGH((null))
+    LOW(1E:0C00)
+    HIGH(1E:0C00)
+    LOW(1F:06E9)
+    HIGH(1F:06E9)
+    LOW(1E:15E5)
+    HIGH(1E:15E5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_INDEX_WORKING_ON?)
+    HIGH(SND_INDEX_WORKING_ON?)
+    LOW(1F:09CC)
+    HIGH(1F:09CC)
+    LOW(1F:05E6)
+    HIGH(1F:05E6)
+    LOW(1F:10D5)
+    HIGH(1F:10D5)
+    LOW((null))
+    HIGH((null))
+    LOW(1E:0C00)
+    HIGH(1E:0C00)
+    LOW(1F:06E9)
+    HIGH(1F:06E9)
+    LOW(1E:15E5)
+    HIGH(1E:15E5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_BF)
+    HIGH(SND_UNK_BF)
+    LOW(1F:05C8)
+    HIGH(1F:05C8)
+    LOW(1F:0CE1)
+    HIGH(1F:0CE1)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    HIGH(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    LOW(1F:05C8)
+    HIGH(1F:05C8)
+    LOW(1F:0CE1)
+    HIGH(1F:0CE1)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_BC)
+    HIGH(SND_UNK_BC)
+    LOW(1F:05C8)
+    HIGH(1F:05C8)
+    LOW(1F:0CE1)
+    HIGH(1F:0CE1)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_INDEX_WORKING_ON?)
+    HIGH(SND_INDEX_WORKING_ON?)
+    LOW(1F:05C8)
+    HIGH(1F:05C8)
+    LOW(1F:0CE1)
+    HIGH(1F:0CE1)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW((null))
+    HIGH((null))
+    LOW(SOUND_BE_WRITE_INDEXER_UNK)
+    HIGH(SOUND_BE_WRITE_INDEXER_UNK)
+    LOW(1F:15D3)
+    HIGH(1F:15D3)
+    LOW(1F:12F0)
+    HIGH(1F:12F0)
+    LOW(1F:05C8)
+    HIGH(1F:05C8)
+    LOW(1F:0CE1)
+    HIGH(1F:0CE1)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(NMI_FLAG_ACTION?)
+    HIGH(NMI_FLAG_ACTION?)
+    LOW(1E:13D0)
+    HIGH(1E:13D0)
+    LOW(1E:13C9)
+    HIGH(1E:13C9)
+    LOW(1F:09E8)
+    HIGH(1F:09E8)
+    LOW(1F:0CE5)
+    HIGH(1F:0CE5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    HIGH(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    LOW(1E:13D0)
+    HIGH(1E:13D0)
+    LOW(1E:13C9)
+    HIGH(1E:13C9)
+    LOW(1F:09E8)
+    HIGH(1F:09E8)
+    LOW(1F:0CE5)
+    HIGH(1F:0CE5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_BC)
+    HIGH(SND_UNK_BC)
+    LOW(1F:0FD0)
+    HIGH(1F:0FD0)
+    LOW(1F:05F7)
+    HIGH(1F:05F7)
+    LOW(1E:13F2)
+    HIGH(1E:13F2)
+    LOW(1F:09E8)
+    HIGH(1F:09E8)
+    LOW(1F:0CE5)
+    HIGH(1F:0CE5)
+    LOW(SPRITE_INDEX_SWAP)
+    HIGH(SPRITE_INDEX_SWAP)
+    LOW(1F:12C2)
+    HIGH(1F:12C2)
+    LOW(FLAG_CLEAR)
+    HIGH(FLAG_CLEAR)
+    LOW(1E:13EE)
+    HIGH(1E:13EE)
+    LOW(1F:0FE8)
+    HIGH(1F:0FE8)
+    LOW(1F:0BE3)
+    HIGH(1F:0BE3)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1F:01F2)
+    HIGH(1F:01F2)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(1F:19C3)
+    HIGH(1F:19C3)
+    LOW(1F:0CE3)
+    HIGH(1F:0CE3)
+    LOW(1F:0EEF)
+    HIGH(1F:0EEF)
+    LOW(1E:0800)
+    HIGH(1E:0800)
+    LOW(1F:10F9)
+    HIGH(1F:10F9)
+    LOW(1F:0FEE)
+    HIGH(1F:0FEE)
+    LOW(EXIT_LOAD_ACTION)
+    HIGH(EXIT_LOAD_ACTION)
+    LOW(**:$00F3)
+    HIGH(**:$00F3)
+    LOW(1F:01D0)
+    HIGH(1F:01D0)
+    LOW(1F:01F2)
+    HIGH(1F:01F2)
+    LOW(1F:19EC)
+    HIGH(1F:19EC)
+    LOW(EXIT_LOAD_ACTION)
+    HIGH(EXIT_LOAD_ACTION)
+    LOW(**:$00F3)
+    HIGH(**:$00F3)
+    LOW(1F:01C4)
+    HIGH(1F:01C4)
+    LOW(1F:0BF2)
+    HIGH(1F:0BF2)
+    LOW(1F:05EE)
+    HIGH(1F:05EE)
+    LOW(1F:13F3)
+    HIGH(1F:13F3)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(1E:09D3)
+    HIGH(1E:09D3)
+    LOW(1E:0DAD)
+    HIGH(1E:0DAD)
+    LOW(1F:07E1)
+    HIGH(1F:07E1)
+    LOW(1F:05EE)
+    HIGH(1F:05EE)
+    LOW(**:$00F4)
+    HIGH(**:$00F4)
+    LOW(1F:08D3)
+    HIGH(1F:08D3)
+    LOW(1F:05E9)
+    HIGH(1F:05E9)
+    LOW(1F:04EC)
+    HIGH(1F:04EC)
+    LOW(1E:0FAD)
+    HIGH(1E:0FAD)
+    LOW(1F:06E6)
+    HIGH(1F:06E6)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(1E:09D3)
+    HIGH(1E:09D3)
+    LOW(1E:02AD)
+    HIGH(1E:02AD)
+    LOW(1F:0FEC)
+    HIGH(1F:0FEC)
+    LOW(1F:0BE3)
+    HIGH(1F:0BE3)
+    LOW(1E:0F00)
+    HIGH(1E:0F00)
+    LOW(1F:06E6)
+    HIGH(1F:06E6)
+    LOW(1F:0EE5)
+    HIGH(1F:0EE5)
+    LOW(1F:05F3)
+    HIGH(1F:05F3)
+    LOW(1F:10D5)
+    HIGH(1F:10D5)
+    LOW(1E:0400)
+    HIGH(1E:0400)
+    LOW(1F:06E5)
+    HIGH(1F:06E5)
+    LOW(1F:0EE5)
+    HIGH(1F:0EE5)
+    LOW(1F:05F3)
+    HIGH(1F:05F3)
+    LOW(1F:10D5)
+    HIGH(1F:10D5)
+    LOW((null))
+    HIGH((null))
+    LOW(1E:0400)
+    HIGH(1E:0400)
+    LOW(1F:06E5)
+    HIGH(1F:06E5)
+    LOW(1F:0EE5)
+    HIGH(1F:0EE5)
+    LOW(1F:05F3)
+    HIGH(1F:05F3)
+    LOW(1F:10D5)
+    HIGH(1F:10D5)
+    LOW((null))
+    HIGH((null))
+    LOW(SLOT_EXTRAS)
+    HIGH(SLOT_EXTRAS)
+    LOW(1F:09F5)
+    HIGH(1F:09F5)
+    LOW(1F:0BE3)
+    HIGH(1F:0BE3)
+    LOW(1F:10D5)
+    HIGH(1F:10D5)
+    LOW(1E:0400)
+    HIGH(1E:0400)
+    LOW(1F:06E5)
+    HIGH(1F:06E5)
+    LOW(1E:04AE)
+    HIGH(1E:04AE)
+    LOW(1F:17EF)
+    HIGH(1F:17EF)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    HIGH(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    LOW(1F:05C4)
+    HIGH(1F:05C4)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:0FC4)
+    HIGH(1F:0FC4)
+    LOW(1F:0EF7)
+    HIGH(1F:0EF7)
+    LOW((null))
+    HIGH((null))
+    LOW((null))
+    HIGH((null))
+    LOW(1F:08F4)
+    HIGH(1F:08F4)
+    LOW(1E:04AD)
+    HIGH(1E:04AD)
+    LOW(1E:13A0)
+    HIGH(1E:13A0)
+    LOW(1F:09EC)
+    HIGH(1F:09EC)
+    LOW(ENGINE_MAPPER_BANK_VALS_COMMITTING)
+    HIGH(ENGINE_MAPPER_BANK_VALS_COMMITTING)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:06A0)
+    HIGH(1E:06A0)
+    LOW(1F:05F2)
+    HIGH(1F:05F2)
+    LOW(1F:1AE5)
+    HIGH(1F:1AE5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    HIGH(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:06A0)
+    HIGH(1E:06A0)
+    LOW(1F:05F2)
+    HIGH(1F:05F2)
+    LOW(1F:1AE5)
+    HIGH(1F:1AE5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_BC)
+    HIGH(SND_UNK_BC)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:06A0)
+    HIGH(1E:06A0)
+    LOW(1F:05F2)
+    HIGH(1F:05F2)
+    LOW(1F:1AE5)
+    HIGH(1F:1AE5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_INDEX_WORKING_ON?)
+    HIGH(SND_INDEX_WORKING_ON?)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:06A0)
+    HIGH(1E:06A0)
+    LOW(1F:05F2)
+    HIGH(1F:05F2)
+    LOW(1F:1AE5)
+    HIGH(1F:1AE5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_BF)
+    HIGH(SND_UNK_BF)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:06A0)
+    HIGH(1E:06A0)
+    LOW(1F:12E9)
+    HIGH(1F:12E9)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    HIGH(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:06A0)
+    HIGH(1E:06A0)
+    LOW(1F:12E9)
+    HIGH(1F:12E9)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_BC)
+    HIGH(SND_UNK_BC)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:06A0)
+    HIGH(1E:06A0)
+    LOW(1F:12E9)
+    HIGH(1F:12E9)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_INDEX_WORKING_ON?)
+    HIGH(SND_INDEX_WORKING_ON?)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:06A0)
+    HIGH(1E:06A0)
+    LOW(1F:12E9)
+    HIGH(1F:12E9)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_BF)
+    HIGH(SND_UNK_BF)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:02A0)
+    HIGH(1E:02A0)
+    LOW(1F:01E5)
+    HIGH(1F:01E5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    HIGH(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:02A0)
+    HIGH(1E:02A0)
+    LOW(1F:01E5)
+    HIGH(1F:01E5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_BC)
+    HIGH(SND_UNK_BC)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:02A0)
+    HIGH(1E:02A0)
+    LOW(1F:01E5)
+    HIGH(1F:01E5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_INDEX_WORKING_ON?)
+    HIGH(SND_INDEX_WORKING_ON?)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:02A0)
+    HIGH(1E:02A0)
+    LOW(1F:01E5)
+    HIGH(1F:01E5)
+    LOW((null))
+    HIGH((null))
+    LOW(SND_UNK_BF)
+    HIGH(SND_UNK_BF)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:14A0)
+    HIGH(1E:14A0)
+    LOW(1F:15E8)
+    HIGH(1F:15E8)
+    LOW(1F:04EE)
+    HIGH(1F:04EE)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    HIGH(SND_UNK_NSE_PRD/TRI_L_DATA?)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:14A0)
+    HIGH(1E:14A0)
+    LOW(1F:15E8)
+    HIGH(1F:15E8)
+    LOW(1F:04EE)
+    HIGH(1F:04EE)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(SND_UNK_BC)
+    HIGH(SND_UNK_BC)
+    LOW(1E:0BD0)
+    HIGH(1E:0BD0)
+    LOW(1E:14A0)
+    HIGH(1E:14A0)
+    LOW(1F:15E8)
+    HIGH(1F:15E8)
+    LOW(1F:04EE)
+    HIGH(1F:04EE)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(SND_INDEX_WORKING_ON?)
+    HIGH(SND_INDEX_WORKING_ON?)
+    LOW(1F:01C6)
+    HIGH(1F:01C6)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(1F:04F4)
+    HIGH(1F:04F4)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:14D3)
+    HIGH(1F:14D3)
+    LOW(1F:0EEF)
+    HIGH(1F:0EEF)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:01D0)
+    HIGH(1F:01D0)
+    LOW(IRQ_SCRIPT_PTRS_DEFAULT)
+    HIGH(IRQ_SCRIPT_PTRS_DEFAULT)
+    LOW(1F:04FA)
+    HIGH(1F:04FA)
+    LOW(1E:0100)
+    HIGH(1E:0100)
+    LOW(1F:0CF3)
+    HIGH(1F:0CF3)
+    LOW(1F:05E5)
+    HIGH(1F:05E5)
+    LOW(ENGINE_MAPPER_BANK_VALS_COMMITTING)
+    HIGH(ENGINE_MAPPER_BANK_VALS_COMMITTING)
+    LOW(1F:0FC3)
+    HIGH(1F:0FC3)
+    LOW(1F:06EE)
+    HIGH(1F:06EE)
+    LOW(1F:04F3)
+    HIGH(1F:04F3)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(ADD_CARRY)
+    HIGH(ADD_CARRY)
+    LOW(1F:0CFA)
+    HIGH(1F:0CFA)
+    LOW(SPRITE_INDEX_SWAP)
+    HIGH(SPRITE_INDEX_SWAP)
+    LOW(1F:0FD0)
+    HIGH(1F:0FD0)
+    LOW(1F:13E9)
+    HIGH(1F:13E9)
+    LOW(1F:0EEF)
+    HIGH(1F:0EEF)
+    LOW((null))
+    HIGH((null))
+    LOW(PTR_SEEDED_UNK_K)
+    HIGH(PTR_SEEDED_UNK_K)
+    LOW(1F:0CEF)
+    HIGH(1F:0CEF)
+    LOW(SPRITE_INDEX_SWAP)
+    HIGH(SPRITE_INDEX_SWAP)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1F:07E9)
+    HIGH(1F:07E9)
+    LOW(1F:0FD7)
+    HIGH(1F:0FD7)
+    LOW(1F:04EF)
+    HIGH(1F:04EF)
+    LOW(1F:08EF)
+    HIGH(1F:08EF)
+    LOW(1E:0400)
+    HIGH(1E:0400)
+    LOW(1F:01F2)
+    HIGH(1F:01F2)
+    LOW(1F:0FE7)
+    HIGH(1F:0FE7)
+    LOW(MAPPER_INDEX_LAST_WRITTEN)
+    HIGH(MAPPER_INDEX_LAST_WRITTEN)
+    LOW((null))
+    HIGH((null))
+    LOW((null))
+    HIGH((null))
+    LOW(**:$00B8)
+    HIGH(**:$00B8)
+    LOW(1F:0CC5)
+    HIGH(1F:0CC5)
+    LOW(1F:10E5)
+    HIGH(1F:10E5)
+    LOW(1F:01E8)
+    HIGH(1F:01E8)
+    LOW(1F:14EE)
+    HIGH(1F:14EE)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1F:01E5)
+    HIGH(1F:01E5)
+    LOW(**:$00F2)
+    HIGH(**:$00F2)
+    LOW(1F:09C2)
+    HIGH(1F:09C2)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:0FC6)
+    HIGH(1F:0FC6)
+    LOW(1F:14EF)
+    HIGH(1F:14EF)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1F:04E1)
+    HIGH(1F:04E1)
+    LOW(1E:14A0)
+    HIGH(1E:14A0)
+    LOW(1F:15F2)
+    HIGH(1F:15F2)
+    LOW(1F:0BE3)
+    HIGH(1F:0BE3)
+    LOW(1E:0F00)
+    HIGH(1E:0F00)
+    LOW(1F:04EC)
+    HIGH(1F:04EC)
+    LOW(1E:12A0)
+    HIGH(1E:12A0)
+    LOW(1F:02EF)
+    HIGH(1F:02EF)
+    LOW(1F:14EF)
+    HIGH(1F:14EF)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1F:07E5)
+    HIGH(1F:07E5)
+    LOW(1F:02E1)
+    HIGH(1F:02E1)
+    LOW(1F:12EF)
+    HIGH(1F:12EF)
+    LOW(NMI_FLAG_ACTION?)
+    HIGH(NMI_FLAG_ACTION?)
+    LOW(1F:01C7)
+    HIGH(1F:01C7)
+    LOW(1F:07F2)
+    HIGH(1F:07F2)
+    LOW(NMI_PACKET_UNIQUE_DATA_UPLOADER)
+    HIGH(NMI_PACKET_UNIQUE_DATA_UPLOADER)
+    LOW(1F:05EC)
+    HIGH(1F:05EC)
+    LOW(1E:0700)
+    HIGH(1E:0700)
+    LOW(1F:02E1)
+    HIGH(1F:02E1)
+    LOW(1F:0CE9)
+    HIGH(1F:0CE9)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW(1E:0700)
+    HIGH(1E:0700)
+    LOW(1F:12EF)
+    HIGH(1F:12EF)
+    LOW(1F:0CE9)
+    HIGH(1F:0CE9)
+    LOW(1F:01EC)
+    HIGH(1F:01EC)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1F:13E9)
+    HIGH(1F:13E9)
+    LOW(1F:0EEF)
+    HIGH(1F:0EEF)
+    LOW(1E:1400)
+    HIGH(1E:1400)
+    LOW(1F:07E9)
+    HIGH(1F:07E9)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1F:04E1)
+    HIGH(1F:04E1)
+    LOW(PTR_SEEDED_UNK_K)
+    HIGH(PTR_SEEDED_UNK_K)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1E:1200)
+    HIGH(1E:1200)
+    LOW(1F:05E1)
+    HIGH(1F:05E1)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:04D9)
+    HIGH(1F:04D9)
+    LOW(1F:05E4)
+    HIGH(1F:05E4)
+    LOW(**:$00F4)
+    HIGH(**:$00F4)
+    LOW(1F:01CD)
+    HIGH(1F:01CD)
+    LOW(1F:09E7)
+    HIGH(1F:09E7)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:0ED3)
+    HIGH(1F:0ED3)
+    LOW(FLAG_CLEAR)
+    HIGH(FLAG_CLEAR)
+    LOW(NMI_LATCH_FLAG_UNK)
+    HIGH(NMI_LATCH_FLAG_UNK)
+    LOW(VAL_POSITIVE)
+    HIGH(VAL_POSITIVE)
+    LOW(1F:01F4)
+    HIGH(1F:01F4)
+    LOW(1F:05EE)
+    HIGH(1F:05EE)
+    LOW(1F:13E5)
+    HIGH(1F:13E5)
+    LOW(1E:0700)
+    HIGH(1E:0700)
+    LOW(1F:05E9)
+    HIGH(1F:05E9)
+    LOW(1F:15E7)
+    HIGH(1F:15E7)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:01C5)
+    HIGH(1F:01C5)
+    LOW(1F:0CE7)
+    HIGH(1F:0CE7)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:0FD7)
+    HIGH(1F:0FD7)
+    LOW(1F:06EC)
+    HIGH(1F:06EC)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(1F:01E5)
+    HIGH(1F:01E5)
+    LOW(1F:15E7)
+    HIGH(1F:15E7)
+    LOW(1F:0CEC)
+    HIGH(1F:0CEC)
+    LOW(1E:0100)
+    HIGH(1E:0100)
+    LOW(1F:0CEC)
+    HIGH(1F:0CEC)
+    LOW(1F:07E9)
+    HIGH(1F:07E9)
+    LOW(1F:14E1)
+    HIGH(1F:14E1)
+    LOW(1F:12EF)
+    HIGH(1F:12EF)
+    LOW(1E:0500)
+    HIGH(1E:0500)
+    LOW(1F:05EE)
+    HIGH(1F:05EE)
+    LOW(1F:07F2)
+    HIGH(1F:07F2)
+    LOW(1E:12F9)
+    HIGH(1E:12F9)
+    LOW(1F:02EF)
+    HIGH(1F:02EF)
+    LOW(1F:14EF)
+    HIGH(1F:14EF)
+    LOW(1E:1400)
+    HIGH(1E:1400)
+    LOW(1F:05E8)
+    HIGH(1F:05E8)
+    LOW(1E:06A0)
+    HIGH(1E:06A0)
+    LOW(1F:13E9)
+    HIGH(1F:13E9)
+    LOW(NMI_FP_BATTLE_UNK)
+    HIGH(NMI_FP_BATTLE_UNK)
+    LOW(1F:15C6)
+    HIGH(1F:15C6)
+    LOW(1F:09E7)
+    HIGH(1F:09E7)
+    LOW(1F:09F4)
+    HIGH(1F:09F4)
+    LOW(1F:05F6)
+    HIGH(1F:05F6)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1E:02AE)
+    HIGH(1E:02AE)
+    LOW((null))
+    HIGH((null))
+    LOW((null))
+    HIGH((null))
+    LOW(1F:0FC2)
+    HIGH(1F:0FC2)
+    LOW(1F:13F3)
+    HIGH(1F:13F3)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1F:0FE2)
+    HIGH(1F:0FE2)
+    LOW(**:$00F4)
+    HIGH(**:$00F4)
+    LOW(1F:01CE)
+    HIGH(1F:01CE)
+    LOW(1F:03EE)
+    HIGH(1F:03EE)
+    LOW(**:$00F9)
+    HIGH(**:$00F9)
+    LOW(1F:14D3)
+    HIGH(1F:14D3)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1F:01ED)
+    HIGH(1F:01ED)
+    LOW(MAPPER_INDEX_LAST_WRITTEN)
+    HIGH(MAPPER_INDEX_LAST_WRITTEN)
+    LOW(1F:0CD5)
+    HIGH(1F:0CD5)
+    LOW(1F:12EC)
+    HIGH(1F:12EC)
+    LOW(1F:03E9)
+    HIGH(1F:03E9)
+    LOW(NMI_FP_BATTLE_UNK)
+    HIGH(NMI_FP_BATTLE_UNK)
+    LOW(1F:05C3)
+    HIGH(1F:05C3)
+    LOW(1F:05F2)
+    HIGH(1F:05F2)
+    LOW(1F:12E2)
+    HIGH(1F:12E2)
+    LOW(1F:0DF5)
+    HIGH(1F:0DF5)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1F:0FEF)
+    HIGH(1F:0FEF)
+    LOW(ENGINE_IRQ_LATCH_CURRENT?)
+    HIGH(ENGINE_IRQ_LATCH_CURRENT?)
+    LOW(1F:12C1)
+    HIGH(1F:12C1)
+    LOW(1F:0FED)
+    HIGH(1F:0FED)
+    LOW(**:$00F2)
+    HIGH(**:$00F2)
+    LOW(1F:0FD7)
+    HIGH(1F:0FD7)
+    LOW(1F:04EF)
+    HIGH(1F:04EF)
+    LOW(1F:08EF)
+    HIGH(1F:08EF)
+    LOW(1E:1700)
+    HIGH(1E:1700)
+    LOW(1F:0CE1)
+    HIGH(1F:0CE1)
+    LOW(1F:19EC)
+    HIGH(1F:19EC)
+    LOW(1E:1400)
+    HIGH(1E:1400)
+    LOW(1F:05E8)
+    HIGH(1F:05E8)
+    LOW(1E:08A0)
+    HIGH(1E:08A0)
+    LOW(ACTION_MENU_COLUMN_MOD)
+    HIGH(ACTION_MENU_COLUMN_MOD)
+    LOW(1F:09F0)
+    HIGH(1F:09F0)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:01C2)
+    HIGH(1F:01C2)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:01CC)
+    HIGH(1F:01CC)
+    LOW(1F:19E4)
+    HIGH(1F:19E4)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1E:02AE)
+    HIGH(1E:02AE)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:01C7)
+    HIGH(1F:01C7)
+    LOW(1F:07EE)
+    HIGH(1F:07EE)
+    LOW(1E:0400)
+    HIGH(1E:0400)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:09C4)
+    HIGH(1F:09C4)
+    LOW(1F:14F3)
+    HIGH(1F:14F3)
+    LOW(1F:12EF)
+    HIGH(1F:12EF)
+    LOW(1F:0FF4)
+    HIGH(1F:0FF4)
+    LOW(1E:0700)
+    HIGH(1E:0700)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:0FDA)
+    HIGH(1F:0FDA)
+    LOW(1F:02ED)
+    HIGH(1F:02ED)
+    LOW(1F:05E9)
+    HIGH(1F:05E9)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(1F:05F3)
+    HIGH(1F:05F3)
+    LOW(1F:04F5)
+    HIGH(1F:04F5)
+    LOW(1E:1AEF)
+    HIGH(1E:1AEF)
+    LOW(1F:0DEF)
+    HIGH(1F:0DEF)
+    LOW(1F:09E2)
+    HIGH(1F:09E2)
+    LOW(1E:0300)
+    HIGH(1E:0300)
+    LOW(1F:0FF2)
+    HIGH(1F:0FF2)
+    LOW(**:$00F7)
+    HIGH(**:$00F7)
+    LOW(1F:0ED3)
+    HIGH(1F:0ED3)
+    LOW(1F:0BE1)
+    HIGH(1F:0BE1)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:19C8)
+    HIGH(1F:19C8)
+    LOW(1F:0EE5)
+    HIGH(1F:0EE5)
+    LOW(BMI_FLAG_SET_DIFF_MODDED_UNK)
+    HIGH(BMI_FLAG_SET_DIFF_MODDED_UNK)
+    LOW(1F:0FC3)
+    HIGH(1F:0FC3)
+    LOW(SCRIPT_RTN_O_SET_SWITCH_EXIT_JMP)
+    HIGH(SCRIPT_RTN_O_SET_SWITCH_EXIT_JMP)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1E:0300)
+    HIGH(1E:0300)
+    LOW(1F:0EE5)
+    HIGH(1F:0EE5)
+    LOW(1F:09F4)
+    HIGH(1F:09F4)
+    LOW(1F:05F0)
+    HIGH(1F:05F0)
+    LOW(1F:05E4)
+    HIGH(1F:05E4)
+    LOW(1E:0400)
+    HIGH(1E:0400)
+    LOW(1F:13F5)
+    HIGH(1F:13F5)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:01C2)
+    HIGH(1F:01C2)
+    LOW(1F:0CEC)
+    HIGH(1F:0CEC)
+    LOW(1E:0600)
+    HIGH(1E:0600)
+    LOW(1F:19EC)
+    HIGH(1F:19EC)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(1F:09F0)
+    HIGH(1F:09F0)
+    LOW(1F:05E4)
+    HIGH(1F:05E4)
+    LOW(**:$00F2)
+    HIGH(**:$00F2)
+    LOW(1F:03D3)
+    HIGH(1F:03D3)
+    LOW(1F:12EF)
+    HIGH(1F:12EF)
+    LOW(1F:09F0)
+    HIGH(1F:09F0)
+    LOW(1F:0EEF)
+    HIGH(1F:0EEF)
+    LOW(1E:1200)
+    HIGH(1E:1200)
+    LOW(1F:10EF)
+    HIGH(1F:10EF)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:09C6)
+    HIGH(1F:09C6)
+    LOW(1F:05F2)
+    HIGH(1F:05F2)
+    LOW(1E:02A0)
+    HIGH(1E:02A0)
+    LOW(1F:0CE1)
+    HIGH(1F:0CE1)
+    LOW(NMI_LATCH_FLAG_UNK)
+    HIGH(NMI_LATCH_FLAG_UNK)
+    LOW(1F:01D7)
+    HIGH(1F:01D7)
+    LOW(1F:03F4)
+    HIGH(1F:03F4)
+    LOW(1F:05E8)
+    HIGH(1F:05E8)
+    LOW(**:$00F2)
+    HIGH(**:$00F2)
+    LOW(1F:12C7)
+    HIGH(1F:12C7)
+    LOW(1F:15EF)
+    HIGH(1F:15EF)
+    LOW(1F:08E3)
+    HIGH(1F:08E3)
+    LOW(ENGINE_MAPPER_CONFIG_STATUS_NO_BANK)
+    HIGH(ENGINE_MAPPER_CONFIG_STATUS_NO_BANK)
+    LOW(1F:08C7)
+    HIGH(1F:08C7)
+    LOW(1F:13EF)
+    HIGH(1F:13EF)
+    LOW(**:$00F4)
+    HIGH(**:$00F4)
+    LOW(1F:09CC)
+    HIGH(1F:09CC)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:01D3)
+    HIGH(1F:01D3)
+    LOW(1F:03F5)
+    HIGH(1F:03F5)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW((null))
+    HIGH((null))
+    LOW(1E:02A0)
+    HIGH(1E:02A0)
+    LOW(1F:14E1)
+    HIGH(1F:14E1)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(1F:01F4)
+    HIGH(1F:01F4)
+    LOW(1F:0DF2)
+    HIGH(1F:0DF2)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW(1E:0AA0)
+    HIGH(1E:0AA0)
+    LOW((null))
+    HIGH((null))
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(1F:15EB)
+    HIGH(1F:15EB)
+    LOW(1F:0BEE)
+    HIGH(1F:0BEE)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(1F:12E8)
+    HIGH(1F:12E8)
+    LOW(1F:15EF)
+    HIGH(1F:15EF)
+    LOW(1F:0CE4)
+    HIGH(1F:0CE4)
+    LOW(1F:19E5)
+    HIGH(1F:19E5)
+    LOW(1E:1200)
+    HIGH(1E:1200)
+    LOW(1F:14E1)
+    HIGH(1F:14E1)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1F:0DEF)
+    HIGH(1F:0DEF)
+    LOW(1F:05E2)
+    HIGH(1F:05E2)
+    LOW(**:$00F2)
+    HIGH(**:$00F2)
+    LOW(1F:0FC4)
+    HIGH(1F:0FC4)
+    LOW(1F:0CEC)
+    HIGH(1F:0CEC)
+    LOW(1E:0C00)
+    HIGH(1E:0C00)
+    LOW(TARGET_ITERATION)
+    HIGH(TARGET_ITERATION)
+    LOW(ENGINE_MAPPER_BANK_VALS_COMMITTING)
+    HIGH(ENGINE_MAPPER_BANK_VALS_COMMITTING)
+    LOW(1F:09C2)
+    HIGH(1F:09C2)
+    LOW(1F:0EEF)
+    HIGH(1F:0EEF)
+    LOW(1F:03E9)
+    HIGH(1F:03E9)
+    LOW(1F:05C3)
+    HIGH(1F:05C3)
+    LOW(1F:14EE)
+    HIGH(1F:14EE)
+    LOW(**:$00E9)
+    HIGH(**:$00E9)
+    LOW(1F:09C2)
+    HIGH(1F:09C2)
+    LOW(1F:0EEF)
+    HIGH(1F:0EEF)
+    LOW(1F:03E9)
+    HIGH(1F:03E9)
+    LOW(1F:03D3)
+    HIGH(1F:03D3)
+    LOW(1F:12EF)
+    HIGH(1F:12EF)
+    LOW(ENGINE_MAPPER_BANK_VALS_COMMITTING)
+    HIGH(ENGINE_MAPPER_BANK_VALS_COMMITTING)
+    LOW(1F:05D2)
+    HIGH(1F:05D2)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:0ED3)
+    HIGH(1F:0ED3)
+    LOW(1F:0BE1)
+    HIGH(1F:0BE1)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:0FCC)
+    HIGH(1F:0FCC)
+    LOW(1F:05EE)
+    HIGH(1F:05EE)
+    LOW(1E:17A0)
+    HIGH(1E:17A0)
+    LOW(1F:0CEF)
+    HIGH(1F:0CEF)
+    LOW(NMI_PPU_CMD_PACKETS_INDEX)
+    HIGH(NMI_PPU_CMD_PACKETS_INDEX)
+    LOW(1F:0FD0)
+    HIGH(1F:0FD0)
+    LOW(1F:01EC)
+    HIGH(1F:01EC)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:05C2)
+    HIGH(1F:05C2)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1E:1200)
+    HIGH(1E:1200)
+    LOW(1F:14E1)
+    HIGH(1F:14E1)
+    LOW(1F:0CF4)
+    HIGH(1F:0CF4)
+    LOW(1F:13E5)
+    HIGH(1F:13E5)
+    LOW(1F:01EE)
+    HIGH(1F:01EE)
+    LOW(1F:05EB)
+    HIGH(1F:05EB)
+    LOW(1E:1400)
+    HIGH(1E:1400)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW(1F:15F4)
+    HIGH(1F:15F4)
+    LOW(1F:01EC)
+    HIGH(1F:01EC)
+    LOW(1E:0300)
+    HIGH(1E:0300)
+    LOW(1F:0FF2)
+    HIGH(1F:0FF2)
+    LOW(1F:0FE3)
+    HIGH(1F:0FE3)
+    LOW(1F:09E4)
+    HIGH(1F:09E4)
+    LOW(1F:05EC)
+    HIGH(1F:05EC)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1F:06F5)
+    HIGH(1F:06F5)
+    LOW(1F:01E6)
+    HIGH(1F:01E6)
+    LOW(1F:0FEC)
+    HIGH(1F:0FEC)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1F:0FE9)
+    HIGH(1F:0FE9)
+    LOW(1F:09EE)
+    HIGH(1F:09EE)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:01C2)
+    HIGH(1F:01C2)
+    LOW(**:$00F4)
+    HIGH(**:$00F4)
+    LOW(1F:14D3)
+    HIGH(1F:14D3)
+    LOW(1F:01F2)
+    HIGH(1F:01F2)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:0FC4)
+    HIGH(1F:0FC4)
+    LOW(NMI_FLAG_ACTION?)
+    HIGH(NMI_FLAG_ACTION?)
+    LOW(1F:13D0)
+    HIGH(1F:13D0)
+    LOW(1F:03F9)
+    HIGH(1F:03F9)
+    LOW(1F:0FE8)
+    HIGH(1F:0FE8)
+    LOW(PTR_SEEDED_UNK_K)
+    HIGH(PTR_SEEDED_UNK_K)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1E:1000)
+    HIGH(1E:1000)
+    LOW(1F:19F3)
+    HIGH(1F:19F3)
+    LOW(1F:08E3)
+    HIGH(1F:08E3)
+    LOW(1E:14EF)
+    HIGH(1E:14EF)
+    LOW(1F:15F2)
+    HIGH(1F:15F2)
+    LOW(1F:0BE3)
+    HIGH(1F:0BE3)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW(1F:01E9)
+    HIGH(1F:01E9)
+    LOW(1E:14E3)
+    HIGH(1E:14E3)
+    LOW(1F:15F2)
+    HIGH(1F:15F2)
+    LOW(1F:0BE3)
+    HIGH(1F:0BE3)
+    LOW(1E:0100)
+    HIGH(1E:0100)
+    LOW(1F:01EC)
+    HIGH(1F:01EC)
+    LOW(1F:0DF2)
+    HIGH(1F:0DF2)
+    LOW(1E:07A0)
+    HIGH(1E:07A0)
+    LOW(1F:0FE8)
+    HIGH(1F:0FE8)
+    LOW(1F:14F3)
+    HIGH(1F:14F3)
+    LOW(1E:0600)
+    HIGH(1E:0600)
+    LOW(1F:15EF)
+    HIGH(1F:15EF)
+    LOW(1F:05F2)
+    HIGH(1F:05F2)
+    LOW(1F:05F9)
+    HIGH(1F:05F9)
+    LOW(**:$00F3)
+    HIGH(**:$00F3)
+    LOW(1F:01C4)
+    HIGH(1F:01C4)
+    LOW(1F:13E4)
+    HIGH(1F:13E4)
+    LOW(1F:19E5)
+    HIGH(1F:19E5)
+    LOW(1F:13E5)
+    HIGH(1F:13E5)
+    LOW(1E:0D00)
+    HIGH(1E:0D00)
+    LOW(1F:0DEF)
+    HIGH(1F:0DEF)
+    LOW(1F:05F3)
+    HIGH(1F:05F3)
+    LOW(1F:05F9)
+    HIGH(1F:05F9)
+    LOW(**:$00F3)
+    HIGH(**:$00F3)
+    LOW(1F:0BD3)
+    HIGH(1F:0BD3)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:04D9)
+    HIGH(1F:04D9)
+    LOW(1F:05E4)
+    HIGH(1F:05E4)
+    LOW(**:$00F4)
+    HIGH(**:$00F4)
+    LOW(1F:09C7)
+    HIGH(1F:09C7)
+    LOW(1F:01E7)
+    HIGH(1F:01E7)
+    LOW(1E:02A0)
+    HIGH(1E:02A0)
+    LOW(1F:12EF)
+    HIGH(1F:12EF)
+    LOW(NMI_FLAG_ACTION?)
+    HIGH(NMI_FLAG_ACTION?)
+    LOW(1F:0DCF)
+    HIGH(1F:0DCF)
+    LOW(1F:07E5)
+    HIGH(1F:07E5)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:0FC2)
+    HIGH(1F:0FC2)
+    LOW(1F:07F2)
+    HIGH(1F:07F2)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(1F:12E3)
+    HIGH(1F:12E3)
+    LOW(1F:10E1)
+    HIGH(1F:10E1)
+    LOW(1F:05F0)
+    HIGH(1F:05F0)
+    LOW(**:$00F2)
+    HIGH(**:$00F2)
+    LOW(1F:0CD5)
+    HIGH(1F:0CD5)
+    LOW(1F:12F4)
+    HIGH(1F:12F4)
+    LOW(1E:02E1)
+    HIGH(1E:02E1)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1F:0FE2)
+    HIGH(1F:0FE2)
+    LOW(**:$00F4)
+    HIGH(**:$00F4)
+    LOW(1F:0DCF)
+    HIGH(1F:0DCF)
+    LOW(1F:07E5)
+    HIGH(1F:07E5)
+    LOW(1E:13E1)
+    HIGH(1E:13E1)
+    LOW(1F:15E1)
+    HIGH(1F:15E1)
+    LOW(1F:05E3)
+    HIGH(1F:05E3)
+    LOW(**:$00F2)
+    HIGH(**:$00F2)
+    LOW(1F:05CB)
+    HIGH(1F:05CB)
+    LOW(1F:0CEC)
+    HIGH(1F:0CEC)
+    LOW(**:$00F9)
+    HIGH(**:$00F9)
+    LOW(1F:14D3)
+    HIGH(1F:14D3)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1E:0DA0)
+    HIGH(1E:0DA0)
+    LOW(1F:0EE9)
+    HIGH(1F:0EE9)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(1E:1300)
+    HIGH(1E:1300)
+    LOW(VAL_NONZERO)
+    HIGH(VAL_NONZERO)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(1F:0EC5)
+    HIGH(1F:0EC5)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(1F:19E7)
+    HIGH(1F:19E7)
+    LOW(1E:0A00)
+    HIGH(1E:0A00)
+    LOW(1F:01F5)
+    HIGH(1F:01F5)
+    LOW(1F:01EE)
+    HIGH(1F:01EE)
+    LOW(1E:0200)
+    HIGH(1E:0200)
+    LOW(1F:15EC)
+    HIGH(1F:15EC)
+    LOW(1E:13E5)
+    HIGH(1E:13E5)
+    LOW(1F:01F4)
+    HIGH(1F:01F4)
+    LOW(1F:0DF2)
+    HIGH(1F:0DF2)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW(1E:1200)
+    HIGH(1E:1200)
+    LOW(VAL_EQ_0x00)
+    HIGH(VAL_EQ_0x00)
+    LOW(1F:0FEB)
+    HIGH(1F:0FEB)
+    LOW(1F:0CF9)
+    HIGH(1F:0CF9)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(VAL_POSITIVE)
+    HIGH(VAL_POSITIVE)
+    LOW(1F:01F4)
+    HIGH(1F:01F4)
+    LOW(1F:09EE)
+    HIGH(1F:09EE)
+    LOW(1F:0EE1)
+    HIGH(1F:0EE1)
+    LOW(1E:0F00)
+    HIGH(1E:0F00)
+    LOW((null))
+    HIGH((null))
+    LOW(1F:0FCD)
+    HIGH(1F:0FCD)
+    LOW(1F:0BEF)
+    HIGH(1F:0BEF)
+    LOW(1E:1A00)
+    HIGH(1E:1A00)
+    LOW(1F:0DEF)
+    HIGH(1F:0DEF)
+    LOW(1F:09E2)
+    HIGH(1F:09E2)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:01CE)
+    HIGH(1F:01CE)
+    LOW(1F:14F3)
+    HIGH(1F:14F3)
+    LOW(1E:1AF9)
+    HIGH(1E:1AF9)
+    LOW(1F:0DEF)
+    HIGH(1F:0DEF)
+    LOW(1F:09E2)
+    HIGH(1F:09E2)
+    LOW(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    HIGH(NMI_FLAG_EXECUTE_UPDATE_BUF_AND_MORE_TODO)
+    LOW(1F:09D3)
+    HIGH(1F:09D3)
+    LOW(1F:16EC)
+    HIGH(1F:16EC)
+    LOW(1F:12E5)
+    HIGH(1F:12E5)
+    LOW(1E:17A0)
+    HIGH(1E:17A0)
+    LOW(1F:0CEF)
+    HIGH(1F:0CEF)
+    LOW(NMI_PPU_CMD_PACKETS_INDEX)
+    HIGH(NMI_PPU_CMD_PACKETS_INDEX)
+    LOW((null))
+    HIGH((null))
+    LOW((null))
+    HIGH((null))
+    LOW(**:$00B7)
+    HIGH(**:$00B7)
+    LOW(1F:12C7)
+    HIGH(1F:12C7)
+    LOW(1F:1AE9)
+    HIGH(1F:1AE9)
+    LOW(1F:0CFA)
+    HIGH(1F:0CFA)
+    LOW(1E:02F9)
+    HIGH(1E:02F9)
+    LOW(1F:01E5)
+    HIGH(1F:01E5)
+    LOW(**:$00F2)
+    HIGH(**:$00F2)
+    LOW((null))
+    HIGH((null))
+    LOW((null))
+    HIGH((null))
+    LOW(1E:18B8)
+    HIGH(1E:18B8)
+    LOW(**:$00D8)
+    HIGH(**:$00D8)
+    LOW(1F:01CC)
+    HIGH(1F:01CC)
+    LOW(1F:14F3)
+    HIGH(1F:14F3)
+    LOW(1F:14D3)
+    HIGH(1F:14D3)
+    LOW(1F:12E1)
+    HIGH(1F:12E1)
+    LOW(1F:01ED)
+    HIGH(1F:01ED)
     .db EE
     .db 00
     .db 00 ; None after this ????????????????????????????????????????????????????????????
@@ -2636,7 +2636,7 @@
     .db 00
     .db 00
     .db 00
-    .db 48
+    .db 48 ; TODO wtf
     .db 59
     .db 00
     .db 00
@@ -4700,7 +4700,7 @@ FILE_E: ; 00:0D34, 0x000D34
     .db 08
     .db FD
     .db 01
-    .db 04 ; This is ptr'd to.
+    .db 04 ; This is ptr'd to, packet ??
     .db 00
     .db 67
     .db DB
@@ -7933,37 +7933,38 @@ FILE_E: ; 00:0D34, 0x000D34
     .db 00
     .db 0A
     .db E9
-BATTLE_ARR_UNK_C: ; 00:1EE9, 0x001EE9
+BATTLE_SFX_SLOT_WRITTEN: ; 00:1EE9, 0x001EE9
     .db 84
-BATTLE_ARRAY_UNK_A: ; 00:1EEA, 0x001EEA
+BATTLE_SFX_ID_COMMITED: ; 00:1EEA, 0x001EEA
     .db FF
-BATTLE_ARRAY_UNK_B: ; 00:1EEB, 0x001EEB
+BATTLE_SFX_WAIT_TIME: ; 00:1EEB, 0x001EEB
     .db 06
+BATTLE_SFX_UNK: ; 00:1EEC, 0x001EEC
     .db 00
-    .db 30
-    .db 00
-    .db 00
-    .db F4
-    .db 84
-    .db FF
-    .db 12
-    .db 00
-    .db 66
-    .db 00
-    .db 08
-    .db FF
-    .db 84
-    .db FF
-    .db 07
-    .db 00
-    .db 36
-    .db 00
-    .db 07
-    .db 09
-    .db 85
-    .db 11
-    .db FF
-    .db 00
+    .db 30 ; Slot 0x4, attr ??, data slot 0x1
+    .db 00 ; SFX commit.
+    .db 00 ; Wait.
+    .db F4 ; Attr ??
+    .db 84 ; Slot 0x4, attr ??
+    .db FF ; SFX commit.
+    .db 12 ; Wait time.
+    .db 00 ; Attr ??
+    .db 66 ; Slot 0x4, attr ??
+    .db 00 ; Sfx commit.
+    .db 08 ; Wait.
+    .db FF ; Attr ??
+    .db 84 ; Slot 0x4, attr ??
+    .db FF ; SFX commit.
+    .db 07 ; Wait.
+    .db 00 ; Attr ??
+    .db 36 ; Slot 0x4, attr ??
+    .db 00 ; SFX commit.
+    .db 07 ; Wait.
+    .db 09 ; Attr ??
+    .db 85 ; Slot 0x4, attr ?? FOCUS
+    .db 11 ; SFX commit.
+    .db FF ; Wait.
+    .db 00 ; Attr ??
     .db 1B
     .db 00
     .db 06
